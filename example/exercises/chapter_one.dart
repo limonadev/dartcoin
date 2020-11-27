@@ -5,6 +5,7 @@ class ChapterOne {
     print('Run each exercise from Chapter One');
     _first();
     _second();
+    _third();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -30,6 +31,14 @@ class ChapterOne {
     var c = FieldElement(number: 6, prime: 13);
 
     print(a + b == c);
+  }
+
+  void _third() {
+    print('Third Exercise');
+    var a = FieldElement(number: 3, prime: 13);
+    var b = FieldElement(number: 12, prime: 13);
+    var c = FieldElement(number: 10, prime: 13);
+    print(a * b == c);
   }
 
   /// Exercise 5 from Programming Bitcoin book - Chapter 1
