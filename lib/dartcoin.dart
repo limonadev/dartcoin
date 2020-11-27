@@ -7,4 +7,5 @@ export 'src/dartcoin_base.dart';
 
 // TODO: Export any libraries intended for clients of this package.
 
+export 'src/finite_field/field_element.dart';
 export 'src/utils/all.dart';
