@@ -5,9 +5,14 @@ class ChapterOne {
     print('Run each exercise from Chapter One');
     _first();
     _second();
-    if (runOptionals) _optional_third();
+
+    if (runOptionals) {
+      print('Optional exercises');
+      _optional_third();
+    }
   }
 
+  /// Exercise 0 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
   void _first() {
     print('First Exercise');
     var a = FieldElement(number: 7, prime: 13);
@@ -17,6 +22,7 @@ class ChapterOne {
     print(a == a);
   }
 
+  /// Exercise 2 https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
   void _second() {
     print('Second Exercise');
     var a = FieldElement(number: 7, prime: 13);
@@ -26,6 +32,7 @@ class ChapterOne {
     print(a + b == c);
   }
 
+  /// Exercise 5 from Programming Bitcoin book - Chapter 1
   void _optional_third() {
     print('Optional Third Exercise');
     const order = 19;
