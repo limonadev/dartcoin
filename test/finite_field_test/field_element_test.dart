@@ -58,4 +58,21 @@ void main() {
       equals(FieldElement(number: 22, prime: 31)),
     );
   });
+
+  test('test_pow', () {
+    var a = FieldElement(number: 17, prime: 31);
+
+    expect(
+      a.pow(3),
+      equals(FieldElement(number: 15, prime: 31)),
+    );
+
+    a = FieldElement(number: 5, prime: 31);
+    var b = FieldElement(number: 18, prime: 31);
+
+    expect(
+      a.pow(5) * b,
+      equals(FieldElement(number: 16, prime: 31)),
+    );
+  });
 }
