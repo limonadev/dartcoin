@@ -43,6 +43,14 @@ class FieldElement {
     return buildInstanceWith(number: number, prime: prime);
   }
 
+  FieldElement operator *(FieldElement other) {
+    if (prime != other.prime) {
+      throw ArgumentError('Cannot multiply two numbers in different Fields');
+    }
+    var number = (this.number * other.number) % prime;
+    return buildInstanceWith(number: number, prime: prime);
+  }
+
   /// Method to mimic the inheritance of the Python examples by using __class__ from
   /// https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/ecc.py#L33
   FieldElement buildInstanceWith({
