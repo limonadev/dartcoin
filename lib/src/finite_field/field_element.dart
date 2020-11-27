@@ -1,6 +1,8 @@
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
+//TODO: Migrate to latest Dart SDK to enable null safety
+
 class FieldElement {
   FieldElement({
     @required this.number,
@@ -23,6 +25,22 @@ class FieldElement {
     }
 
     return result;
+  }
+
+  FieldElement operator +(FieldElement other) {
+    if (prime != other.prime) {
+      throw ArgumentError('Cannot add two numbers in different Fields');
+    }
+    var number = (this.number + other.number) % prime;
+    return FieldElement(number: number, prime: prime);
+  }
+
+  FieldElement operator -(FieldElement other) {
+    if (prime != other.prime) {
+      throw ArgumentError('Cannot subtract two numbers in different Fields');
+    }
+    var number = (this.number - other.number) % prime;
+    return FieldElement(number: number, prime: prime);
   }
 
   @override
