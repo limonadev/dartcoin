@@ -11,6 +11,7 @@ class ChapterOne {
     if (runOptionals) {
       print('Optional exercises');
       _optional_first();
+      _optional_second();
     }
   }
 
@@ -61,6 +62,18 @@ class ChapterOne {
         result.add((i * k) % order);
       }
       result.sort();
+      print(result);
+    }
+  }
+
+  /// Exercise 7 from Programming Bitcoin book - Chapter 1
+  void _optional_second() {
+    print('Optional Second Exercise');
+    for (var p in [7, 11, 17, 31]) {
+      var result = [];
+      for (var i = 1; i < p; i++) {
+        result.add(i.modPow(p - 1, p));
+      }
       print(result);
     }
   }
