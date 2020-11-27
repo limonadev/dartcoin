@@ -32,7 +32,7 @@ class FieldElement {
       throw ArgumentError('Cannot add two numbers in different Fields');
     }
     var number = (this.number + other.number) % prime;
-    return FieldElement(number: number, prime: prime);
+    return buildInstanceWith(number: number, prime: prime);
   }
 
   FieldElement operator -(FieldElement other) {
@@ -40,7 +40,19 @@ class FieldElement {
       throw ArgumentError('Cannot subtract two numbers in different Fields');
     }
     var number = (this.number - other.number) % prime;
-    return FieldElement(number: number, prime: prime);
+    return buildInstanceWith(number: number, prime: prime);
+  }
+
+  /// Method to mimic the inheritance of the Python examples by using __class__ from
+  /// https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/ecc.py#L33
+  FieldElement buildInstanceWith({
+    @required int number,
+    @required int prime,
+  }) {
+    return FieldElement(
+      number: number,
+      prime: prime,
+    );
   }
 
   @override
