@@ -51,6 +51,11 @@ class FieldElement {
     return buildInstanceWith(number: number, prime: prime);
   }
 
+  FieldElement pow(int exponent) {
+    var number = this.number.modPow(exponent, prime);
+    return buildInstanceWith(number: number, prime: prime);
+  }
+
   /// Method to mimic the inheritance of the Python examples by using __class__ from
   /// https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/ecc.py#L33
   FieldElement buildInstanceWith({
