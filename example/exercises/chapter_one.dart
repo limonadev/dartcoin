@@ -6,10 +6,11 @@ class ChapterOne {
     _first();
     _second();
     _third();
+    _fourth();
 
     if (runOptionals) {
       print('Optional exercises');
-      _optional_third();
+      _optional_first();
     }
   }
 
@@ -33,6 +34,7 @@ class ChapterOne {
     print(a + b == c);
   }
 
+  /// Exercise 5 https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
   void _third() {
     print('Third Exercise');
     var a = FieldElement(number: 3, prime: 13);
@@ -41,9 +43,17 @@ class ChapterOne {
     print(a * b == c);
   }
 
+  /// Exercise 6 https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
+  void _fourth() {
+    print('Fourth Exercise');
+    var a = FieldElement(number: 3, prime: 13);
+    var b = FieldElement(number: 1, prime: 13);
+    print(a.pow(3) == b);
+  }
+
   /// Exercise 5 from Programming Bitcoin book - Chapter 1
-  void _optional_third() {
-    print('Optional Third Exercise');
+  void _optional_first() {
+    print('Optional First Exercise');
     const order = 19;
     for (var k in [1, 3, 7, 13, 18]) {
       var result = [];
