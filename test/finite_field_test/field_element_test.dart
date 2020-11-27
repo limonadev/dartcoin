@@ -48,4 +48,14 @@ void main() {
       equals(FieldElement(number: 16, prime: 31)),
     );
   });
+
+  test('test_mul', () {
+    var a = FieldElement(number: 24, prime: 31);
+    var b = FieldElement(number: 19, prime: 31);
+
+    expect(
+      a * b,
+      equals(FieldElement(number: 22, prime: 31)),
+    );
+  });
 }
