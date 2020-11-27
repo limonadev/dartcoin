@@ -12,4 +12,40 @@ void main() {
     expect(a != c, true);
     expect(a != b, false);
   });
+
+  test('test_add', () {
+    var a = FieldElement(number: 2, prime: 31);
+    var b = FieldElement(number: 15, prime: 31);
+
+    expect(
+      a + b,
+      equals(FieldElement(number: 17, prime: 31)),
+    );
+
+    a = FieldElement(number: 17, prime: 31);
+    b = FieldElement(number: 21, prime: 31);
+
+    expect(
+      a + b,
+      equals(FieldElement(number: 7, prime: 31)),
+    );
+  });
+
+  test('test_sub', () {
+    var a = FieldElement(number: 29, prime: 31);
+    var b = FieldElement(number: 4, prime: 31);
+
+    expect(
+      a - b,
+      equals(FieldElement(number: 25, prime: 31)),
+    );
+
+    a = FieldElement(number: 15, prime: 31);
+    b = FieldElement(number: 30, prime: 31);
+
+    expect(
+      a - b,
+      equals(FieldElement(number: 16, prime: 31)),
+    );
+  });
 }
