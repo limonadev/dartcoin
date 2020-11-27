@@ -1,10 +1,11 @@
 import 'package:dartcoin/dartcoin.dart';
 
 class ChapterOne {
-  void runEverything() {
+  void runEverything({bool runOptionals = false}) {
     print('Run each exercise from Chapter One');
     _first();
     _second();
+    if (runOptionals) _optional_third();
   }
 
   void _first() {
@@ -23,5 +24,18 @@ class ChapterOne {
     var c = FieldElement(number: 6, prime: 13);
 
     print(a + b == c);
+  }
+
+  void _optional_third() {
+    print('Optional Third Exercise');
+    const order = 19;
+    for (var k in [1, 3, 7, 13, 18]) {
+      var result = [];
+      for (var i = 0; i <= 18; i++) {
+        result.add((i * k) % order);
+      }
+      result.sort();
+      print(result);
+    }
   }
 }
