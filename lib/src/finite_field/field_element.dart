@@ -51,6 +51,14 @@ class FieldElement {
     return buildInstanceWith(number: number, prime: prime);
   }
 
+  FieldElement operator /(FieldElement other) {
+    if (prime != other.prime) {
+      throw ArgumentError('Cannot divide two numbers in different Fields');
+    }
+    var number = (this.number * other.number.modPow(prime - 2, prime)) % prime;
+    return buildInstanceWith(number: number, prime: prime);
+  }
+
   FieldElement pow(int exponent) {
     var number = this.number.modPow(exponent, prime);
     return buildInstanceWith(number: number, prime: prime);
