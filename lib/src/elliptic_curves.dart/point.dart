@@ -10,9 +10,23 @@ class Point {
     @required this.x,
     @required this.y,
   }) : assert(
-          pow(y, 2) == pow(x, 3) + a * x + b,
+          (x == INF && y == INF) || (pow(y, 2) == pow(x, 3) + a * x + b),
           '($x,$y) is not in the curve',
         );
+
+  factory Point.atInfinity({
+    @required int a,
+    @required int b,
+  }) {
+    return Point(
+      a: a,
+      b: b,
+      x: Point.INF,
+      y: Point.INF,
+    );
+  }
+
+  static const int INF = null;
 
   final int a;
   final int b;
@@ -20,18 +34,54 @@ class Point {
   final int y;
 
   @override
+  int get hashCode => ObjectUtils.buildHashCode(
+        [a, b, x, y],
+      );
+
+  bool get isPointAtInfinity => x == INF;
+
+  @override
   bool operator ==(dynamic other) {
     var result = false;
 
     if (other is Point) {
-      result = a == other.a && b == other.b && x == other.x && y == other.y;
+      result = _isSameCurve(other) && x == other.x && y == other.y;
     }
 
     return result;
   }
 
+  Point operator +(Point other) {
+    if (!_isSameCurve(other)) {
+      throw ArgumentError('Points $this and $other are not on the same curve');
+    }
+
+    Point result;
+    if (isPointAtInfinity) {
+      result = other.copy();
+    } else if (other.isPointAtInfinity) {
+      result = copy();
+    } else if (_isAdditiveInverseOf(other)) {
+      result = Point.atInfinity(a: a, b: b);
+    }
+
+    return result;
+  }
+
+  Point copy() {
+    return Point(a: a, b: b, x: x, y: y);
+  }
+
   @override
-  int get hashCode => ObjectUtils.buildHashCode(
-        [a, b, x, y],
-      );
+  String toString() {
+    return 'Point ($x, $y) on curve ($a, $b)';
+  }
+
+  bool _isAdditiveInverseOf(Point other) {
+    return x == other.x && y != other.y;
+  }
+
+  bool _isSameCurve(Point other) {
+    return a == other.a && b == other.b;
+  }
 }
