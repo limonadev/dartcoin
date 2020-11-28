@@ -7,6 +7,7 @@ class ChapterOne {
     _second();
     _third();
     _fourth();
+    _fifth();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -51,6 +52,14 @@ class ChapterOne {
     var a = FieldElement(number: 3, prime: 13);
     var b = FieldElement(number: 1, prime: 13);
     print(a.pow(3) == b);
+  }
+
+  /// Exercise 9 https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
+  void _fifth() {
+    print('Fifth Exercise');
+    var a = FieldElement(number: 7, prime: 13);
+    var b = FieldElement(number: 8, prime: 13);
+    print(a.pow(-3) == b);
   }
 
   /// Exercise 5 from Programming Bitcoin book - Chapter 1
