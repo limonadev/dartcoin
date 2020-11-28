@@ -63,10 +63,42 @@ class Point {
     } else if (other.isPointAtInfinity) {
       result = copy();
     } else if (_isAdditiveInverseOf(other)) {
-      result = Point.atInfinity(a: a, b: b);
+      result = buildAtInfiniteInstance(a: a, b: b);
+    } else if (x != other.x) {
+      var slope = (other.y - this.y) ~/ (other.x - this.x);
+      var x = pow(slope, 2) - this.x - other.x;
+      var y = slope * (this.x - x) - this.y;
+
+      result = buildInstanceWith(a: a, b: b, x: x, y: y);
     }
 
     return result;
+  }
+
+  Point buildAtInfiniteInstance({
+    @required int a,
+    @required int b,
+  }) {
+    return Point.atInfinity(
+      a: a,
+      b: b,
+    );
+  }
+
+  /// Method to mimic the inheritance of the Python examples by using __class__ from
+  /// https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch02/answers.py#L107
+  Point buildInstanceWith({
+    @required int a,
+    @required int b,
+    @required int x,
+    @required int y,
+  }) {
+    return Point(
+      a: a,
+      b: b,
+      x: x,
+      y: y,
+    );
   }
 
   Point copy() {
