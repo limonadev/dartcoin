@@ -30,4 +30,13 @@ void main() {
       equals(Point(a: 5, b: 7, x: 2, y: -5)),
     );
   });
+
+  test('test_add2', () {
+    var a = Point(a: 5, b: 7, x: -1, y: -1);
+
+    expect(
+      a + a,
+      equals(Point(a: 5, b: 7, x: 18, y: 77)),
+    );
+  });
 }
