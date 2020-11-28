@@ -6,6 +6,7 @@ class ChapterTwo {
     _first();
     _second();
     _third();
+    _fourth();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -43,5 +44,14 @@ class ChapterTwo {
     var p2 = Point(a: 5, b: 7, x: -1, y: -1);
 
     print(p1 + p2);
+  }
+
+  /// Exercise 6 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch02/Chapter2.ipynb
+  void _fourth() {
+    print('Fourth Exercise');
+
+    var p = Point(a: 5, b: 7, x: -1, y: -1);
+
+    print(p + p);
   }
 }
