@@ -75,4 +75,13 @@ void main() {
       equals(FieldElement(number: 16, prime: 31)),
     );
   });
+
+  test('test_div', () {
+    var a = FieldElement(number: 3, prime: 31);
+    var b = FieldElement(number: 24, prime: 31);
+    expect(
+      a / b,
+      equals(FieldElement(number: 4, prime: 31)),
+    );
+  });
 }
