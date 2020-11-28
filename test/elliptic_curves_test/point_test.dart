@@ -39,4 +39,14 @@ void main() {
       equals(Point(a: 5, b: 7, x: 18, y: 77)),
     );
   });
+
+  /// This is not part of the book.
+  test('test_add3', () {
+    var a = Point(a: -1, b: 0, x: 0, y: 0);
+
+    expect(
+      a + a,
+      equals(Point.atInfinity(a: -1, b: 0)),
+    );
+  });
 }
