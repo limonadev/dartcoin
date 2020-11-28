@@ -12,6 +12,7 @@ class ChapterOne {
       print('Optional exercises');
       _optional_first();
       _optional_second();
+      _optional_third();
     }
   }
 
@@ -76,5 +77,25 @@ class ChapterOne {
       }
       print(result);
     }
+  }
+
+  /// Exercise 8 from Programming Bitcoin book - Chapter 1
+  void _optional_third() {
+    print('Optional Third Exercise');
+
+    const order = 31;
+
+    /// The operation of n^(-i) in some order is equals to
+    /// ( n ^ (order-i-1) ) % order
+    var i = 1;
+    var firstTerm = 24.modPow(order - i - 1, order);
+    print((3 * firstTerm) % order);
+
+    i = 3;
+    print(17.modPow(order - i - 1, order));
+
+    i = 4;
+    firstTerm = 4.modPow(order - i - 1, order);
+    print((firstTerm * 11) % order);
   }
 }
