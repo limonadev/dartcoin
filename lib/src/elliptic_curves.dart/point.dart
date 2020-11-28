@@ -70,6 +70,12 @@ class Point {
       var y = slope * (this.x - x) - this.y;
 
       result = buildInstanceWith(a: a, b: b, x: x, y: y);
+    } else if (this == other) {
+      var slope = (3 * pow(this.x, 2) + a) ~/ (2 * this.y);
+      var x = pow(slope, 2) - 2 * this.x;
+      var y = slope * (this.x - x) - this.y;
+
+      result = buildInstanceWith(a: a, b: b, x: x, y: y);
     }
 
     return result;
