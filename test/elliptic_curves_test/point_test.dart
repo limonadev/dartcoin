@@ -20,4 +20,14 @@ void main() {
     expect(b + a, equals(b));
     expect(b + c, equals(a));
   });
+
+  test('test_add1', () {
+    var a = Point(a: 5, b: 7, x: 3, y: 7);
+    var b = Point(a: 5, b: 7, x: -1, y: -1);
+
+    expect(
+      a + b,
+      equals(Point(a: 5, b: 7, x: 2, y: -5)),
+    );
+  });
 }
