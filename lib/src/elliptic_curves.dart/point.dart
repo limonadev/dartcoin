@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
+@immutable
 class Point {
   Point({
     @required this.a,

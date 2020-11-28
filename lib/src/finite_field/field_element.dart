@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 //TODO: Migrate to latest Dart SDK to enable null safety
 
+@immutable
 class FieldElement {
   FieldElement({
     @required this.number,
