@@ -5,6 +5,7 @@ class ChapterTwo {
     print('Run each exercise from Chapter Two');
     _first();
     _second();
+    _third();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -24,11 +25,23 @@ class ChapterTwo {
 
   /// Exercise 2 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch02/Chapter2.ipynb
   void _second() {
+    print('Second Exercise');
     var p1 = Point(a: 5, b: 7, x: -1, y: -1);
     var p2 = Point(a: 5, b: 7, x: -1, y: 1);
     var inf = Point.atInfinity(a: 5, b: 7);
+
     print(p1 + inf);
     print(inf + p2);
+    print(p1 + p2);
+  }
+
+  /// Exercise 4 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch02/Chapter2.ipynb
+  void _third() {
+    print('Third Exercise');
+
+    var p1 = Point(a: 5, b: 7, x: 2, y: 5);
+    var p2 = Point(a: 5, b: 7, x: -1, y: -1);
+
     print(p1 + p2);
   }
 }
