@@ -10,4 +10,14 @@ void main() {
     expect(a != b, true);
     expect(a != a, false);
   });
+
+  test('test_add0', () {
+    var a = Point.atInfinity(a: 5, b: 7);
+    var b = Point(a: 5, b: 7, x: 2, y: 5);
+    var c = Point(a: 5, b: 7, x: 2, y: -5);
+
+    expect(a + b, equals(b));
+    expect(b + a, equals(b));
+    expect(b + c, equals(a));
+  });
 }
