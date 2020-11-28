@@ -5,14 +5,10 @@ Created from templates made available by Stagehand under a BSD-style
 
 ## Usage
 
-A simple usage example:
-
-```dart
-import 'package:dartcoin/dartcoin.dart';
-
-main() {
-  var awesome = new Awesome();
-}
+To run all the examples, ensure the desired chapter is uncommented in `example/dartcoin_example.dart`.
+After that, you can run:
+```
+dart --enable-asserts example/dartcoin_example.dart
 ```
 
 ## Features and bugs
