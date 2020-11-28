@@ -83,5 +83,18 @@ void main() {
       a / b,
       equals(FieldElement(number: 4, prime: 31)),
     );
+
+    a = FieldElement(number: 17, prime: 31);
+    expect(
+      a.pow(-3),
+      FieldElement(number: 29, prime: 31),
+    );
+
+    a = FieldElement(number: 4, prime: 31);
+    b = FieldElement(number: 11, prime: 31);
+    expect(
+      a.pow(-4) * b,
+      equals(FieldElement(number: 13, prime: 31)),
+    );
   });
 }

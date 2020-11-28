@@ -60,7 +60,8 @@ class FieldElement {
   }
 
   FieldElement pow(int exponent) {
-    var number = this.number.modPow(exponent, prime);
+    var realExponent = exponent % (prime - 1);
+    var number = this.number.modPow(realExponent, prime);
     return buildInstanceWith(number: number, prime: prime);
   }
 
