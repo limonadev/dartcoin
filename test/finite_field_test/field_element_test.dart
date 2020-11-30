@@ -4,9 +4,9 @@ import 'package:test/test.dart';
 /// Each test is based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/ecc.py
 void main() {
   test('test_ne', () {
-    var a = FieldElement(value: 2, prime: 31);
-    var b = FieldElement(value: 2, prime: 31);
-    var c = FieldElement(value: 15, prime: 31);
+    var a = FieldElement(prime: 31, value: 2);
+    var b = FieldElement(prime: 31, value: 2);
+    var c = FieldElement(prime: 31, value: 15);
 
     expect(a, equals(b));
     expect(a != c, true);
@@ -14,87 +14,87 @@ void main() {
   });
 
   test('test_add', () {
-    var a = FieldElement(value: 2, prime: 31);
-    var b = FieldElement(value: 15, prime: 31);
+    var a = FieldElement(prime: 31, value: 2);
+    var b = FieldElement(prime: 31, value: 15);
 
     expect(
       a + b,
-      equals(FieldElement(value: 17, prime: 31)),
+      equals(FieldElement(prime: 31, value: 17)),
     );
 
-    a = FieldElement(value: 17, prime: 31);
-    b = FieldElement(value: 21, prime: 31);
+    a = FieldElement(prime: 31, value: 17);
+    b = FieldElement(prime: 31, value: 21);
 
     expect(
       a + b,
-      equals(FieldElement(value: 7, prime: 31)),
+      equals(FieldElement(prime: 31, value: 7)),
     );
   });
 
   test('test_sub', () {
-    var a = FieldElement(value: 29, prime: 31);
-    var b = FieldElement(value: 4, prime: 31);
+    var a = FieldElement(prime: 31, value: 29);
+    var b = FieldElement(prime: 31, value: 4);
 
     expect(
       a - b,
-      equals(FieldElement(value: 25, prime: 31)),
+      equals(FieldElement(prime: 31, value: 25)),
     );
 
-    a = FieldElement(value: 15, prime: 31);
-    b = FieldElement(value: 30, prime: 31);
+    a = FieldElement(prime: 31, value: 15);
+    b = FieldElement(prime: 31, value: 30);
 
     expect(
       a - b,
-      equals(FieldElement(value: 16, prime: 31)),
+      equals(FieldElement(prime: 31, value: 16)),
     );
   });
 
   test('test_mul', () {
-    var a = FieldElement(value: 24, prime: 31);
-    var b = FieldElement(value: 19, prime: 31);
+    var a = FieldElement(prime: 31, value: 24);
+    var b = FieldElement(prime: 31, value: 19);
 
     expect(
       a * b,
-      equals(FieldElement(value: 22, prime: 31)),
+      equals(FieldElement(prime: 31, value: 22)),
     );
   });
 
   test('test_pow', () {
-    var a = FieldElement(value: 17, prime: 31);
+    var a = FieldElement(prime: 31, value: 17);
 
     expect(
       a.pow(3),
-      equals(FieldElement(value: 15, prime: 31)),
+      equals(FieldElement(prime: 31, value: 15)),
     );
 
-    a = FieldElement(value: 5, prime: 31);
-    var b = FieldElement(value: 18, prime: 31);
+    a = FieldElement(prime: 31, value: 5);
+    var b = FieldElement(prime: 31, value: 18);
 
     expect(
       a.pow(5) * b,
-      equals(FieldElement(value: 16, prime: 31)),
+      equals(FieldElement(prime: 31, value: 16)),
     );
   });
 
   test('test_div', () {
-    var a = FieldElement(value: 3, prime: 31);
-    var b = FieldElement(value: 24, prime: 31);
+    var a = FieldElement(prime: 31, value: 3);
+    var b = FieldElement(prime: 31, value: 24);
     expect(
       a / b,
-      equals(FieldElement(value: 4, prime: 31)),
+      equals(FieldElement(prime: 31, value: 4)),
     );
 
-    a = FieldElement(value: 17, prime: 31);
+    a = FieldElement(prime: 31, value: 17);
     expect(
       a.pow(-3),
-      FieldElement(value: 29, prime: 31),
+      FieldElement(prime: 31, value: 29),
     );
 
-    a = FieldElement(value: 4, prime: 31);
-    b = FieldElement(value: 11, prime: 31);
+    a = FieldElement(prime: 31, value: 4);
+    b = FieldElement(prime: 31, value: 11);
     expect(
       a.pow(-4) * b,
-      equals(FieldElement(value: 13, prime: 31)),
+      equals(FieldElement(prime: 31, value: 13)),
     );
   });
 }
