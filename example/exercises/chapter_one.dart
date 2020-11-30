@@ -20,8 +20,8 @@ class ChapterOne {
   /// Exercise 0 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
   void _first() {
     print('First Exercise');
-    var a = FieldElement(number: 7, prime: 13);
-    var b = FieldElement(number: 6, prime: 13);
+    var a = FieldElement(value: 7, prime: 13);
+    var b = FieldElement(value: 6, prime: 13);
 
     print(a == b);
     print(a == a);
@@ -30,9 +30,9 @@ class ChapterOne {
   /// Exercise 2 https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
   void _second() {
     print('Second Exercise');
-    var a = FieldElement(number: 7, prime: 13);
-    var b = FieldElement(number: 12, prime: 13);
-    var c = FieldElement(number: 6, prime: 13);
+    var a = FieldElement(value: 7, prime: 13);
+    var b = FieldElement(value: 12, prime: 13);
+    var c = FieldElement(value: 6, prime: 13);
 
     print(a + b == c);
   }
@@ -40,25 +40,25 @@ class ChapterOne {
   /// Exercise 5 https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
   void _third() {
     print('Third Exercise');
-    var a = FieldElement(number: 3, prime: 13);
-    var b = FieldElement(number: 12, prime: 13);
-    var c = FieldElement(number: 10, prime: 13);
+    var a = FieldElement(value: 3, prime: 13);
+    var b = FieldElement(value: 12, prime: 13);
+    var c = FieldElement(value: 10, prime: 13);
     print(a * b == c);
   }
 
   /// Exercise 6 https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
   void _fourth() {
     print('Fourth Exercise');
-    var a = FieldElement(number: 3, prime: 13);
-    var b = FieldElement(number: 1, prime: 13);
+    var a = FieldElement(value: 3, prime: 13);
+    var b = FieldElement(value: 1, prime: 13);
     print(a.pow(3) == b);
   }
 
   /// Exercise 9 https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/Chapter1.ipynb
   void _fifth() {
     print('Fifth Exercise');
-    var a = FieldElement(number: 7, prime: 13);
-    var b = FieldElement(number: 8, prime: 13);
+    var a = FieldElement(value: 7, prime: 13);
+    var b = FieldElement(value: 8, prime: 13);
     print(a.pow(-3) == b);
   }
 

@@ -15,7 +15,7 @@ class ChapterThree {
     print('Optional First Exercise');
 
     const prime = 223;
-    final b = FieldElement(number: 7, prime: prime);
+    final b = FieldElement(value: 7, prime: prime);
 
     var points = [
       [192, 105],
@@ -26,8 +26,8 @@ class ChapterThree {
     ];
 
     for (var p in points) {
-      var x = FieldElement(number: p[0], prime: prime);
-      var y = FieldElement(number: p[1], prime: prime);
+      var x = FieldElement(value: p[0], prime: prime);
+      var y = FieldElement(value: p[1], prime: prime);
 
       print(y.pow(2) == x.pow(3) + b);
     }

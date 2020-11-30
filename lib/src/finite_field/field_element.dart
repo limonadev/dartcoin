@@ -7,23 +7,26 @@ import 'package:meta/meta.dart';
 @immutable
 class FieldElement extends Operand {
   FieldElement({
-    @required this.number,
+    @required int value,
     @required this.prime,
-  })  : assert(number >= 0),
-        assert(number < prime);
+  })  : assert(value >= 0),
+        assert(value < prime),
+        super(value: value);
 
-  final int number;
   final int prime;
 
   @override
-  int get hashCode => ObjectUtils.buildHashCode([number, prime]);
+  int get hashCode => ObjectUtils.buildHashCode([value, prime]);
+
+  @override
+  int get value => super.value.toInt();
 
   @override
   bool operator ==(dynamic other) {
     var result = false;
 
     if (other is FieldElement) {
-      result = number == other.number && prime == other.prime;
+      result = value == other.value && prime == other.prime;
     }
 
     return result;
@@ -43,8 +46,8 @@ class FieldElement extends Operand {
       throw ArgumentError('Cannot add two numbers in different Fields');
     }
 
-    var number = (this.number + other.number) % prime;
-    return buildInstanceWith(number: number, prime: prime);
+    var number = (value + other.value) % prime;
+    return buildInstanceWith(value: number, prime: prime);
   }
 
   @override
@@ -61,8 +64,8 @@ class FieldElement extends Operand {
       throw ArgumentError('Cannot subtract two numbers in different Fields');
     }
 
-    var number = (this.number - other.number) % prime;
-    return buildInstanceWith(number: number, prime: prime);
+    var number = (value - other.value) % prime;
+    return buildInstanceWith(value: number, prime: prime);
   }
 
   @override
@@ -79,8 +82,8 @@ class FieldElement extends Operand {
       throw ArgumentError('Cannot multiply two numbers in different Fields');
     }
 
-    var number = (this.number * other.number) % prime;
-    return buildInstanceWith(number: number, prime: prime);
+    var number = (value * other.value) % prime;
+    return buildInstanceWith(value: number, prime: prime);
   }
 
   FieldElement operator /(Operand o) {
@@ -96,31 +99,31 @@ class FieldElement extends Operand {
       throw ArgumentError('Cannot divide two numbers in different Fields');
     }
 
-    var number = (this.number * other.number.modPow(prime - 2, prime)) % prime;
-    return buildInstanceWith(number: number, prime: prime);
+    var number = (value * other.value.modPow(prime - 2, prime)) % prime;
+    return buildInstanceWith(value: number, prime: prime);
   }
 
   @override
   FieldElement pow(num exponent) {
     var realExponent = exponent % (prime - 1);
-    var number = this.number.modPow(realExponent, prime);
-    return buildInstanceWith(number: number, prime: prime);
+    var number = value.modPow(realExponent, prime);
+    return buildInstanceWith(value: number, prime: prime);
   }
 
   /// Method to mimic the inheritance of the Python examples by using __class__ from
   /// https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/ecc.py#L33
   FieldElement buildInstanceWith({
-    @required int number,
+    @required int value,
     @required int prime,
   }) {
     return FieldElement(
-      number: number,
+      value: value,
       prime: prime,
     );
   }
 
   @override
   String toString() {
-    return 'FieldElement_$prime($number)';
+    return 'FieldElement_$prime($value)';
   }
 }
