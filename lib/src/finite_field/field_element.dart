@@ -105,6 +105,24 @@ class FieldElement extends Operand {
   }
 
   @override
+  FieldElement operator ~/(Operand o) {
+    if (o is! FieldElement) {
+      throw ArgumentError(
+        'Cannot divide a FieldElement with a ${o.runtimeType}',
+      );
+    }
+
+    var other = o as FieldElement;
+
+    if (prime != other.prime) {
+      throw ArgumentError('Cannot divide two numbers in different Fields');
+    }
+
+    var number = (value * other.value.modPow(prime - 2, prime)) % prime;
+    return buildInstanceWith(value: number, prime: prime);
+  }
+
+  @override
   FieldElement pow(num exponent) {
     var realExponent = exponent % (prime - 1);
     var number = value.modPow(realExponent, prime);
