@@ -7,8 +7,8 @@ import 'package:meta/meta.dart';
 @immutable
 class FieldElement extends Operand {
   FieldElement({
-    @required int value,
     @required this.prime,
+    @required int value,
   })  : assert(value >= 0),
         assert(value < prime),
         super(value: value);
@@ -86,6 +86,7 @@ class FieldElement extends Operand {
     return buildInstanceWith(value: number, prime: prime);
   }
 
+  @override
   FieldElement operator /(Operand o) {
     if (o is! FieldElement) {
       throw ArgumentError(
