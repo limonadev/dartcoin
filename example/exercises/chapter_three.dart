@@ -7,6 +7,7 @@ class ChapterThree {
     if (runOptionals) {
       print('Optional exercises');
       _optional_first();
+      _optional_second();
     }
   }
 
@@ -30,6 +31,48 @@ class ChapterThree {
       var y = FieldElement(prime: prime, value: p[1]);
 
       print(y.pow(2) == x.pow(3) + b);
+    }
+  }
+
+  /// Exercise 2 from Programming Bitcoin book - Chapter 3
+  void _optional_second() {
+    print('Optional Second Exercise');
+
+    const prime = 223;
+    final a = FieldElement(prime: prime, value: 0);
+    final b = FieldElement(prime: prime, value: 7);
+
+    var pointsA = [
+      [192, 105],
+      [170, 142],
+      [47, 71],
+      [143, 98]
+    ];
+    var pointsB = [
+      [17, 56],
+      [60, 139],
+      [17, 56],
+      [76, 66]
+    ];
+
+    for (var i = 0; i < pointsA.length; i++) {
+      var p1 = pointsA[i];
+      var p2 = pointsB[i];
+
+      var first = Point(
+        a: a,
+        b: b,
+        x: FieldElement(prime: prime, value: p1[0]),
+        y: FieldElement(prime: prime, value: p1[1]),
+      );
+      var second = Point(
+        a: a,
+        b: b,
+        x: FieldElement(prime: prime, value: p2[0]),
+        y: FieldElement(prime: prime, value: p2[1]),
+      );
+
+      print(first + second);
     }
   }
 }
