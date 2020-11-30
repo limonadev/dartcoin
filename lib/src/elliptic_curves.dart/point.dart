@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:dartcoin/src/models/operand.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
@@ -11,35 +10,59 @@ class Point {
     @required this.x,
     @required this.y,
   }) : assert(
-          (x == INF && y == INF) || (pow(y, 2) == pow(x, 3) + a * x + b),
+          (x.isInf && y.isInf) || (y.pow(2) == x.pow(3) + a * x + b),
           '($x,$y) is not in the curve',
         );
 
-  factory Point.atInfinity({
-    @required int a,
-    @required int b,
+  factory Point.fromNumbers({
+    @required num a,
+    @required num b,
+    @required num x,
+    @required num y,
   }) {
     return Point(
-      a: a,
-      b: b,
-      x: Point.INF,
-      y: Point.INF,
+      a: Operand(value: a),
+      b: Operand(value: b),
+      x: Operand(value: x),
+      y: Operand(value: y),
     );
   }
 
-  static const int INF = null;
+  factory Point.atInfinity({
+    @required dynamic a,
+    @required dynamic b,
+  }) {
+    Operand realA, realB;
+    assert(
+      (a is num || a is Operand) && (b is num || b is Operand),
+      'Point needs a [num] or an [Operand] to be constructed',
+    );
 
-  final int a;
-  final int b;
-  final int x;
-  final int y;
+    if (a is num) realA = Operand(value: a);
+    if (b is num) realB = Operand(value: b);
+
+    realA ??= a;
+    realB ??= b;
+
+    return Point(
+      a: realA,
+      b: realB,
+      x: Operand.infinity(),
+      y: Operand.infinity(),
+    );
+  }
+
+  final Operand a;
+  final Operand b;
+  final Operand x;
+  final Operand y;
 
   @override
   int get hashCode => ObjectUtils.buildHashCode(
         [a, b, x, y],
       );
 
-  bool get isPointAtInfinity => x == INF;
+  bool get isPointAtInfinity => x.isInf;
 
   @override
   bool operator ==(dynamic other) {
@@ -66,17 +89,17 @@ class Point {
       result = buildAtInfiniteInstance(a: a, b: b);
     } else if (x != other.x) {
       var slope = (other.y - this.y) ~/ (other.x - this.x);
-      var x = pow(slope, 2) - this.x - other.x;
+      var x = slope.pow(2) - this.x - other.x;
       var y = slope * (this.x - x) - this.y;
 
       result = buildInstanceWith(a: a, b: b, x: x, y: y);
     } else {
       /// Both points are the same point
-      if (y == 0) {
+      if (y == Operand.zero()) {
         result = buildAtInfiniteInstance(a: a, b: b);
       } else {
-        var slope = (3 * pow(this.x, 2) + a) ~/ (2 * this.y);
-        var x = pow(slope, 2) - 2 * this.x;
+        var slope = (this.x.pow(2) * 3 + a) ~/ (this.y * 2);
+        var x = slope.pow(2) - this.x * 2;
         var y = slope * (this.x - x) - this.y;
 
         result = buildInstanceWith(a: a, b: b, x: x, y: y);
@@ -87,8 +110,8 @@ class Point {
   }
 
   Point buildAtInfiniteInstance({
-    @required int a,
-    @required int b,
+    @required Operand a,
+    @required Operand b,
   }) {
     return Point.atInfinity(
       a: a,
@@ -99,10 +122,10 @@ class Point {
   /// Method to mimic the inheritance of the Python examples by using __class__ from
   /// https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch02/answers.py#L107
   Point buildInstanceWith({
-    @required int a,
-    @required int b,
-    @required int x,
-    @required int y,
+    @required Operand a,
+    @required Operand b,
+    @required Operand x,
+    @required Operand y,
   }) {
     return Point(
       a: a,
@@ -118,7 +141,13 @@ class Point {
 
   @override
   String toString() {
-    return 'Point ($x, $y) on curve ($a, $b)';
+    String result;
+    if (isPointAtInfinity) {
+      result = 'Point at infinity on curve ($a, $b)';
+    } else {
+      result = 'Point ($x, $y) on curve ($a, $b)';
+    }
+    return result;
   }
 
   bool _isAdditiveInverseOf(Point other) {

@@ -1,10 +1,11 @@
+import 'package:dartcoin/src/models/operand.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
 //TODO: Migrate to latest Dart SDK to enable null safety
 
 @immutable
-class FieldElement {
+class FieldElement extends Operand {
   FieldElement({
     @required this.number,
     @required this.prime,
@@ -28,39 +29,79 @@ class FieldElement {
     return result;
   }
 
-  FieldElement operator +(FieldElement other) {
+  @override
+  FieldElement operator +(Operand o) {
+    if (o is! FieldElement) {
+      throw ArgumentError(
+        'Cannot add a FieldElement with a ${o.runtimeType}',
+      );
+    }
+
+    var other = o as FieldElement;
+
     if (prime != other.prime) {
       throw ArgumentError('Cannot add two numbers in different Fields');
     }
+
     var number = (this.number + other.number) % prime;
     return buildInstanceWith(number: number, prime: prime);
   }
 
-  FieldElement operator -(FieldElement other) {
+  @override
+  FieldElement operator -(Operand o) {
+    if (o is! FieldElement) {
+      throw ArgumentError(
+        'Cannot subtract a FieldElement with a ${o.runtimeType}',
+      );
+    }
+
+    var other = o as FieldElement;
+
     if (prime != other.prime) {
       throw ArgumentError('Cannot subtract two numbers in different Fields');
     }
+
     var number = (this.number - other.number) % prime;
     return buildInstanceWith(number: number, prime: prime);
   }
 
-  FieldElement operator *(FieldElement other) {
+  @override
+  FieldElement operator *(dynamic o) {
+    if (o is! FieldElement) {
+      throw ArgumentError(
+        'Cannot multiply a FieldElement with a ${o.runtimeType}',
+      );
+    }
+
+    var other = o as FieldElement;
+
     if (prime != other.prime) {
       throw ArgumentError('Cannot multiply two numbers in different Fields');
     }
+
     var number = (this.number * other.number) % prime;
     return buildInstanceWith(number: number, prime: prime);
   }
 
-  FieldElement operator /(FieldElement other) {
+  FieldElement operator /(Operand o) {
+    if (o is! FieldElement) {
+      throw ArgumentError(
+        'Cannot divide a FieldElement with a ${o.runtimeType}',
+      );
+    }
+
+    var other = o as FieldElement;
+
     if (prime != other.prime) {
       throw ArgumentError('Cannot divide two numbers in different Fields');
     }
+
     var number = (this.number * other.number.modPow(prime - 2, prime)) % prime;
     return buildInstanceWith(number: number, prime: prime);
   }
 
-  FieldElement pow(int exponent) {
+  @override
+  FieldElement pow(num exponent) {
     var realExponent = exponent % (prime - 1);
     var number = this.number.modPow(realExponent, prime);
     return buildInstanceWith(number: number, prime: prime);
