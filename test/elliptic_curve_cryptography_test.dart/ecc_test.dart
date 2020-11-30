@@ -39,4 +39,64 @@ void main() {
       );
     }
   });
+
+  test('test_add', () {
+    const prime = 223;
+
+    final a = FieldElement(prime: prime, value: 0);
+    final b = FieldElement(prime: prime, value: 7);
+
+    var pointsA = [
+      [192, 105],
+      [47, 71],
+      [143, 98]
+    ];
+    var pointsB = [
+      [17, 56],
+      [117, 141],
+      [76, 66]
+    ];
+    var results = [
+      [170, 142],
+      [60, 139],
+      [47, 71]
+    ];
+
+    for (var i = 0; i < pointsA.length; i++) {
+      var p1 = pointsA[i];
+      var p2 = pointsB[i];
+      var r = results[i];
+
+      var first = Point(
+        a: a,
+        b: b,
+        x: FieldElement(prime: prime, value: p1[0]),
+        y: FieldElement(prime: prime, value: p1[1]),
+      );
+      var second = Point(
+        a: a,
+        b: b,
+        x: FieldElement(prime: prime, value: p2[0]),
+        y: FieldElement(prime: prime, value: p2[1]),
+      );
+
+      expect(
+        first + second,
+        equals(
+          Point(
+            a: a,
+            b: b,
+            x: FieldElement(
+              prime: prime,
+              value: r[0],
+            ),
+            y: FieldElement(
+              prime: prime,
+              value: r[1],
+            ),
+          ),
+        ),
+      );
+    }
+  });
 }
