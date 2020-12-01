@@ -12,6 +12,7 @@ class ChapterThree {
       _optional_second();
       _optional_third();
       _optional_fourth();
+      _optional_fifth();
     }
   }
 
@@ -163,5 +164,12 @@ class ChapterThree {
     );
 
     print(g * n);
+  }
+
+  /// Exercise on page 61 from Programming Bitcoin book - Chapter 3
+  void _optional_fifth() {
+    print('Optional Fifth Exercise');
+
+    print(Secp256Utils.generator * Secp256Utils.order);
   }
 }
