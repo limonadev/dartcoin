@@ -112,18 +112,24 @@ class Point {
     return result;
   }
 
-  Point operator *(dynamic other) {
-    if (other is! int) {
+  Point operator *(dynamic o) {
+    BigInt other;
+
+    if (o is int) {
+      other = BigInt.from(o);
+    } else if (o is BigInt) {
+      other = o;
+    } else {
       throw ArgumentError(
-        'Cannot multiply a Point with a ${other.runtimeType}',
+        'Cannot multiply a Point with a ${o.runtimeType}',
       );
     }
 
     var current = copy();
     var result = buildAtInfiniteInstance(a: a.copy(), b: b.copy());
 
-    while (other > 0) {
-      if (other & 1 == 1) {
+    while (other > BigInt.zero) {
+      if (other & BigInt.one == BigInt.one) {
         result += current;
       }
 
