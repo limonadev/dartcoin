@@ -4,6 +4,7 @@ class ChapterThree {
   void runEverything({bool runOptionals = false}) {
     print('Run each exercise from Chapter Three');
     _first();
+    _second();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -16,6 +17,7 @@ class ChapterThree {
 
   /// Exercise 4 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch03/Chapter3.ipynb
   void _first() {
+    print('First Exercise');
     const prime = 223;
 
     final a = FieldElement.fromNumbers(prime: prime, value: 0);
@@ -28,6 +30,21 @@ class ChapterThree {
     for (var i = 1; i < 21; i++) {
       print(point * i);
     }
+  }
+
+  /// Exercise 5 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch03/Chapter3.ipynb
+  void _second() {
+    print('Second Exercise');
+    const prime = 223;
+
+    final a = FieldElement.fromNumbers(prime: prime, value: 0);
+    final b = FieldElement.fromNumbers(prime: prime, value: 7);
+    final x = FieldElement.fromNumbers(prime: prime, value: 15);
+    final y = FieldElement.fromNumbers(prime: prime, value: 86);
+
+    final point = Point(a: a, b: b, x: x, y: y);
+
+    print(point * 7);
   }
 
   /// Exercise 1 from Programming Bitcoin book - Chapter 3
