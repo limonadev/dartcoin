@@ -8,6 +8,7 @@ class ChapterThree {
       print('Optional exercises');
       _optional_first();
       _optional_second();
+      _optional_third();
     }
   }
 
@@ -74,5 +75,31 @@ class ChapterThree {
 
       print(first + second);
     }
+  }
+
+  /// Exercise 5 from Programming Bitcoin book - Chapter 3
+  void _optional_third() {
+    print('Optional Third Exercise');
+
+    const prime = 223;
+    final a = FieldElement(prime: prime, value: 0);
+    final b = FieldElement(prime: prime, value: 7);
+
+    final genPoint = Point(
+      a: a,
+      b: b,
+      x: FieldElement(prime: prime, value: 15),
+      y: FieldElement(prime: prime, value: 86),
+    );
+
+    var sum = genPoint.copy();
+
+    var order = 1;
+    while (!sum.isPointAtInfinity) {
+      sum += genPoint;
+      order++;
+    }
+
+    print(order);
   }
 }
