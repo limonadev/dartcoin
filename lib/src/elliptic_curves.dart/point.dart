@@ -95,7 +95,7 @@ class Point {
       result = buildInstanceWith(a: a, b: b, x: x, y: y);
     } else {
       /// Both points are the same point
-      if (y == Operand.zero()) {
+      if (y.isZero) {
         result = buildAtInfiniteInstance(a: a, b: b);
       } else {
         var slope = (this.x.pow(2) * 3 + a) ~/ (this.y * 2);

@@ -18,6 +18,7 @@ class Operand {
   int get hashCode => ObjectUtils.buildHashCode([value]);
 
   bool get isInf => value == INF;
+  bool get isZero => value == 0;
 
   @override
   bool operator ==(dynamic other) {
