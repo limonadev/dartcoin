@@ -7,8 +7,8 @@ void main() {
   test('test_on_curve', () {
     const prime = 223;
 
-    var a = FieldElement(prime: prime, value: 0);
-    var b = FieldElement(prime: prime, value: 7);
+    var a = FieldElement.fromNumbers(prime: prime, value: 0);
+    var b = FieldElement.fromNumbers(prime: prime, value: 7);
 
     var validPoints = [
       [192, 105],
@@ -21,8 +21,8 @@ void main() {
     ];
 
     for (var p in validPoints) {
-      var x = FieldElement(prime: prime, value: p[0]);
-      var y = FieldElement(prime: prime, value: p[1]);
+      var x = FieldElement.fromNumbers(prime: prime, value: p[0]);
+      var y = FieldElement.fromNumbers(prime: prime, value: p[1]);
 
       expect(
         () => Point(a: a, b: b, x: x, y: y),
@@ -31,8 +31,8 @@ void main() {
     }
 
     for (var p in invalidPoints) {
-      var x = FieldElement(prime: prime, value: p[0]);
-      var y = FieldElement(prime: prime, value: p[1]);
+      var x = FieldElement.fromNumbers(prime: prime, value: p[0]);
+      var y = FieldElement.fromNumbers(prime: prime, value: p[1]);
 
       expect(
         () => Point(a: a, b: b, x: x, y: y),
@@ -44,8 +44,8 @@ void main() {
   test('test_add', () {
     const prime = 223;
 
-    final a = FieldElement(prime: prime, value: 0);
-    final b = FieldElement(prime: prime, value: 7);
+    final a = FieldElement.fromNumbers(prime: prime, value: 0);
+    final b = FieldElement.fromNumbers(prime: prime, value: 7);
 
     var pointsA = [
       [192, 105],
@@ -71,14 +71,14 @@ void main() {
       var first = Point(
         a: a,
         b: b,
-        x: FieldElement(prime: prime, value: p1[0]),
-        y: FieldElement(prime: prime, value: p1[1]),
+        x: FieldElement.fromNumbers(prime: prime, value: p1[0]),
+        y: FieldElement.fromNumbers(prime: prime, value: p1[1]),
       );
       var second = Point(
         a: a,
         b: b,
-        x: FieldElement(prime: prime, value: p2[0]),
-        y: FieldElement(prime: prime, value: p2[1]),
+        x: FieldElement.fromNumbers(prime: prime, value: p2[0]),
+        y: FieldElement.fromNumbers(prime: prime, value: p2[1]),
       );
 
       expect(
@@ -87,11 +87,11 @@ void main() {
           Point(
             a: a,
             b: b,
-            x: FieldElement(
+            x: FieldElement.fromNumbers(
               prime: prime,
               value: r[0],
             ),
-            y: FieldElement(
+            y: FieldElement.fromNumbers(
               prime: prime,
               value: r[1],
             ),
@@ -103,8 +103,8 @@ void main() {
 
   test('test_rmul', () {
     const prime = 223;
-    final a = FieldElement(prime: prime, value: 0);
-    final b = FieldElement(prime: prime, value: 7);
+    final a = FieldElement.fromNumbers(prime: prime, value: 0);
+    final b = FieldElement.fromNumbers(prime: prime, value: 7);
 
     var coefficients = [2, 2, 2, 4, 8, 21];
     var points = [
@@ -125,8 +125,8 @@ void main() {
     ];
 
     for (var i = 0; i < coefficients.length; i++) {
-      var x = FieldElement(prime: prime, value: points[i][0]);
-      var y = FieldElement(prime: prime, value: points[i][1]);
+      var x = FieldElement.fromNumbers(prime: prime, value: points[i][0]);
+      var y = FieldElement.fromNumbers(prime: prime, value: points[i][1]);
 
       var p = Point(a: a, b: b, x: x, y: y);
 
@@ -137,8 +137,10 @@ void main() {
               ? Point(
                   a: a,
                   b: b,
-                  x: FieldElement(prime: prime, value: results[i][0]),
-                  y: FieldElement(prime: prime, value: results[i][1]),
+                  x: FieldElement.fromNumbers(
+                      prime: prime, value: results[i][0]),
+                  y: FieldElement.fromNumbers(
+                      prime: prime, value: results[i][1]),
                 )
               : Point.atInfinity(
                   a: a,
