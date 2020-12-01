@@ -2,15 +2,13 @@ import 'package:dartcoin/src/models/operand.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
-//TODO: Migrate to latest Dart SDK to enable null safety
-
 @immutable
 class FieldElement extends Operand {
   FieldElement({
     @required this.prime,
     @required BigInt value,
-  })  : assert(value >= BigInt.zero),
-        assert(value < prime),
+  })  : assert(value == null || value >= BigInt.zero),
+        assert(value == null || value < prime),
         super(value: value);
 
   factory FieldElement.fromNumbers({
