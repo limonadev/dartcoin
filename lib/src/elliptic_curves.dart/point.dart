@@ -83,6 +83,7 @@ class Point {
     Point result;
     var a = this.a.copy();
     var b = this.b.copy();
+
     if (isPointAtInfinity) {
       result = other.copy();
     } else if (other.isPointAtInfinity) {
@@ -106,6 +107,28 @@ class Point {
 
         result = buildInstanceWith(a: a, b: b, x: x, y: y);
       }
+    }
+
+    return result;
+  }
+
+  Point operator *(dynamic other) {
+    if (other is! int) {
+      throw ArgumentError(
+        'Cannot multiply a Point with a ${other.runtimeType}',
+      );
+    }
+
+    var current = copy();
+    var result = buildAtInfiniteInstance(a: a.copy(), b: b.copy());
+
+    while (other > 0) {
+      if (other & 1 == 1) {
+        result += current;
+      }
+
+      current += current;
+      other >>= 1;
     }
 
     return result;
