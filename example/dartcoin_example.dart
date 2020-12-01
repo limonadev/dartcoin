@@ -2,11 +2,11 @@ import 'exercises/all.dart';
 
 void main() {
   var chapterOne = ChapterOne();
-  //chapterOne.runEverything(runOptionals: false);
+  //chapterOne.runEverything(runOptionals: true);
 
   var chapterTwo = ChapterTwo();
-  //chapterTwo.runEverything(runOptionals: false);
+  //chapterTwo.runEverything(runOptionals: true);
 
   var chapterThree = ChapterThree();
-  chapterThree.runEverything(runOptionals: false);
+  chapterThree.runEverything(runOptionals: true);
 }

@@ -17,7 +17,7 @@ class ChapterThree {
     print('Optional First Exercise');
 
     const prime = 223;
-    final b = FieldElement(prime: prime, value: 7);
+    final b = FieldElement.fromNumbers(prime: prime, value: 7);
 
     var points = [
       [192, 105],
@@ -28,8 +28,8 @@ class ChapterThree {
     ];
 
     for (var p in points) {
-      var x = FieldElement(prime: prime, value: p[0]);
-      var y = FieldElement(prime: prime, value: p[1]);
+      var x = FieldElement.fromNumbers(prime: prime, value: p[0]);
+      var y = FieldElement.fromNumbers(prime: prime, value: p[1]);
 
       print(y.pow(2) == x.pow(3) + b);
     }
@@ -40,8 +40,8 @@ class ChapterThree {
     print('Optional Second Exercise');
 
     const prime = 223;
-    final a = FieldElement(prime: prime, value: 0);
-    final b = FieldElement(prime: prime, value: 7);
+    final a = FieldElement.fromNumbers(prime: prime, value: 0);
+    final b = FieldElement.fromNumbers(prime: prime, value: 7);
 
     var pointsA = [
       [192, 105],
@@ -63,14 +63,14 @@ class ChapterThree {
       var first = Point(
         a: a,
         b: b,
-        x: FieldElement(prime: prime, value: p1[0]),
-        y: FieldElement(prime: prime, value: p1[1]),
+        x: FieldElement.fromNumbers(prime: prime, value: p1[0]),
+        y: FieldElement.fromNumbers(prime: prime, value: p1[1]),
       );
       var second = Point(
         a: a,
         b: b,
-        x: FieldElement(prime: prime, value: p2[0]),
-        y: FieldElement(prime: prime, value: p2[1]),
+        x: FieldElement.fromNumbers(prime: prime, value: p2[0]),
+        y: FieldElement.fromNumbers(prime: prime, value: p2[1]),
       );
 
       print(first + second);
@@ -82,14 +82,14 @@ class ChapterThree {
     print('Optional Third Exercise');
 
     const prime = 223;
-    final a = FieldElement(prime: prime, value: 0);
-    final b = FieldElement(prime: prime, value: 7);
+    final a = FieldElement.fromNumbers(prime: prime, value: 0);
+    final b = FieldElement.fromNumbers(prime: prime, value: 7);
 
     final genPoint = Point(
       a: a,
       b: b,
-      x: FieldElement(prime: prime, value: 15),
-      y: FieldElement(prime: prime, value: 86),
+      x: FieldElement.fromNumbers(prime: prime, value: 15),
+      y: FieldElement.fromNumbers(prime: prime, value: 86),
     );
 
     var sum = genPoint.copy();
