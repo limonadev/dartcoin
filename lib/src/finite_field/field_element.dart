@@ -70,13 +70,19 @@ class FieldElement extends Operand {
 
   @override
   FieldElement operator *(dynamic o) {
-    if (o is! FieldElement) {
+    FieldElement other;
+
+    if (o is FieldElement) {
+      other = o;
+    } else if (o is Operand) {
+      other = FieldElement(prime: prime, value: o.value);
+    } else if (o is num) {
+      other = FieldElement(prime: prime, value: o);
+    } else {
       throw ArgumentError(
         'Cannot multiply a FieldElement with a ${o.runtimeType}',
       );
     }
-
-    var other = o as FieldElement;
 
     if (prime != other.prime) {
       throw ArgumentError('Cannot multiply two numbers in different Fields');
