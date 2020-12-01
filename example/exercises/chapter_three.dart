@@ -9,6 +9,7 @@ class ChapterThree {
       _optional_first();
       _optional_second();
       _optional_third();
+      _optional_fourth();
     }
   }
 
@@ -101,5 +102,32 @@ class ChapterThree {
     }
 
     print(order);
+  }
+
+  /// Exercise on page 60 from Programming Bitcoin book - Chapter 3
+  void _optional_fourth() {
+    final gx = BigInt.parse(
+      '79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798',
+      radix: 16,
+    );
+    final gy = BigInt.parse(
+      '483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8',
+      radix: 16,
+    );
+    final p = BigInt.two.pow(256) - BigInt.two.pow(32) - BigInt.from(977);
+    final n = BigInt.parse(
+      'fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141',
+      radix: 16,
+    );
+    final x = FieldElement(prime: p, value: gx);
+    final y = FieldElement(prime: p, value: gy);
+    final g = Point(
+      a: FieldElement(prime: p, value: BigInt.zero),
+      b: FieldElement(prime: p, value: BigInt.from(7)),
+      x: x,
+      y: y,
+    );
+
+    print(g * n);
   }
 }
