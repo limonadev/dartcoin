@@ -81,6 +81,8 @@ class Point {
     }
 
     Point result;
+    var a = this.a.copy();
+    var b = this.b.copy();
     if (isPointAtInfinity) {
       result = other.copy();
     } else if (other.isPointAtInfinity) {
