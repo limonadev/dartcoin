@@ -148,6 +148,11 @@ class FieldElement extends Operand {
   }
 
   @override
+  FieldElement copy() {
+    return FieldElement(prime: prime, value: value);
+  }
+
+  @override
   String toString() {
     return 'FieldElement_$prime($value)';
   }

@@ -60,6 +60,10 @@ class Operand {
     );
   }
 
+  Operand copy() {
+    return Operand(value: value);
+  }
+
   Operand pow(num exponent) {
     return Operand(
       value: math.pow(value, exponent),
