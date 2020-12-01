@@ -3,6 +3,7 @@ import 'package:dartcoin/dartcoin.dart';
 class ChapterThree {
   void runEverything({bool runOptionals = false}) {
     print('Run each exercise from Chapter Three');
+    _first();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -10,6 +11,22 @@ class ChapterThree {
       _optional_second();
       _optional_third();
       _optional_fourth();
+    }
+  }
+
+  /// Exercise 4 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch03/Chapter3.ipynb
+  void _first() {
+    const prime = 223;
+
+    final a = FieldElement.fromNumbers(prime: prime, value: 0);
+    final b = FieldElement.fromNumbers(prime: prime, value: 7);
+    final x = FieldElement.fromNumbers(prime: prime, value: 47);
+    final y = FieldElement.fromNumbers(prime: prime, value: 71);
+
+    final point = Point(a: a, b: b, x: x, y: y);
+
+    for (var i = 1; i < 21; i++) {
+      print(point * i);
     }
   }
 
