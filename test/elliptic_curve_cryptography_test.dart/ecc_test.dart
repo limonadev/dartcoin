@@ -1,4 +1,5 @@
 import 'package:dartcoin/dartcoin.dart';
+import 'package:dartcoin/src/models/operand.dart';
 import 'package:test/test.dart';
 
 /// Each test is based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch03/ecc.py
@@ -95,6 +96,54 @@ void main() {
               value: r[1],
             ),
           ),
+        ),
+      );
+    }
+  });
+
+  test('test_rmul', () {
+    const prime = 223;
+    final a = FieldElement(prime: prime, value: 0);
+    final b = FieldElement(prime: prime, value: 7);
+
+    var coefficients = [2, 2, 2, 4, 8, 21];
+    var points = [
+      [192, 105],
+      [143, 98],
+      [47, 71],
+      [47, 71],
+      [47, 71],
+      [47, 71]
+    ];
+    var results = [
+      [49, 71],
+      [64, 168],
+      [36, 111],
+      [194, 51],
+      [116, 55],
+      [null, null]
+    ];
+
+    for (var i = 0; i < coefficients.length; i++) {
+      var x = FieldElement(prime: prime, value: points[i][0]);
+      var y = FieldElement(prime: prime, value: points[i][1]);
+
+      var p = Point(a: a, b: b, x: x, y: y);
+
+      expect(
+        p * coefficients[i],
+        equals(
+          results[i][0] != null
+              ? Point(
+                  a: a,
+                  b: b,
+                  x: FieldElement(prime: prime, value: results[i][0]),
+                  y: FieldElement(prime: prime, value: results[i][1]),
+                )
+              : Point.atInfinity(
+                  a: a,
+                  b: b,
+                ),
         ),
       );
     }
