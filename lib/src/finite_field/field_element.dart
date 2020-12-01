@@ -8,18 +8,25 @@ import 'package:meta/meta.dart';
 class FieldElement extends Operand {
   FieldElement({
     @required this.prime,
-    @required int value,
-  })  : assert(value >= 0),
+    @required BigInt value,
+  })  : assert(value >= BigInt.zero),
         assert(value < prime),
         super(value: value);
 
-  final int prime;
+  factory FieldElement.fromNumbers({
+    @required int prime,
+    @required int value,
+  }) {
+    return FieldElement(
+      prime: BigInt.from(prime),
+      value: BigInt.from(value),
+    );
+  }
+
+  final BigInt prime;
 
   @override
   int get hashCode => ObjectUtils.buildHashCode([value, prime]);
-
-  @override
-  int get value => super.value.toInt();
 
   @override
   bool operator ==(dynamic other) {
@@ -76,8 +83,8 @@ class FieldElement extends Operand {
       other = o;
     } else if (o is Operand) {
       other = FieldElement(prime: prime, value: o.value);
-    } else if (o is num) {
-      other = FieldElement(prime: prime, value: o);
+    } else if (o is int) {
+      other = FieldElement(prime: prime, value: BigInt.from(o));
     } else {
       throw ArgumentError(
         'Cannot multiply a FieldElement with a ${o.runtimeType}',
@@ -92,7 +99,7 @@ class FieldElement extends Operand {
     return buildInstanceWith(value: number, prime: prime);
   }
 
-  @override
+  // TODO: Check the non integer division
   FieldElement operator /(Operand o) {
     if (o is! FieldElement) {
       throw ArgumentError(
@@ -106,7 +113,8 @@ class FieldElement extends Operand {
       throw ArgumentError('Cannot divide two numbers in different Fields');
     }
 
-    var number = (value * other.value.modPow(prime - 2, prime)) % prime;
+    var number =
+        (value * other.value.modPow(prime - BigInt.two, prime)) % prime;
     return buildInstanceWith(value: number, prime: prime);
   }
 
@@ -124,13 +132,15 @@ class FieldElement extends Operand {
       throw ArgumentError('Cannot divide two numbers in different Fields');
     }
 
-    var number = (value * other.value.modPow(prime - 2, prime)) % prime;
+    var number =
+        (value * other.value.modPow(prime - BigInt.two, prime)) % prime;
     return buildInstanceWith(value: number, prime: prime);
   }
 
   @override
-  FieldElement pow(num exponent) {
-    var realExponent = exponent % (prime - 1);
+  FieldElement pow(int exponent) {
+    var e = BigInt.from(exponent);
+    var realExponent = e % (prime - BigInt.one);
     var number = value.modPow(realExponent, prime);
     return buildInstanceWith(value: number, prime: prime);
   }
@@ -138,8 +148,8 @@ class FieldElement extends Operand {
   /// Method to mimic the inheritance of the Python examples by using __class__ from
   /// https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch01/ecc.py#L33
   FieldElement buildInstanceWith({
-    @required int value,
-    @required int prime,
+    @required BigInt value,
+    @required BigInt prime,
   }) {
     return FieldElement(
       value: value,

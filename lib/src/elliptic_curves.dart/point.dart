@@ -15,16 +15,16 @@ class Point {
         );
 
   factory Point.fromNumbers({
-    @required num a,
-    @required num b,
-    @required num x,
-    @required num y,
+    @required int a,
+    @required int b,
+    @required int x,
+    @required int y,
   }) {
     return Point(
-      a: Operand(value: a),
-      b: Operand(value: b),
-      x: Operand(value: x),
-      y: Operand(value: y),
+      a: Operand(value: BigInt.from(a)),
+      b: Operand(value: BigInt.from(b)),
+      x: Operand(value: BigInt.from(x)),
+      y: Operand(value: BigInt.from(y)),
     );
   }
 
@@ -34,12 +34,12 @@ class Point {
   }) {
     Operand realA, realB;
     assert(
-      (a is num || a is Operand) && (b is num || b is Operand),
-      'Point needs a [num] or an [Operand] to be constructed',
+      (a is int || a is Operand) && (b is int || b is Operand),
+      'Point needs a [int] or an [Operand] to be constructed',
     );
 
-    if (a is num) realA = Operand(value: a);
-    if (b is num) realB = Operand(value: b);
+    if (a is int) realA = Operand(value: BigInt.from(a));
+    if (b is int) realB = Operand(value: BigInt.from(b));
 
     realA ??= a;
     realB ??= b;

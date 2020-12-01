@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
@@ -7,18 +5,18 @@ import 'package:meta/meta.dart';
 class Operand {
   Operand({@required this.value});
 
-  factory Operand.zero() => Operand(value: 0);
+  factory Operand.zero() => Operand(value: BigInt.zero);
   factory Operand.infinity() => Operand(value: INF);
 
-  static const num INF = null;
+  static const BigInt INF = null;
 
-  final num value;
+  final BigInt value;
 
   @override
   int get hashCode => ObjectUtils.buildHashCode([value]);
 
   bool get isInf => value == INF;
-  bool get isZero => value == 0;
+  bool get isZero => value == BigInt.zero;
 
   @override
   bool operator ==(dynamic other) {
@@ -41,18 +39,23 @@ class Operand {
     Operand result;
     if (other is Operand) {
       result = Operand(value: value * other.value);
-    } else if (other is num) {
-      result = Operand(value: value * other);
+    } else if (other is int) {
+      result = Operand(value: value * BigInt.from(other));
+    } else {
+      throw ArgumentError(
+        'Cannot multiply an Operand with a ${other.runtimeType}',
+      );
     }
 
     return result;
   }
 
-  Operand operator /(Operand other) {
+  // TODO: Check the non integer division
+  /*Operand operator /(Operand other) {
     return Operand(
       value: value / other.value,
     );
-  }
+  }*/
 
   Operand operator ~/(Operand other) {
     return Operand(
@@ -64,9 +67,9 @@ class Operand {
     return Operand(value: value);
   }
 
-  Operand pow(num exponent) {
+  Operand pow(int exponent) {
     return Operand(
-      value: math.pow(value, exponent),
+      value: value.pow(exponent),
     );
   }
 
