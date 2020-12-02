@@ -14,20 +14,6 @@ class Point {
           '($x,$y) is not in the curve',
         );
 
-  factory Point.fromNumbers({
-    @required int a,
-    @required int b,
-    @required int x,
-    @required int y,
-  }) {
-    return Point(
-      a: Operand(value: BigInt.from(a)),
-      b: Operand(value: BigInt.from(b)),
-      x: Operand(value: BigInt.from(x)),
-      y: Operand(value: BigInt.from(y)),
-    );
-  }
-
   factory Point.atInfinity({
     @required dynamic a,
     @required dynamic b,
@@ -49,6 +35,20 @@ class Point {
       b: realB,
       x: Operand.infinity(),
       y: Operand.infinity(),
+    );
+  }
+
+  factory Point.fromNumbers({
+    @required int a,
+    @required int b,
+    @required int x,
+    @required int y,
+  }) {
+    return Point(
+      a: Operand(value: BigInt.from(a)),
+      b: Operand(value: BigInt.from(b)),
+      x: Operand(value: BigInt.from(x)),
+      y: Operand(value: BigInt.from(y)),
     );
   }
 

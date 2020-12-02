@@ -5,8 +5,8 @@ import 'package:meta/meta.dart';
 class Operand {
   Operand({@required this.value});
 
-  factory Operand.zero() => Operand(value: BigInt.zero);
   factory Operand.infinity() => Operand(value: INF);
+  factory Operand.zero() => Operand(value: BigInt.zero);
 
   static const BigInt INF = null;
 

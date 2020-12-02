@@ -7,8 +7,8 @@ class FieldElement extends Operand {
   FieldElement({
     @required this.prime,
     @required BigInt value,
-  })  : assert(value == null || value >= BigInt.zero),
-        assert(value == null || value < prime),
+  })  : assert(value >= BigInt.zero),
+        assert(value < prime),
         super(value: value);
 
   factory FieldElement.fromNumbers({
