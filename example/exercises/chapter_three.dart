@@ -67,17 +67,13 @@ class ChapterThree {
       '8ca63759c1157ebeaec0d03cecca119fc9a75bf8e6d0fa65c841c8e2738cdaec',
       radix: 16,
     );
-    final px = Operand(
-      value: BigInt.parse(
-        '04519fac3d910ca7e7138f7013706f619fa8f033e6ec6e09370ea38cee6a7574',
-        radix: 16,
-      ),
+    final px = Operand.fromHex(
+      hex: '04519fac3d910ca7e7138f7013706f619fa8f033e6ec6e09370ea38cee6a7574',
+      radix: 16,
     );
-    final py = Operand(
-      value: BigInt.parse(
-        '82b51eab8c27c66e26c858a079bcdf4f1ada34cec420cafc7eac1a42216fb6c4',
-        radix: 16,
-      ),
+    final py = Operand.fromHex(
+      hex: '82b51eab8c27c66e26c858a079bcdf4f1ada34cec420cafc7eac1a42216fb6c4',
+      radix: 16,
     );
 
     final point = S256Point(x: px, y: py);
@@ -94,17 +90,13 @@ class ChapterThree {
     print('Fourth Exercise');
 
     final point = S256Point(
-      x: Operand(
-        value: BigInt.parse(
-          '887387e452b8eacc4acfde10d9aaf7f6d9a0f975aabb10d006e4da568744d06c',
-          radix: 16,
-        ),
+      x: Operand.fromHex(
+        hex: '887387e452b8eacc4acfde10d9aaf7f6d9a0f975aabb10d006e4da568744d06c',
+        radix: 16,
       ),
-      y: Operand(
-        value: BigInt.parse(
-          '61de6d95231cd89026e286df3b6ae4a894a3378e393e93a0f45b666329a0ae34',
-          radix: 16,
-        ),
+      y: Operand.fromHex(
+        hex: '61de6d95231cd89026e286df3b6ae4a894a3378e393e93a0f45b666329a0ae34',
+        radix: 16,
       ),
     );
 
