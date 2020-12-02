@@ -12,6 +12,71 @@ void main() {
     );
   });
 
+  test('test_pubpoint', () {
+    final points = [
+      [
+        7,
+        Operand.fromHex(
+          hex:
+              '5cbdf0646e5db4eaa398f365f2ea7a0e3d419b7e0330e39ce92bddedcac4f9bc',
+          radix: 16,
+        ),
+        Operand.fromHex(
+          hex:
+              '6aebca40ba255960a3178d6d861a54dba813d0b813fde7b5a5082628087264da',
+          radix: 16,
+        )
+      ],
+      [
+        1485,
+        Operand.fromHex(
+          hex:
+              'c982196a7466fbbbb0e27a940b6af926c1a74d5ad07128c82824a11b5398afda',
+          radix: 16,
+        ),
+        Operand.fromHex(
+          hex:
+              '7a91f9eae64438afb9ce6448a1c133db2d8fb9254e4546b6f001637d50901f55',
+          radix: 16,
+        )
+      ],
+      [
+        BigInt.two.pow(128),
+        Operand.fromHex(
+          hex:
+              '8f68b9d2f63b5f339239c1ad981f162ee88c5678723ea3351b7b444c9ec4c0da',
+          radix: 16,
+        ),
+        Operand.fromHex(
+          hex:
+              '662a9f2dba063986de1d90c2b6be215dbbea2cfe95510bfdf23cbf79501fff82',
+          radix: 16,
+        )
+      ],
+      [
+        BigInt.two.pow(240) + BigInt.two.pow(31),
+        Operand.fromHex(
+          hex:
+              '9577ff57c8234558f293df502ca4f09cbc65a6572c842b39b366f21717945116',
+          radix: 16,
+        ),
+        Operand.fromHex(
+          hex:
+              '10b49c67fa9365ad7b90dab070be339a1daf9052373ec30ffae4f72d5e66d053',
+          radix: 16,
+        )
+      ],
+    ];
+
+    for (var p in points) {
+      final point = S256Point(x: p[1], y: p[2]);
+      expect(
+        Secp256Utils.generator * p[0],
+        equals(point),
+      );
+    }
+  });
+
   test('test_verify', () {
     final point = S256Point(
       x: Operand.fromHex(
