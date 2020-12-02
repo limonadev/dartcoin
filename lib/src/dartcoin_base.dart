@@ -1,5 +1,6 @@
-export 'elliptic_curves.dart/point.dart';
-export 'finite_field/field_element.dart';
+export 'elliptic_curves.dart/all.dart';
+export 'finite_field/all.dart';
+export 'models/operand.dart';
 export 'utils/all.dart';
 
 /// Checks if you are awesome. Spoiler: you are.
