@@ -1,6 +1,7 @@
 import 'package:dartcoin/src/elliptic_curves.dart/point.dart';
 import 'package:dartcoin/src/finite_field/s256_field_element.dart';
 import 'package:dartcoin/src/models/operand.dart';
+import 'package:dartcoin/src/signature/signature.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
@@ -38,5 +39,20 @@ class S256Point extends Point {
       x: result.x,
       y: result.y,
     );
+  }
+
+  bool verify({
+    @required Signature sig,
+    @required BigInt z,
+  }) {
+    final sInv = sig.s.modPow(
+      Secp256Utils.order - BigInt.two,
+      Secp256Utils.order,
+    );
+
+    final u = (z * sInv) % Secp256Utils.order;
+    final v = (sig.r * sInv) % Secp256Utils.order;
+
+    return (Secp256Utils.generator * u + this * v).x.value == sig.r;
   }
 }
