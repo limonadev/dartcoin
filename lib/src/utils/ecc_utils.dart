@@ -1,10 +1,11 @@
 import 'package:dartcoin/src/elliptic_curves.dart/s256_point.dart';
-import 'package:dartcoin/src/finite_field/s256_field_element.dart';
+import 'package:dartcoin/src/models/operand.dart';
 
 class Secp256Utils {
+  /// G
   static final generator = S256Point(
-    x: S256FieldElement(value: gx),
-    y: S256FieldElement(value: gy),
+    x: Operand(value: gx),
+    y: Operand(value: gy),
   );
 
   static final gx = BigInt.parse(
@@ -16,11 +17,13 @@ class Secp256Utils {
     radix: 16,
   );
 
+  /// N
   static final order = BigInt.parse(
     'fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141',
     radix: 16,
   );
 
+  /// P
   static final BigInt prime =
       BigInt.two.pow(256) - BigInt.two.pow(32) - BigInt.from(977);
 
