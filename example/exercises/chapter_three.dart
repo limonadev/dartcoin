@@ -5,6 +5,7 @@ class ChapterThree {
     print('Run each exercise from Chapter Three');
     _first();
     _second();
+    _third();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -46,6 +47,44 @@ class ChapterThree {
     final point = Point(a: a, b: b, x: x, y: y);
 
     print(point * 7);
+  }
+
+  /// Exercise 5 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch03/Chapter3.ipynb
+  void _third() {
+    print('Third Exercise');
+
+    final z = BigInt.parse(
+      'bc62d4b80d9e36da29c16c5d4d9f11731f36052c72401a76c23c0fb5a9b74423',
+      radix: 16,
+    );
+    final r = BigInt.parse(
+      '37206a0610995c58074999cb9767b87af4c4978db68c06e8e6e81d282047a7c6',
+      radix: 16,
+    );
+    final s = BigInt.parse(
+      '8ca63759c1157ebeaec0d03cecca119fc9a75bf8e6d0fa65c841c8e2738cdaec',
+      radix: 16,
+    );
+    final px = Operand(
+      value: BigInt.parse(
+        '04519fac3d910ca7e7138f7013706f619fa8f033e6ec6e09370ea38cee6a7574',
+        radix: 16,
+      ),
+    );
+    final py = Operand(
+      value: BigInt.parse(
+        '82b51eab8c27c66e26c858a079bcdf4f1ada34cec420cafc7eac1a42216fb6c4',
+        radix: 16,
+      ),
+    );
+
+    final point = S256Point(x: px, y: py);
+    final sInv = s.modPow(Secp256Utils.order - BigInt.two, Secp256Utils.order);
+
+    final u = (z * sInv) % Secp256Utils.order;
+    final v = (r * sInv) % Secp256Utils.order;
+
+    print((Secp256Utils.generator * u + point * v).x.value == r);
   }
 
   /// Exercise 1 from Programming Bitcoin book - Chapter 3
