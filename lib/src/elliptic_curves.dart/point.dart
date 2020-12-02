@@ -20,12 +20,16 @@ class Point {
   }) {
     Operand realA, realB;
     assert(
-      (a is int || a is Operand) && (b is int || b is Operand),
-      'Point needs a [int] or an [Operand] to be constructed',
+      (a is int || a is BigInt || a is Operand) &&
+          (b is int || b is BigInt || b is Operand),
+      'Point needs a [BigInt] or an [Operand] to be constructed',
     );
 
     if (a is int) realA = Operand(value: BigInt.from(a));
     if (b is int) realB = Operand(value: BigInt.from(b));
+
+    if (a is BigInt) realA = Operand(value: a);
+    if (b is BigInt) realB = Operand(value: b);
 
     realA ??= a;
     realB ??= b;
@@ -35,6 +39,20 @@ class Point {
       b: realB,
       x: Operand.infinity(),
       y: Operand.infinity(),
+    );
+  }
+
+  factory Point.fromBigNumbers({
+    @required BigInt a,
+    @required BigInt b,
+    @required BigInt x,
+    @required BigInt y,
+  }) {
+    return Point(
+      a: Operand(value: a),
+      b: Operand(value: b),
+      x: Operand(value: x),
+      y: Operand(value: y),
     );
   }
 
@@ -119,6 +137,8 @@ class Point {
       other = BigInt.from(o);
     } else if (o is BigInt) {
       other = o;
+    } else if (o.runtimeType == Operand) {
+      other = o.value;
     } else {
       throw ArgumentError(
         'Cannot multiply a Point with a ${o.runtimeType}',

@@ -23,6 +23,8 @@ class S256Point extends Point {
       other = BigInt.from(o);
     } else if (o is BigInt) {
       other = o;
+    } else if (o.runtimeType == Operand) {
+      other = o.value;
     } else {
       throw ArgumentError(
         'Cannot multiply a S256Point with a ${o.runtimeType}',

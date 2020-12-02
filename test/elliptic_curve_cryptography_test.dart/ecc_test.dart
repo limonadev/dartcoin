@@ -1,5 +1,4 @@
 import 'package:dartcoin/dartcoin.dart';
-import 'package:dartcoin/src/models/operand.dart';
 import 'package:test/test.dart';
 
 /// Each test is based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch03/ecc.py
@@ -149,5 +148,42 @@ void main() {
         ),
       );
     }
+  });
+
+  /// This is not part of the book.
+  test('test_big_rmul', () {
+    const prime = 223;
+    final a = FieldElement.fromNumbers(prime: prime, value: 0);
+    final b = FieldElement.fromNumbers(prime: prime, value: 7);
+    final x = FieldElement.fromNumbers(prime: prime, value: 192);
+    final y = FieldElement.fromNumbers(prime: prime, value: 105);
+
+    final p = Point(a: a, b: b, x: x, y: y);
+    final result = Point(
+      a: a,
+      b: b,
+      x: FieldElement.fromNumbers(prime: prime, value: 49),
+      y: FieldElement.fromNumbers(prime: prime, value: 71),
+    );
+
+    expect(
+      p * 2,
+      equals(result),
+    );
+
+    expect(
+      p * BigInt.two,
+      equals(result),
+    );
+
+    expect(
+      p * Operand(value: BigInt.two),
+      equals(result),
+    );
+
+    expect(
+      () => p * FieldElement.fromNumbers(prime: prime, value: 2),
+      throwsArgumentError,
+    );
   });
 }
