@@ -5,6 +5,16 @@ import 'package:meta/meta.dart';
 class Operand {
   Operand({@required this.value});
 
+  factory Operand.fromHex({
+    @required String hex,
+    int radix = 10,
+  }) =>
+      Operand(
+        value: BigInt.parse(
+          hex,
+          radix: radix,
+        ),
+      );
   factory Operand.infinity() => Operand(value: INF);
   factory Operand.zero() => Operand(value: BigInt.zero);
 
