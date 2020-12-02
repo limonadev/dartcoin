@@ -1,6 +1,7 @@
 export 'elliptic_curves.dart/all.dart';
 export 'finite_field/all.dart';
 export 'models/operand.dart';
+export 'signature/signature.dart';
 export 'utils/all.dart';
 
 /// Checks if you are awesome. Spoiler: you are.
