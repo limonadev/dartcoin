@@ -11,6 +11,16 @@ class FieldElement extends Operand {
         assert(value < prime),
         super(value: value);
 
+  factory FieldElement.fromBigNumbers({
+    @required BigInt prime,
+    @required BigInt value,
+  }) {
+    return FieldElement(
+      prime: prime,
+      value: value,
+    );
+  }
+
   factory FieldElement.fromNumbers({
     @required int prime,
     @required int value,
@@ -79,7 +89,7 @@ class FieldElement extends Operand {
 
     if (o is FieldElement) {
       other = o;
-    } else if (o is Operand) {
+    } else if (o.runtimeType == Operand) {
       other = FieldElement(prime: prime, value: o.value);
     } else if (o is int) {
       other = FieldElement(prime: prime, value: BigInt.from(o));

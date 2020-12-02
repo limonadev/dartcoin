@@ -37,7 +37,7 @@ class Operand {
 
   Operand operator *(dynamic other) {
     Operand result;
-    if (other is Operand) {
+    if (other.runtimeType == Operand) {
       result = Operand(value: value * other.value);
     } else if (other is int) {
       result = Operand(value: value * BigInt.from(other));

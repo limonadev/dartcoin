@@ -22,7 +22,7 @@ class Point {
     assert(
       (a is int || a is BigInt || a is Operand) &&
           (b is int || b is BigInt || b is Operand),
-      'Point needs a [BigInt] or an [Operand] to be constructed',
+      'Point needs an [int], a [BigInt] or an [Operand] to be constructed',
     );
 
     if (a is int) realA = Operand(value: BigInt.from(a));
