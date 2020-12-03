@@ -10,4 +10,8 @@ class ObjectUtils {
 
     return result;
   }
+
+  static String toHex(BigInt value) {
+    return value.toRadixString(16).padLeft(64, '0');
+  }
 }
