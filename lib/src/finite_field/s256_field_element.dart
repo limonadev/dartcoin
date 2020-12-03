@@ -13,4 +13,9 @@ class S256FieldElement extends FieldElement {
   factory S256FieldElement.infinity() => S256FieldElement(
         value: Operand.INF,
       );
+
+  @override
+  String toString() {
+    return 'S256FieldElement ${value.toRadixString(16).padLeft(64, '0')}';
+  }
 }

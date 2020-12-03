@@ -41,6 +41,11 @@ class S256Point extends Point {
     );
   }
 
+  @override
+  String toString() {
+    return 'S256Point ($x $y)';
+  }
+
   bool verify({
     @required Signature sig,
     @required BigInt z,
