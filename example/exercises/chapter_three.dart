@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:meta/meta.dart';
 import 'package:dartcoin/dartcoin.dart';
+import 'package:pointycastle/src/utils.dart';
 
 class ChapterThree {
   void runEverything({bool runOptionals = false}) {
@@ -16,6 +19,7 @@ class ChapterThree {
       _optional_third();
       _optional_fourth();
       _optional_fifth();
+      _optional_sixth();
     }
   }
 
@@ -256,6 +260,33 @@ class ChapterThree {
     print('Optional Fifth Exercise');
 
     print(Secp256Utils.generator * Secp256Utils.order);
+  }
+
+  /// Exercise on page 69 from Programming Bitcoin book - Chapter 3
+  void _optional_sixth() {
+    print('Optional Sixth Exercise');
+    final e = decodeBigInt(
+      Secp256Utils.hash256(
+        data: utf8.encode('my secret'),
+      ),
+    );
+    final z = decodeBigInt(
+      Secp256Utils.hash256(
+        data: utf8.encode('my message'),
+      ),
+    );
+
+    final k = BigInt.from(1234567890);
+    final r = (Secp256Utils.generator * k).x.value;
+    final kInv = k.modPow(Secp256Utils.order - BigInt.two, Secp256Utils.order);
+    final s = (z + r * e) * kInv % Secp256Utils.order;
+
+    final point = Secp256Utils.generator * e;
+
+    print(point);
+    print(z.toRadixString(16));
+    print(r.toRadixString(16));
+    print(s.toRadixString(16));
   }
 
   bool _isValidSignature({
