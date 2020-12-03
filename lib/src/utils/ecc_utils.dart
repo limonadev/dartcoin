@@ -5,7 +5,6 @@ import 'package:crypto/crypto.dart';
 import 'package:dartcoin/src/elliptic_curves.dart/s256_point.dart';
 import 'package:dartcoin/src/models/operand.dart';
 import 'package:meta/meta.dart';
-import 'package:pointycastle/src/utils.dart';
 
 class Secp256Utils {
   /// G
@@ -39,11 +38,20 @@ class Secp256Utils {
   /// Method to generate a random number below [max], taking at most
   /// `64` hex digits (starting from right) for [max], If [max] is
   /// smaller than that, the remaining space will be filled with zeros.
-  /// If the result is called `x`, then `0 <= x < max`.
+  /// If the result is called `x`, then `0 <= x < max`. Also [max]
+  /// should be a positive number.
   static BigInt bigRandom({@required BigInt max, int seed}) {
-    var hexResult = '00';
+    if (max.isNegative || max == BigInt.zero) {
+      throw ArgumentError('[max] should be a positive number.');
+    }
 
     final random = Random(seed);
+
+    var hexResult = BigInt.from(
+      random.nextInt(
+        max >= BigInt.from(256) ? 256 : max.toInt(),
+      ),
+    ).toRadixString(16);
 
     for (var i = 0; i < 32; i++) {
       final suffix = BigInt.from(random.nextInt(256)).toRadixString(16);
