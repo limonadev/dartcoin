@@ -16,6 +16,6 @@ class S256FieldElement extends FieldElement {
 
   @override
   String toString() {
-    return 'S256FieldElement ${value.toRadixString(16).padLeft(64, '0')}';
+    return 'S256FieldElement ${ObjectUtils.toHex(value)}';
   }
 }
