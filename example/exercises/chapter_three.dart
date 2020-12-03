@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:meta/meta.dart';
 import 'package:dartcoin/dartcoin.dart';
@@ -11,6 +12,7 @@ class ChapterThree {
     _second();
     _third();
     _fourth();
+    _fifth();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -135,6 +137,32 @@ class ChapterThree {
     print(
       _isValidSignature(point: point, r: r, s: s, z: z),
     );
+  }
+
+  /// Exercise 7 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch03/Chapter3.ipynb
+  void _fifth() {
+    print('Fifth Exercise');
+
+    final e = BigInt.from(12345);
+    final z = decodeBigInt(
+      Secp256Utils.hash256(
+        data: utf8.encode('Programming Bitcoin!'),
+      ),
+    );
+
+    // NEVER GENERATE K FROM THE RANDOM LIBRARY, THIS WAS ONLY WITH
+    // EDUCATIONAL PURPOSES
+    final k = BigInt.from(Random().nextInt(10000000));
+    final r = (Secp256Utils.generator * k).x.value;
+    final kInv = k.modPow(Secp256Utils.order - BigInt.two, Secp256Utils.order);
+    final s = (z + r * e) * kInv % Secp256Utils.order;
+
+    final point = Secp256Utils.generator * e;
+
+    print(point);
+    print(z.toRadixString(16));
+    print(r.toRadixString(16));
+    print(s.toRadixString(16));
   }
 
   /// Exercise 1 from Programming Bitcoin book - Chapter 3
