@@ -1,4 +1,7 @@
 import 'dart:typed_data';
+import 'package:meta/meta.dart';
+
+enum Endian { big, little }
 
 class ObjectUtils {
   /// Took from https://github.com/bcgit/pc-dart/blob/master/lib/src/utils.dart
@@ -26,6 +29,8 @@ class ObjectUtils {
   }
 
   /// Took from https://github.com/bcgit/pc-dart/blob/master/lib/src/utils.dart
+  /// This function will return an [Uint8List] with the minimun size necessary
+  /// to represent the [number].
   static Uint8List encodeBigInt(BigInt number) {
     // Not handling negative numbers. Decide how you want to do that.
     var size = (number.bitLength + 7) >> 3;
@@ -35,6 +40,30 @@ class ObjectUtils {
       number = number >> 8;
     }
     return result;
+  }
+
+  /// This function will return an [Uint8List] with length [size]. If the [number]
+  /// representation needs few bytes, the remaining space will be filled with zeros.
+  static Uint8List bigIntToBytes({
+    @required BigInt number,
+    Endian endian = Endian.big,
+    int size = 32,
+  }) {
+    var encoded = encodeBigInt(number);
+    if (encoded.length > size) {
+      throw RangeError(
+        'The [size] should be greater or equal than the length in bytes of the [number]',
+      );
+    } else {
+      encoded = Uint8List.fromList(
+        [
+          ...List.filled(size - encoded.length, 0),
+          ...encoded,
+        ],
+      );
+    }
+
+    return endian == Endian.big ? encoded : encoded.reversed.toList();
   }
 
   static String toHex(BigInt value) {
