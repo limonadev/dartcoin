@@ -8,5 +8,8 @@ void main() {
   //chapterTwo.runEverything(runOptionals: true);
 
   var chapterThree = ChapterThree();
-  chapterThree.runEverything(runOptionals: true);
+  //chapterThree.runEverything(runOptionals: true);
+
+  var chapterFour = ChapterFour();
+  chapterFour.runEverything(runOptionals: true);
 }
