@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:meta/meta.dart';
 import 'package:dartcoin/dartcoin.dart';
-import 'package:pointycastle/src/utils.dart';
 
 class ChapterThree {
   void runEverything({bool runOptionals = false}) {
@@ -144,7 +143,7 @@ class ChapterThree {
     print('Fifth Exercise');
 
     final e = BigInt.from(12345);
-    final z = decodeBigInt(
+    final z = ObjectUtils.decodeBigInt(
       Secp256Utils.hash256(
         data: utf8.encode('Programming Bitcoin!'),
       ),
@@ -293,12 +292,12 @@ class ChapterThree {
   /// Exercise on page 69 from Programming Bitcoin book - Chapter 3
   void _optional_sixth() {
     print('Optional Sixth Exercise');
-    final e = decodeBigInt(
+    final e = ObjectUtils.decodeBigInt(
       Secp256Utils.hash256(
         data: utf8.encode('my secret'),
       ),
     );
-    final z = decodeBigInt(
+    final z = ObjectUtils.decodeBigInt(
       Secp256Utils.hash256(
         data: utf8.encode('my message'),
       ),

@@ -3,7 +3,6 @@ import 'package:dartcoin/src/elliptic_curves.dart/s256_point.dart';
 import 'package:dartcoin/src/signature/signature.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
-import 'package:pointycastle/src/utils.dart';
 
 class PrivateKey {
   PrivateKey({
@@ -22,8 +21,8 @@ class PrivateKey {
       currZ -= Secp256Utils.order;
     }
 
-    var zBytes = encodeBigInt(currZ);
-    var secretBytes = encodeBigInt(secret);
+    var zBytes = ObjectUtils.encodeBigInt(currZ);
+    var secretBytes = ObjectUtils.encodeBigInt(secret);
 
     var hmacSha256 = Hmac(sha256, k);
     k = hmacSha256.convert(
@@ -38,7 +37,7 @@ class PrivateKey {
     BigInt result;
     while (result == null) {
       v = hmacSha256.convert(v).bytes;
-      final candidate = decodeBigInt(v);
+      final candidate = ObjectUtils.decodeBigInt(v);
 
       k = hmacSha256.convert(
         [...v, 0, ...secretBytes, ...zBytes],
