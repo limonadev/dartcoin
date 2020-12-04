@@ -64,6 +64,6 @@ class PrivateKey {
   }
 
   String toHex() {
-    return ObjectUtils.toHex(secret);
+    return ObjectUtils.toHex(value: secret);
   }
 }

@@ -66,7 +66,7 @@ class ObjectUtils {
     return endian == Endian.big ? encoded : encoded.reversed.toList();
   }
 
-  static String toHex(BigInt value) {
-    return value.toRadixString(16).padLeft(64, '0');
+  static String toHex({int padding = 64, @required BigInt value}) {
+    return value.toRadixString(16).padLeft(padding, '0');
   }
 }
