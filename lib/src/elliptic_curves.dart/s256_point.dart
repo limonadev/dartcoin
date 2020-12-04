@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dartcoin/src/elliptic_curves.dart/point.dart';
 import 'package:dartcoin/src/finite_field/s256_field_element.dart';
 import 'package:dartcoin/src/models/operand.dart';
@@ -38,6 +40,16 @@ class S256Point extends Point {
     return S256Point(
       x: result.x,
       y: result.y,
+    );
+  }
+
+  Uint8List sec() {
+    return Uint8List.fromList(
+      [
+        4,
+        ...ObjectUtils.bigIntToBytes(number: x.value),
+        ...ObjectUtils.bigIntToBytes(number: y.value),
+      ],
     );
   }
 
