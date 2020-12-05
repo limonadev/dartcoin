@@ -77,7 +77,13 @@ class Operand {
     return Operand(value: value);
   }
 
-  Operand pow(int exponent) {
+  Operand pow(dynamic exponent) {
+    if (exponent is! int) {
+      throw ArgumentError(
+        'The exponent cannot be a ${exponent.runtimeType}',
+      );
+    }
+
     return Operand(
       value: value.pow(exponent),
     );

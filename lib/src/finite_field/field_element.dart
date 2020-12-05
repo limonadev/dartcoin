@@ -146,8 +146,14 @@ class FieldElement extends Operand {
   }
 
   @override
-  FieldElement pow(int exponent) {
-    var e = BigInt.from(exponent);
+  FieldElement pow(dynamic exponent) {
+    if (exponent is! int && exponent is! BigInt) {
+      throw ArgumentError(
+        'The exponent cannot be a ${exponent.runtimeType}',
+      );
+    }
+
+    final e = exponent is int ? BigInt.from(exponent) : exponent;
     var realExponent = e % (prime - BigInt.one);
     var number = value.modPow(realExponent, prime);
     return buildInstanceWith(value: number, prime: prime);
