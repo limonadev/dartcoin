@@ -11,6 +11,38 @@ class Signature {
     @required this.s,
   });
 
+  factory Signature.fromSerialized({@required Uint8List der}) {
+    final compound = der[0];
+    if (compound != 0x30) {
+      throw FormatException('Bad Signature');
+    }
+    final length = der[1];
+    if (length + 2 != der.length) {
+      throw FormatException('Bad Signature Length');
+    }
+    var marker = der[2];
+    if (marker != 0x02) {
+      throw FormatException('Bad Signature');
+    }
+    final rLength = der[3];
+    final r = ObjectUtils.decodeBigInt(
+      der.sublist(4, 4 + rLength),
+    );
+    marker = der[4 + rLength];
+    if (marker != 0x02) {
+      throw FormatException('Bad Signature');
+    }
+    final sLength = der[4 + rLength + 1];
+    final s = ObjectUtils.decodeBigInt(
+      der.sublist(4 + rLength + 2, 4 + rLength + 2 + sLength),
+    );
+    if (der.length != 6 + rLength + sLength) {
+      throw FormatException('Signature too long');
+    }
+
+    return Signature(r: r, s: s);
+  }
+
   final BigInt r;
   final BigInt s;
 
