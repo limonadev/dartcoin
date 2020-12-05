@@ -44,12 +44,15 @@ class ObjectUtils {
 
   /// This function will return an [Uint8List] with length [size]. If the [number]
   /// representation needs few bytes, the remaining space will be filled with zeros.
+  /// If the [size] is null, its value will be the encoded number lenght.
   static Uint8List bigIntToBytes({
     @required BigInt number,
     Endian endian = Endian.big,
-    int size = 32,
+    int size,
   }) {
     var encoded = encodeBigInt(number);
+    size ??= encoded.length;
+
     if (encoded.length > size) {
       throw RangeError(
         'The [size] should be greater or equal than the length in bytes of the [number]',

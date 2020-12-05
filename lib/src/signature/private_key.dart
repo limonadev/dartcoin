@@ -21,8 +21,14 @@ class PrivateKey {
       currZ -= Secp256Utils.order;
     }
 
-    var zBytes = ObjectUtils.bigIntToBytes(number: currZ);
-    var secretBytes = ObjectUtils.bigIntToBytes(number: secret);
+    var zBytes = ObjectUtils.bigIntToBytes(
+      number: currZ,
+      size: 32,
+    );
+    var secretBytes = ObjectUtils.bigIntToBytes(
+      number: secret,
+      size: 32,
+    );
 
     var hmacSha256 = Hmac(sha256, k);
     k = hmacSha256.convert(

@@ -80,8 +80,16 @@ class S256Point extends Point {
     return Uint8List.fromList(
       [
         prefix,
-        ...ObjectUtils.bigIntToBytes(number: x.value),
-        ...compressed ? [] : ObjectUtils.bigIntToBytes(number: y.value),
+        ...ObjectUtils.bigIntToBytes(
+          number: x.value,
+          size: 32,
+        ),
+        ...compressed
+            ? []
+            : ObjectUtils.bigIntToBytes(
+                number: y.value,
+                size: 32,
+              ),
       ],
     );
   }
