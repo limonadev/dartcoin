@@ -15,6 +15,25 @@ class S256FieldElement extends FieldElement {
       );
 
   @override
+  S256FieldElement buildInstanceWith({
+    @required BigInt value,
+    @required BigInt prime,
+  }) {
+    return S256FieldElement(
+      value: value,
+    );
+  }
+
+  @override
+  FieldElement copy() {
+    return S256FieldElement(value: value);
+  }
+
+  S256FieldElement sqrt() {
+    return pow((prime + BigInt.one) / BigInt.from(4));
+  }
+
+  @override
   String toString() {
     return 'S256FieldElement ${ObjectUtils.toHex(value: value)}';
   }
