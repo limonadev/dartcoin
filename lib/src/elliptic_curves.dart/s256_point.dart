@@ -18,6 +18,37 @@ class S256Point extends Point {
           y: y.isInf ? Operand.infinity() : S256FieldElement(value: y.value),
         );
 
+  factory S256Point.fromSerialized({@required Uint8List sec}) {
+    S256FieldElement x, y;
+    if (sec[0] == 4) {
+      x = S256FieldElement(
+        value: ObjectUtils.decodeBigInt(sec.sublist(1, 33)),
+      );
+      y = S256FieldElement(
+        value: ObjectUtils.decodeBigInt(sec.sublist(33)),
+      );
+    } else {
+      x = S256FieldElement(
+        value: ObjectUtils.decodeBigInt(sec.sublist(1)),
+      );
+
+      final isEven = sec[0] == 2;
+
+      S256FieldElement right =
+          x.pow(3) + S256FieldElement(value: Secp256Utils.valueB);
+      final left = right.sqrt();
+
+      final evenSolution =
+          left.value.isEven ? left.value : Secp256Utils.prime - left.value;
+      final oddSolution =
+          left.value.isOdd ? left.value : Secp256Utils.prime - left.value;
+
+      y = S256FieldElement(value: isEven ? evenSolution : oddSolution);
+    }
+
+    return S256Point(x: x, y: y);
+  }
+
   @override
   S256Point operator *(dynamic o) {
     BigInt other;
