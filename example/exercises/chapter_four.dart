@@ -4,15 +4,15 @@ class ChapterFour {
   void runEverything({bool runOptionals = false}) {
     print('Run each exercise from Chapter Fourth');
 
+    _first();
     if (runOptionals) {
       print('Optional exercises');
-      _optional_first();
     }
   }
 
-  /// Exercise 1 from Programming Bitcoin book - Chapter 4
-  void _optional_first() {
-    print('Optional First Exercise');
+  /// Exercise 1 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch04/Chapter4.ipynb
+  void _first() {
+    print('First Exercise');
 
     final secrets = [
       BigInt.from(5000),
@@ -22,7 +22,7 @@ class ChapterFour {
 
     for (var secret in secrets) {
       final pk = PrivateKey(secret: secret);
-      final sec = pk.point.sec();
+      final sec = pk.point.sec(compressed: false);
       print(ObjectUtils.toHex(
         padding: 130,
         value: ObjectUtils.decodeBigInt(sec),

@@ -43,12 +43,14 @@ class S256Point extends Point {
     );
   }
 
-  Uint8List sec() {
+  Uint8List sec({bool compressed = true}) {
+    final prefix = compressed ? (y.value.isEven ? 2 : 3) : 4;
+
     return Uint8List.fromList(
       [
-        4,
+        prefix,
         ...ObjectUtils.bigIntToBytes(number: x.value),
-        ...ObjectUtils.bigIntToBytes(number: y.value),
+        ...compressed ? [] : ObjectUtils.bigIntToBytes(number: y.value),
       ],
     );
   }
