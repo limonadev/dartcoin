@@ -34,4 +34,10 @@ class Base58Utils {
       ),
     );
   }
+
+  /// Convenience method to show a readable String from a Base58
+  /// list called [encoded].
+  static String humanReadable({@required Uint8List encoded}) {
+    return encoded.map((e) => String.fromCharCode(e)).join();
+  }
 }
