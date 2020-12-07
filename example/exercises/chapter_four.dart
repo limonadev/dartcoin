@@ -8,6 +8,7 @@ class ChapterFour {
     _second();
     _third();
     _fourth();
+    _fifth();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -94,7 +95,35 @@ class ChapterFour {
         ),
       );
 
-      print(Base58Utils.encode(bytes: bytes));
+      print(
+        Base58Utils.humanReadable(
+          encoded: Base58Utils.encode(bytes: bytes),
+        ),
+      );
+    }
+  }
+
+  /// Exercise 5 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch04/Chapter4.ipynb
+  void _fifth() {
+    print('Fifth Exercise');
+
+    // PrivateKey, Compressed SEC, TestNet
+    final arguments = [
+      [BigInt.from(5002), false, true],
+      [BigInt.from(2020).pow(5), true, true],
+      [BigInt.parse('12345deadbeef', radix: 16), true, false],
+    ];
+
+    for (var arg in arguments) {
+      final pk = PrivateKey(secret: arg[0]);
+      final address = pk.point.getAddress(
+        compressed: arg[1],
+        testnet: arg[2],
+      );
+      final humanAddress = Base58Utils.humanReadable(
+        encoded: address,
+      );
+      print(humanAddress);
     }
   }
 }
