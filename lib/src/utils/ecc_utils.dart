@@ -68,6 +68,10 @@ class Secp256Utils {
     return BigInt.parse(hexResult, radix: 16);
   }
 
+  static Uint8List hash160({@required Uint8List data}) {
+    return RIPEMD160().update(SHA256().update(data).digest()).digest();
+  }
+
   static Uint8List hash256({@required Uint8List data}) {
     return SHA256().update(SHA256().update(data).digest()).digest();
   }
