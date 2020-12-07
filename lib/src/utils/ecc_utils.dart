@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:crypto/crypto.dart';
 import 'package:dartcoin/src/elliptic_curves.dart/s256_point.dart';
 import 'package:dartcoin/src/models/operand.dart';
+import 'package:hash/hash.dart';
 import 'package:meta/meta.dart';
 
 class Secp256Utils {
@@ -69,6 +69,6 @@ class Secp256Utils {
   }
 
   static Uint8List hash256({@required Uint8List data}) {
-    return sha256.convert(sha256.convert(data).bytes).bytes;
+    return SHA256().update(SHA256().update(data).digest()).digest();
   }
 }
