@@ -202,4 +202,60 @@ void main() {
       ),
     );
   });
+
+  test('test_address', () {
+    var secret = BigInt.from(888).pow(3);
+    var mainnetAddress = '148dY81A9BmdpMhvYEVznrM45kWN32vSCN';
+    var testnetAddress = 'mieaqB68xDCtbUBYFoUNcmZNwk74xcBfTP';
+    var point = Secp256Utils.generator * secret;
+
+    expect(
+      Base58Utils.humanReadable(
+        encoded: point.getAddress(compressed: true, testnet: false),
+      ),
+      equals(mainnetAddress),
+    );
+    expect(
+      Base58Utils.humanReadable(
+        encoded: point.getAddress(compressed: true, testnet: true),
+      ),
+      equals(testnetAddress),
+    );
+
+    secret = BigInt.from(321);
+    mainnetAddress = '1S6g2xBJSED7Qr9CYZib5f4PYVhHZiVfj';
+    testnetAddress = 'mfx3y63A7TfTtXKkv7Y6QzsPFY6QCBCXiP';
+    point = Secp256Utils.generator * secret;
+
+    expect(
+      Base58Utils.humanReadable(
+        encoded: point.getAddress(compressed: false, testnet: false),
+      ),
+      equals(mainnetAddress),
+    );
+    expect(
+      Base58Utils.humanReadable(
+        encoded: point.getAddress(compressed: false, testnet: true),
+      ),
+      equals(testnetAddress),
+    );
+
+    secret = BigInt.from(4242424242);
+    mainnetAddress = '1226JSptcStqn4Yq9aAmNXdwdc2ixuH9nb';
+    testnetAddress = 'mgY3bVusRUL6ZB2Ss999CSrGVbdRwVpM8s';
+    point = Secp256Utils.generator * secret;
+
+    expect(
+      Base58Utils.humanReadable(
+        encoded: point.getAddress(compressed: false, testnet: false),
+      ),
+      equals(mainnetAddress),
+    );
+    expect(
+      Base58Utils.humanReadable(
+        encoded: point.getAddress(compressed: false, testnet: true),
+      ),
+      equals(testnetAddress),
+    );
+  });
 }
