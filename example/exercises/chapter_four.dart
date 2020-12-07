@@ -94,7 +94,7 @@ class ChapterFour {
         ),
       );
 
-      print(EncodingUtils.toBase58(bytes));
+      print(Base58Utils.encode(bytes: bytes));
     }
   }
 }
