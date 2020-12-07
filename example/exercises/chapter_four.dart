@@ -7,6 +7,7 @@ class ChapterFour {
     _first();
     _second();
     _third();
+    _fourth();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -73,5 +74,27 @@ class ChapterFour {
         value: ObjectUtils.decodeBigInt(der),
       ),
     );
+  }
+
+  /// Exercise 4 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch04/Chapter4.ipynb
+  void _fourth() {
+    print('Fourth Exercise');
+
+    final hexNumbers = [
+      '7c076ff316692a3d7eb3c3bb0f8b1488cf72e1afcd929e29307032997a838a3d',
+      'eff69ef2b1bd93a66ed5219add4fb51e11a840f404876325a1e8ffe0529a2c',
+      'c7207fee197d27c618aea621406f6bf5ef6fca38681d82b2f06fddbdce6feab6',
+    ];
+
+    for (var hex in hexNumbers) {
+      var bytes = ObjectUtils.bigIntToBytes(
+        number: BigInt.parse(
+          hex,
+          radix: 16,
+        ),
+      );
+
+      print(EncodingUtils.toBase58(bytes));
+    }
   }
 }
