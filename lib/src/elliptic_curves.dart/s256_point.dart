@@ -74,6 +74,20 @@ class S256Point extends Point {
     );
   }
 
+  Uint8List getAddress({
+    bool compressed = true,
+    bool testnet = true,
+  }) {
+    final h160 = toHash160(compressed: compressed);
+    final prefix = testnet ? 0x6f : 0x00;
+
+    return Base58Utils.encodeChecksum(
+      bytes: Uint8List.fromList(
+        [prefix, ...h160],
+      ),
+    );
+  }
+
   Uint8List sec({bool compressed = true}) {
     final prefix = compressed ? (y.value.isEven ? 2 : 3) : 4;
 
@@ -91,6 +105,14 @@ class S256Point extends Point {
                 size: 32,
               ),
       ],
+    );
+  }
+
+  Uint8List toHash160({bool compressed = true}) {
+    return Secp256Utils.hash160(
+      data: sec(
+        compressed: compressed,
+      ),
     );
   }
 
