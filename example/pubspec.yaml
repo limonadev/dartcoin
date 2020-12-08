@@ -1,0 +1,16 @@
+name: example
+description: Most of the exercises of the Programming Bitcoin book.
+version: 1.0.0
+
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+
+dependencies:
+  dartcoin:
+    path: ../../dartcoin
+
+dev_dependencies:
+  pedantic: ^1.8.0
+
+assets:
+  - assets/
