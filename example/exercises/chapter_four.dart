@@ -9,6 +9,7 @@ class ChapterFour {
     _third();
     _fourth();
     _fifth();
+    _sixth();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -124,6 +125,30 @@ class ChapterFour {
         encoded: address,
       );
       print(humanAddress);
+    }
+  }
+
+  /// Exercise 6 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch04/Chapter4.ipynb
+  void _sixth() {
+    print('Sixth Exercise');
+
+    // PrivateKey, Compressed SEC, TestNet
+    final arguments = [
+      [BigInt.from(5003), true, true],
+      [BigInt.from(2021).pow(5), false, true],
+      [BigInt.parse('54321deadbeef', radix: 16), true, false],
+    ];
+
+    for (var arg in arguments) {
+      final pk = PrivateKey(secret: arg[0]);
+      final wif = pk.wif(
+        compressed: arg[1],
+        testnet: arg[2],
+      );
+      final humanWif = Base58Utils.humanReadable(
+        encoded: wif,
+      );
+      print(humanWif);
     }
   }
 }
