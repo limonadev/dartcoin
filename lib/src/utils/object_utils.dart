@@ -67,7 +67,9 @@ class ObjectUtils {
       );
     }
 
-    return endian == Endian.big ? encoded : encoded.reversed.toList();
+    return endian == Endian.big
+        ? encoded
+        : Uint8List.fromList(encoded.reversed.toList());
   }
 
   static BigInt bytesToBigInt({
