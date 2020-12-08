@@ -13,7 +13,7 @@ dart --enable-asserts example/dartcoin_example.dart
 
 ### Chapter 04
 
-* It's necessary to create a file called `secret_chapter_04.txt.txt` inside the `assets` folder with the desired passprhase in the first line. This will be used as the passphrase for the Testnet address.
+* It's necessary to create a file called `secret_chapter_04.txt` inside the `assets` folder with the desired passprhase in the first line. This will be used as the passphrase for the Testnet address.
 
 
 ## Features and bugs
