@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dartcoin/dartcoin.dart';
 import 'package:test/test.dart';
 
@@ -187,8 +189,36 @@ void main() {
         throwsRangeError,
       );
     });
+
+    /// Based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch04/helper.py#L89
+    test('test_int_to_little_endian', () {
+      var n = 1;
+      expect(
+        ObjectUtils.bigIntToBytes(
+          number: BigInt.from(n),
+          endian: Endian.little,
+          size: 4,
+        ),
+        equals(Uint8List.fromList([0x01, 0x00, 0x00, 0x00])),
+      );
+
+      n = 10011545;
+      expect(
+        ObjectUtils.bigIntToBytes(
+          number: BigInt.from(n),
+          endian: Endian.little,
+          size: 8,
+        ),
+        equals(
+          Uint8List.fromList(
+            [0x99, 0xc3, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00],
+          ),
+        ),
+      );
+    });
   });
 
+  /// Based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch04/helper.py#L81
   group('Bytes to BigInt', () {
     test('test_little_endian_to_int', () {
       var h = ObjectUtils.encodeBigInt(
