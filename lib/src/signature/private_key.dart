@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:crypto/crypto.dart';
 import 'package:dartcoin/src/elliptic_curves.dart/s256_point.dart';
 import 'package:dartcoin/src/signature/signature.dart';
 import 'package:dartcoin/src/utils/all.dart';
+import 'package:hash/hash.dart';
 import 'package:meta/meta.dart';
 
 class PrivateKey {
@@ -32,25 +32,25 @@ class PrivateKey {
       size: 32,
     );
 
-    var hmacSha256 = Hmac(sha256, k);
-    k = hmacSha256.convert(
+    var hmacSha256 = Hmac(SHA256(), k);
+    k = hmacSha256.update(
       [...v, 0, ...secretBytes, ...zBytes],
-    ).bytes;
-    v = hmacSha256.convert(v).bytes;
-    k = hmacSha256.convert(
+    ).digest();
+    v = hmacSha256.update(v).digest();
+    k = hmacSha256.update(
       [...v, 1, ...secretBytes, ...zBytes],
-    ).bytes;
-    v = hmacSha256.convert(v).bytes;
+    ).digest();
+    v = hmacSha256.update(v).digest();
 
     BigInt result;
     while (result == null) {
-      v = hmacSha256.convert(v).bytes;
+      v = hmacSha256.update(v).digest();
       final candidate = ObjectUtils.decodeBigInt(v);
 
-      k = hmacSha256.convert(
+      k = hmacSha256.update(
         [...v, 0, ...secretBytes, ...zBytes],
-      ).bytes;
-      v = hmacSha256.convert(v).bytes;
+      ).digest();
+      v = hmacSha256.update(v).digest();
 
       if (candidate >= BigInt.one && candidate < Secp256Utils.prime) {
         result = candidate;
