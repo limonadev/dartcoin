@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartcoin/dartcoin.dart';
 
 class ChapterFour {
@@ -10,6 +12,7 @@ class ChapterFour {
     _fourth();
     _fifth();
     _sixth();
+    _seventh();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -150,5 +153,25 @@ class ChapterFour {
       );
       print(humanWif);
     }
+  }
+
+  /// Exercise 9 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch04/Chapter4.ipynb
+  void _seventh() {
+    print('Seventh Exercise');
+
+    final secretFile = File('example/assets/secret_chapter_04.txt');
+    final secretPhrase = secretFile.readAsBytesSync();
+    final secret = ObjectUtils.bytesToBigInt(bytes: secretPhrase);
+
+    final pk = PrivateKey(secret: secret);
+    final address = pk.point.getAddress(
+      compressed: true,
+      testnet: true,
+    );
+    final humanAddress = Base58Utils.humanReadable(
+      encoded: address,
+    );
+
+    print(humanAddress);
   }
 }
