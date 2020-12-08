@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:crypto/crypto.dart';
 import 'package:dartcoin/src/elliptic_curves.dart/s256_point.dart';
 import 'package:dartcoin/src/signature/signature.dart';
@@ -71,5 +73,25 @@ class PrivateKey {
 
   String toHex() {
     return ObjectUtils.toHex(value: secret);
+  }
+
+  Uint8List wif({
+    bool compressed = true,
+    bool testnet = true,
+  }) {
+    final encodedSecret = ObjectUtils.bigIntToBytes(
+      number: secret,
+      size: 32,
+    );
+    final prefix = testnet ? 0xef : 0x80;
+    final bytes = [prefix, ...encodedSecret];
+
+    if (compressed) {
+      bytes.add(0x01);
+    }
+
+    return Base58Utils.encodeChecksum(
+      bytes: Uint8List.fromList(bytes),
+    );
   }
 }
