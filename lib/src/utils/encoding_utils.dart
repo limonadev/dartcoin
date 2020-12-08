@@ -2,14 +2,16 @@ import 'dart:typed_data';
 import 'package:meta/meta.dart';
 import 'package:dartcoin/src/utils/all.dart';
 
-// TODO: CHECK THE BASE58 ENCODING, IS IT REALLY NECESSARY TO USE BYTES?
+/// According to https://tools.ietf.org/id/draft-msporny-base58-01.html , the byte encoding
+/// is based on the position in the [alphabet]. For example, the Human Readable Base58 value:
+/// `1F1` is encoded as the list of bytes `[0,14,0]`.
 class Base58Utils {
   static const alphabet =
       '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
   static Uint8List encode({@required Uint8List bytes}) {
     final zerosCount = bytes.takeWhile((value) => value == 0x00).length;
-    final prefix = List.filled(zerosCount, '1'.codeUnitAt(0));
+    final prefix = List.filled(zerosCount, 0x00);
 
     var decoded = ObjectUtils.decodeBigInt(bytes);
     final result = <int>[];
@@ -18,7 +20,7 @@ class Base58Utils {
       final mod = (decoded % BigInt.from(58)).toInt();
       decoded = decoded ~/ BigInt.from(58);
 
-      result.insert(0, alphabet[mod].codeUnitAt(0));
+      result.insert(0, mod);
     }
 
     return Uint8List.fromList(prefix + result);
@@ -38,6 +40,6 @@ class Base58Utils {
   /// Convenience method to show a readable String from a Base58
   /// list called [encoded].
   static String humanReadable({@required Uint8List encoded}) {
-    return encoded.map((e) => String.fromCharCode(e)).join();
+    return encoded.map((e) => alphabet[e]).join();
   }
 }
