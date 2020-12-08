@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:meta/meta.dart';
 
@@ -67,6 +68,21 @@ class ObjectUtils {
     }
 
     return endian == Endian.big ? encoded : encoded.reversed.toList();
+  }
+
+  static BigInt bytesToBigInt({
+    @required Uint8List bytes,
+    Endian endian = Endian.big,
+  }) {
+    /// The line
+    /// `BigInt.from(bytes[bytes.length - i - 1]) << (8 * i);`
+    /// from [decodeBigInt] is the same as
+    /// `BigInt.from(bytes[bytes.length - i - 1]) * BigInt.from(256).pow(i);`
+    return decodeBigInt(
+      endian == Endian.big
+          ? bytes
+          : Uint8List.fromList(bytes.reversed.toList()),
+    );
   }
 
   static String toHex({int padding = 64, @required BigInt value}) {
