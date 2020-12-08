@@ -188,4 +188,36 @@ void main() {
       );
     });
   });
+
+  group('Bytes to BigInt', () {
+    test('test_little_endian_to_int', () {
+      var h = ObjectUtils.encodeBigInt(
+        BigInt.parse(
+          '99c3980000000000',
+          radix: 16,
+        ),
+      );
+      expect(
+        ObjectUtils.bytesToBigInt(
+          bytes: h,
+          endian: Endian.little,
+        ),
+        equals(BigInt.from(10011545)),
+      );
+
+      h = ObjectUtils.encodeBigInt(
+        BigInt.parse(
+          'a135ef0100000000',
+          radix: 16,
+        ),
+      );
+      expect(
+        ObjectUtils.bytesToBigInt(
+          bytes: h,
+          endian: Endian.little,
+        ),
+        equals(BigInt.from(32454049)),
+      );
+    });
+  });
 }
