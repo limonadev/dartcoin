@@ -21,7 +21,7 @@ void main() {
     );
 
     final stream = fakeSyncRead(rawTx: rawTx);
-    final tx = await Transaction.parse(stream);
+    final tx = await TransactionFactory.parse(stream);
 
     expect(
       tx.version,

@@ -23,34 +23,6 @@ class Transaction {
         encoded: hashed(),
       );
 
-  static Future<Transaction> parse(Stream<int> stream) async {
-    final stepsDone = [false];
-
-    final acc = <int>[];
-    int version;
-
-    await for (var byte in stream) {
-      acc.add(byte);
-      if (acc.length == 4 && stepsDone[0] == false) {
-        version = ObjectUtils.bytesToBigInt(
-          bytes: Uint8List.fromList(acc),
-          endian: Endian.little,
-        ).toInt();
-
-        acc.clear();
-        stepsDone[0] = true;
-      }
-    }
-
-    return Transaction(
-      locktime: null,
-      testnet: null,
-      txIns: null,
-      txOuts: null,
-      version: version,
-    );
-  }
-
   /// TODO: CREATE A `serialize()` method, instead of passing a Fib seq
   Uint8List hashed() {
     return Uint8List.fromList(
