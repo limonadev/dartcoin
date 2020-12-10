@@ -2,6 +2,7 @@ export 'elliptic_curves.dart/all.dart';
 export 'finite_field/all.dart';
 export 'models/operand.dart';
 export 'signature/all.dart';
+export 'transaction/transaction.dart';
 export 'utils/all.dart';
 
 /// Checks if you are awesome. Spoiler: you are.
