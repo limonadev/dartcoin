@@ -1,10 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:dartcoin/src/transaction/transaction.dart';
+import 'package:dartcoin/src/transaction/varint.dart';
 import 'package:dartcoin/src/utils/all.dart';
 
 enum Parsing {
   Version,
+  TxInsVarint,
   TxIns,
   TxOuts,
   Locktime,
@@ -12,9 +14,12 @@ enum Parsing {
 
 class TransactionFactory {
   static Future<Transaction> parse(Stream<int> stream) async {
+    final acc = <int>[];
     var currentStep = Parsing.Version;
 
-    final acc = <int>[];
+    int txInVarintByteNumber;
+    int txInVarint;
+
     int version;
 
     await for (var byte in stream) {
@@ -26,7 +31,16 @@ class TransactionFactory {
         ).toInt();
 
         acc.clear();
-        currentStep = Parsing.TxIns;
+        currentStep = Parsing.TxInsVarint;
+      } else if (currentStep == Parsing.TxInsVarint) {
+        if (txInVarintByteNumber == null) {
+          txInVarintByteNumber = Varint.numberOfNecessaryBytes(flag: byte);
+        } else if (acc.length == txInVarintByteNumber + 1) {
+          txInVarint = Varint.read(bytes: acc);
+
+          acc.clear();
+          currentStep = Parsing.TxIns;
+        }
       }
     }
 
