@@ -5,6 +5,20 @@ import 'package:test/test.dart';
 
 void main() {
   group('Varint', () {
+    test('Necessary Bytes', () {
+      final flags = [1, 0xfd, 0xfe, 0xff];
+      final expectedVals = [0, 2, 4, 8];
+
+      for (var i = 0; i < flags.length; i++) {
+        final flag = flags[i];
+
+        expect(
+          Varint.numberOfNecessaryBytes(flag: flag),
+          equals(expectedVals[i]),
+        );
+      }
+    });
+
     test('Read', () async {
       var raw = ObjectUtils.bigIntToBytes(
         number: BigInt.parse(
