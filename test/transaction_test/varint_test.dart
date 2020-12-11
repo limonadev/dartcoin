@@ -63,7 +63,7 @@ void main() {
           ),
         ),
         endian: Endian.little,
-      ).toInt();
+      );
       var varint = Varint.read(bytes: raw);
       expect(
         varint,
@@ -84,7 +84,7 @@ void main() {
           ),
         ),
         endian: Endian.little,
-      ).toInt();
+      );
       varint = Varint.read(bytes: raw);
       expect(
         varint,
@@ -105,7 +105,7 @@ void main() {
           ),
         ),
         endian: Endian.little,
-      ).toInt();
+      );
       varint = Varint.read(bytes: raw);
       expect(
         varint,
@@ -126,7 +126,7 @@ void main() {
           ),
         ),
         endian: Endian.little,
-      ).toInt();
+      );
       varint = Varint.read(bytes: raw);
       expect(
         varint,

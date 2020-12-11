@@ -68,7 +68,7 @@ class Varint {
     return result;
   }
 
-  static int read({@required Uint8List bytes}) {
+  static BigInt read({@required Uint8List bytes}) {
     final flag = bytes[0];
     final bytesNumber = numberOfNecessaryBytes(flag: flag);
 
@@ -77,6 +77,6 @@ class Varint {
         bytes.sublist(bytesNumber == 0 ? 0 : 1, 1 + bytesNumber),
       ),
       endian: Endian.little,
-    ).toInt();
+    );
   }
 }

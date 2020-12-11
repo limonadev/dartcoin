@@ -18,7 +18,7 @@ class TransactionFactory {
     var currentStep = Parsing.Version;
 
     int txInVarintByteNumber;
-    int txInVarint;
+    BigInt txInVarint;
 
     int version;
 
