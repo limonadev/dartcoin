@@ -5,6 +5,35 @@ import 'package:test/test.dart';
 
 void main() {
   group('Varint', () {
+    test('encode', () {
+      final toEncode = ['1', 'ab12', 'ab12cd34', 'ab12cd34ab12cd34'];
+      final prefixes = [null, 0xfd, 0xfe, 0xff];
+
+      for (var i = 0; i < toEncode.length; i++) {
+        final val = BigInt.parse(
+          toEncode[i],
+          radix: 16,
+        );
+        final result = Varint.encode(
+          varint: val,
+        );
+        final expected = Uint8List.fromList(
+          [
+            if (prefixes[i] != null) prefixes[i],
+            ...ObjectUtils.bigIntToBytes(
+              number: val,
+              endian: Endian.little,
+            ),
+          ],
+        );
+
+        expect(
+          result,
+          equals(expected),
+        );
+      }
+    });
+
     test('Necessary Bytes', () {
       final flags = [1, 0xfd, 0xfe, 0xff];
       final expectedVals = [0, 2, 4, 8];
