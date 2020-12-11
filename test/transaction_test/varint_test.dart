@@ -5,8 +5,40 @@ import 'package:test/test.dart';
 
 void main() {
   group('Varint', () {
+    test('conversion', () {
+      final toEncode = ['01', 'ab12', 'ab12cd34', 'ab12cd34ab12cd34'];
+
+      for (final raw in toEncode) {
+        final val = BigInt.parse(
+          raw,
+          radix: 16,
+        );
+
+        final encoded = Varint.encode(
+          varint: val,
+        );
+
+        final decoded = Varint.read(
+          bytes: encoded,
+        );
+
+        expect(
+          decoded,
+          equals(val),
+        );
+        expect(
+          encoded,
+          equals(
+            Varint.encode(
+              varint: decoded,
+            ),
+          ),
+        );
+      }
+    });
+
     test('encode', () {
-      final toEncode = ['1', 'ab12', 'ab12cd34', 'ab12cd34ab12cd34'];
+      final toEncode = ['01', 'ab12', 'ab12cd34', 'ab12cd34ab12cd34'];
       final prefixes = [null, 0xfd, 0xfe, 0xff];
 
       for (var i = 0; i < toEncode.length; i++) {
@@ -36,14 +68,14 @@ void main() {
 
     test('Necessary Bytes', () {
       final flags = [1, 0xfd, 0xfe, 0xff];
-      final expectedVals = [0, 2, 4, 8];
+      final results = [0, 2, 4, 8];
 
       for (var i = 0; i < flags.length; i++) {
         final flag = flags[i];
 
         expect(
           Varint.numberOfNecessaryBytes(flag: flag),
-          equals(expectedVals[i]),
+          equals(results[i]),
         );
       }
     });
