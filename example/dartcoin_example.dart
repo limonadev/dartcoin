@@ -1,6 +1,6 @@
 import 'exercises/all.dart';
 
-void main() {
+void main() async {
   var chapterOne = ChapterOne();
   //chapterOne.runEverything(runOptionals: true);
 
@@ -11,5 +11,8 @@ void main() {
   //chapterThree.runEverything(runOptionals: true);
 
   var chapterFour = ChapterFour();
-  chapterFour.runEverything(runOptionals: true);
+  //chapterFour.runEverything(runOptionals: true);
+
+  var chapterFive = ChapterFive();
+  await chapterFive.runEverything(runOptionals: true);
 }
