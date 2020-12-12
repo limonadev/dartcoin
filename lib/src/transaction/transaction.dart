@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:dartcoin/src/transaction/transaction_input.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
@@ -11,11 +12,11 @@ class Transaction {
     @required this.txIns,
     @required this.txOuts,
     @required this.version,
-  });
+  }) : assert(txIns != null);
 
   final dynamic locktime;
   final bool testnet;
-  final List<dynamic> txIns;
+  final List<TxInput> txIns;
   final List<dynamic> txOuts;
   final int version;
 

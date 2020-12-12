@@ -48,7 +48,7 @@ class TransactionFactory {
     return Transaction(
       locktime: null,
       testnet: null,
-      txIns: null,
+      txIns: [],
       txOuts: null,
       version: version,
     );
