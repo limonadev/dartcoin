@@ -15,7 +15,7 @@ enum ScriptParsing {
 
 class ScriptFactory {
   static Future<Script> parse(Stream<int> stream) async {
-    final cmds = <Uint8List>[];
+    final cmds = <Object>[];
     var currentStep = ScriptParsing.Length;
 
     final acc = <int>[];
@@ -109,7 +109,7 @@ class ScriptFactory {
           }
         }
       } else if (currentStep == ScriptParsing.OpCode) {
-        cmds.add(Uint8List.fromList([byte]));
+        cmds.add(byte);
         currentStep = null;
       }
     }
