@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 import 'package:dartcoin/src/transaction/script.dart';
@@ -15,13 +17,17 @@ class TxInput {
               radix: 16,
             );
 
-  final BigInt prevTxId;
-  final BigInt prevTxIndex;
+  final Uint8List prevTxId;
+  final Uint8List prevTxIndex;
   final Script scriptSig;
   final BigInt sequence;
 
   @override
   String toString() {
-    return '${ObjectUtils.toHex(value: prevTxId)}:$prevTxIndex';
+    final id = ObjectUtils.bytesToBigInt(
+      bytes: prevTxId,
+      endian: Endian.little,
+    );
+    return '${ObjectUtils.toHex(value: id)}:$prevTxIndex';
   }
 }
