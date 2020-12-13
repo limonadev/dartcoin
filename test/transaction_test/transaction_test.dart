@@ -1,17 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:dartcoin/dartcoin.dart';
-import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
 /// Each test is based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch05/tx.py
 void main() {
-  Stream<int> fakeSyncRead({@required Uint8List rawTx}) async* {
-    for (var byte in rawTx) {
-      yield byte;
-    }
-  }
-
   test('test_parse_version', () async {
     final rawTx = ObjectUtils.bigIntToBytes(
       number: BigInt.parse(
@@ -20,8 +11,7 @@ void main() {
       ),
     );
 
-    final stream = fakeSyncRead(rawTx: rawTx);
-    final tx = await TransactionFactory.parse(stream);
+    final tx = await TransactionFactory.parseSync(bytes: rawTx);
 
     expect(
       tx.version,
