@@ -58,7 +58,7 @@ void main() {
         radix: 16,
       ),
     );
-    final script = ScriptFactory.parseSync(scriptPubKey);
+    final script = ScriptFactory.parseSync(bytes: scriptPubKey).result;
 
     var want = ObjectUtils.bigIntToBytes(
       number: BigInt.parse(
