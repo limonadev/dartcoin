@@ -33,11 +33,11 @@ class TransactionFactory {
         acc.clear();
         currentStep = Parsing.TxInsVarint;
       } else if (currentStep == Parsing.TxInsVarint) {
-        /// TODO: Fix probably error on parsing (see ScriptFactory)
-        if (txInVarintByteNumber == null) {
-          txInVarintByteNumber = Varint.numberOfNecessaryBytes(flag: byte);
-        } else if (acc.length == txInVarintByteNumber + 1) {
-          txInVarint = Varint.read(bytes: acc);
+        txInVarintByteNumber ??= Varint.numberOfNecessaryBytes(flag: byte);
+
+        if (txInVarintByteNumber == 0 ||
+            acc.length == txInVarintByteNumber + 1) {
+          txInVarint = Varint.read(bytes: Uint8List.fromList(acc));
 
           acc.clear();
           currentStep = Parsing.TxIns;
