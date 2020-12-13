@@ -14,6 +14,68 @@ enum ScriptParsing {
 }
 
 class ScriptFactory {
+  static Script parseSync(Uint8List bytes) {
+    final cmds = <Object>[];
+
+    final lengthVarintByteNumber = Varint.numberOfNecessaryBytes(
+      flag: bytes[0],
+    );
+    final lengthVarint = Varint.read(bytes: bytes);
+
+    if (BigInt.from(bytes.length - lengthVarintByteNumber - 1) !=
+        lengthVarint) {
+      throw FormatException('ScriptParsing Script failed!');
+    }
+
+    int necessaryBytes;
+
+    for (var i = lengthVarintByteNumber + 1; i < bytes.length; i++) {
+      final byte = bytes[i];
+
+      if (byte >= 1 && byte <= 75) {
+        necessaryBytes = byte;
+
+        cmds.add(
+          Uint8List.fromList(
+            bytes.sublist(i + 1, i + necessaryBytes + 1),
+          ),
+        );
+
+        i += necessaryBytes;
+      } else if (byte == 76) {
+        necessaryBytes = ObjectUtils.bytesToBigInt(
+          bytes: Uint8List.fromList([bytes[i + 1]]),
+          endian: Endian.little,
+        ).toInt();
+
+        cmds.add(
+          Uint8List.fromList(
+            bytes.sublist(i + 2, i + necessaryBytes + 2),
+          ),
+        );
+
+        i += necessaryBytes + 1;
+      } else if (byte == 77) {
+        necessaryBytes = ObjectUtils.bytesToBigInt(
+          bytes: Uint8List.fromList([bytes[i + 1], bytes[i + 2]]),
+          endian: Endian.little,
+        ).toInt();
+
+        cmds.add(
+          Uint8List.fromList(
+            bytes.sublist(i + 3, i + necessaryBytes + 3),
+          ),
+        );
+
+        i += necessaryBytes + 2;
+      } else {
+        cmds.add(byte);
+      }
+    }
+
+    return Script(cmds: cmds);
+  }
+
   static Future<Script> parse(Stream<int> stream) async {
     final cmds = <Object>[];
     var currentStep = ScriptParsing.Length;
