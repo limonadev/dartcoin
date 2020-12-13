@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:dartcoin/src/transaction/transaction.dart';
+import 'package:dartcoin/src/transaction/transaction_input.dart';
+import 'package:dartcoin/src/transaction/transaction_input_factory.dart';
 import 'package:dartcoin/src/transaction/varint.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
@@ -13,38 +15,40 @@ enum Parsing {
   Locktime,
 }
 
-class ParsingResult<T> {
-  ParsingResult({
-    @required this.currentBytePosition,
-    @required this.result,
-  });
-
-  final int currentBytePosition;
-  final T result;
-}
-
 class TransactionFactory {
-  static Transaction parseSync({@required Uint8List bytes}) {
-    var currentByteIndex = 0;
-
+  static Transaction parseSync({
+    @required Uint8List bytes,
+    int initialIndex = 0,
+  }) {
     final versionResult = _parseVersion(
       bytes: bytes,
-      currentByteIndex: currentByteIndex,
+      initialIndex: initialIndex,
     );
-    currentByteIndex = versionResult.currentBytePosition;
+    initialIndex = versionResult.currentBytePosition;
     final version = versionResult.result;
 
     final numberOfTxInputsResult = _parseNumberOfTxInputs(
       bytes: bytes,
-      currentByteIndex: currentByteIndex,
+      initialIndex: initialIndex,
     );
-    currentByteIndex = numberOfTxInputsResult.currentBytePosition;
+    initialIndex = numberOfTxInputsResult.currentBytePosition;
     final numberOfTxInputs = numberOfTxInputsResult.result;
+
+    final txIns = <TxInput>[];
+    for (var i = 0; i < numberOfTxInputs.toInt(); i++) {
+      final txInResult = TxInputFactory.parseSync(
+        bytes: bytes,
+        initialIndex: initialIndex,
+      );
+      initialIndex = txInResult.currentBytePosition;
+
+      txIns.add(txInResult.result);
+    }
 
     return Transaction(
       locktime: null,
       testnet: null,
-      txIns: [],
+      txIns: txIns,
       txOuts: null,
       version: version,
     );
@@ -52,13 +56,13 @@ class TransactionFactory {
 
   static ParsingResult<int> _parseVersion({
     @required Uint8List bytes,
-    @required int currentByteIndex,
+    @required int initialIndex,
   }) {
     return ParsingResult(
-      currentBytePosition: currentByteIndex + 4,
+      currentBytePosition: initialIndex + 4,
       result: ObjectUtils.bytesToBigInt(
         bytes: Uint8List.fromList(
-          bytes.sublist(currentByteIndex, currentByteIndex + 4),
+          bytes.sublist(initialIndex, initialIndex + 4),
         ),
         endian: Endian.little,
       ).toInt(),
@@ -67,19 +71,19 @@ class TransactionFactory {
 
   static ParsingResult<BigInt> _parseNumberOfTxInputs({
     @required Uint8List bytes,
-    @required int currentByteIndex,
+    @required int initialIndex,
   }) {
     final numberOfBytes = Varint.numberOfNecessaryBytes(
-      flag: bytes[currentByteIndex],
+      flag: bytes[initialIndex],
     );
     final numberOfTxInputs = Varint.read(
       bytes: Uint8List.fromList(
-        bytes.sublist(currentByteIndex),
+        bytes.sublist(initialIndex),
       ),
     );
 
     return ParsingResult(
-      currentBytePosition: currentByteIndex + numberOfBytes + 1,
+      currentBytePosition: initialIndex + numberOfBytes + 1,
       result: numberOfTxInputs,
     );
   }
