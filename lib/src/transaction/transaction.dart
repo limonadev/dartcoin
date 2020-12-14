@@ -16,7 +16,7 @@ class Transaction {
   })  : assert(txIns != null),
         assert(txOuts != null);
 
-  final dynamic locktime;
+  final BigInt locktime;
   final bool testnet;
   final List<TxInput> txIns;
   final List<TxOutput> txOuts;

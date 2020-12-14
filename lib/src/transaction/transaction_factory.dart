@@ -65,8 +65,15 @@ class TransactionFactory {
       txOuts.add(txOutResult.result);
     }
 
+    final locktimeResult = _parseLocktime(
+      bytes: bytes,
+      initialIndex: initialIndex,
+    );
+    initialIndex = locktimeResult.currentBytePosition;
+    final locktime = locktimeResult.result;
+
     return Transaction(
-      locktime: null,
+      locktime: locktime,
       testnet: null,
       txIns: txIns,
       txOuts: txOuts,
@@ -124,6 +131,26 @@ class TransactionFactory {
     return ParsingResult(
       currentBytePosition: initialIndex + numberOfBytes + 1,
       result: numberOfTxOutputs,
+    );
+  }
+
+  static ParsingResult<BigInt> _parseLocktime({
+    @required Uint8List bytes,
+    @required int initialIndex,
+  }) {
+    final locktime = ObjectUtils.bytesToBigInt(
+      bytes: Uint8List.fromList(
+        bytes.sublist(
+          initialIndex,
+          initialIndex + 4,
+        ),
+      ),
+      endian: Endian.little,
+    );
+
+    return ParsingResult(
+      currentBytePosition: initialIndex + 4,
+      result: locktime,
     );
   }
 
