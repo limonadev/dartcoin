@@ -16,7 +16,10 @@ class TxInputFactory {
     );
     initialIndex += 32;
 
-    final prevTxIndex = bytes.sublist(initialIndex, initialIndex + 4);
+    final prevTxIndex = ObjectUtils.bytesToBigInt(
+      bytes: bytes.sublist(initialIndex, initialIndex + 4),
+      endian: Endian.little,
+    );
     initialIndex += 4;
 
     final scriptSigResult = ScriptFactory.parseSync(

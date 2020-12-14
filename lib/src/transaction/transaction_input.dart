@@ -18,7 +18,7 @@ class TxInput {
             );
 
   final Uint8List prevTxId;
-  final Uint8List prevTxIndex;
+  final BigInt prevTxIndex;
   final Script scriptSig;
   final BigInt sequence;
 
