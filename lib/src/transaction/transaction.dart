@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dartcoin/src/transaction/transaction_input.dart';
+import 'package:dartcoin/src/transaction/transaction_output.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
@@ -12,12 +13,13 @@ class Transaction {
     @required this.txIns,
     @required this.txOuts,
     @required this.version,
-  }) : assert(txIns != null);
+  })  : assert(txIns != null),
+        assert(txOuts != null);
 
   final dynamic locktime;
   final bool testnet;
   final List<TxInput> txIns;
-  final List<dynamic> txOuts;
+  final List<TxOutput> txOuts;
   final int version;
 
   String get id => Base58Utils.humanReadable(
