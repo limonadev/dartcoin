@@ -12,7 +12,7 @@ class ChapterFive {
     }
   }
 
-  /// Exercise 1 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch04/Chapter5.ipynb
+  /// Exercise 1 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch05/Chapter5.ipynb
   void _first() {
     print('First Exercise');
 
@@ -30,7 +30,7 @@ class ChapterFive {
     print(script);
   }
 
-  /// Exercise 5 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch04/Chapter5.ipynb
+  /// Exercise 5 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch05/Chapter5.ipynb
   void _second() {
     print('First Exercise');
 
