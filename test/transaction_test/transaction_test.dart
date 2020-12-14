@@ -43,6 +43,10 @@ void main() {
       tx.txIns[0].prevTxId,
       equals(want),
     );
+    expect(
+      tx.txIns[0].prevTxIndex,
+      equals(BigInt.zero),
+    );
 
     want = ObjectUtils.bigIntToBytes(
       number: BigInt.parse(
