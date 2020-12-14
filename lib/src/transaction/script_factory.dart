@@ -32,7 +32,7 @@ class ScriptFactory {
     int necessaryBytes;
     var i = lengthVarintByteNumber + 1;
 
-    for (; i < lenAsInt && i < realBytes.length; i++) {
+    for (; i <= lenAsInt && i < realBytes.length; i++) {
       final byte = realBytes[i];
 
       if (byte >= 1 && byte <= 75) {
