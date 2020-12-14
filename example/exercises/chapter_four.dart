@@ -76,6 +76,7 @@ class ChapterFour {
 
     print(
       ObjectUtils.toHex(
+        padding: 64,
         value: ObjectUtils.decodeBigInt(der),
       ),
     );

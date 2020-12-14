@@ -28,6 +28,6 @@ class TxInput {
       bytes: prevTxId,
       endian: Endian.little,
     );
-    return '${ObjectUtils.toHex(value: id)}:$prevTxIndex';
+    return '${ObjectUtils.toHex(padding: 64, value: id)}:$prevTxIndex';
   }
 }

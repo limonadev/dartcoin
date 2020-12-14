@@ -72,7 +72,10 @@ class PrivateKey {
   }
 
   String toHex() {
-    return ObjectUtils.toHex(value: secret);
+    return ObjectUtils.toHex(
+      padding: 64,
+      value: secret,
+    );
   }
 
   Uint8List wif({

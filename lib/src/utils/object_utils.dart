@@ -86,7 +86,11 @@ class ObjectUtils {
     );
   }
 
-  static String toHex({int padding = 64, @required BigInt value}) {
-    return value.toRadixString(16).padLeft(padding, '0');
+  static String toHex({int padding, @required BigInt value}) {
+    var result = value.toRadixString(16);
+    if (padding != null) {
+      result = result.padLeft(padding, '0');
+    }
+    return result;
   }
 }
