@@ -14,5 +14,5 @@ void main() async {
   //chapterFour.runEverything(runOptionals: true);
 
   var chapterFive = ChapterFive();
-  await chapterFive.runEverything(runOptionals: true);
+  chapterFive.runEverything(runOptionals: true);
 }
