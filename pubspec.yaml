@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   hash: ^1.0.3
+  http: ^0.12.2
   #crypto: ^2.1.5
   #pointycastle: ^2.0.0
 
