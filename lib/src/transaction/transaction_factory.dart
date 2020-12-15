@@ -21,6 +21,7 @@ class TransactionFactory {
   static Transaction parseSync({
     @required Uint8List bytes,
     int initialIndex = 0,
+    bool testnet = true,
   }) {
     final versionResult = _parseVersion(
       bytes: bytes,
@@ -74,7 +75,7 @@ class TransactionFactory {
 
     return Transaction(
       locktime: locktime,
-      testnet: null,
+      testnet: testnet,
       txIns: txIns,
       txOuts: txOuts,
       version: version,
