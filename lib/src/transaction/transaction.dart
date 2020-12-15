@@ -20,7 +20,7 @@ class Transaction {
   final bool testnet;
   final List<TxInput> txIns;
   final List<TxOutput> txOuts;
-  final int version;
+  final BigInt version;
 
   String get id => Base58Utils.humanReadable(
         encoded: hashed(),

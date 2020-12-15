@@ -81,7 +81,7 @@ class TransactionFactory {
     );
   }
 
-  static ParsingResult<int> _parseVersion({
+  static ParsingResult<BigInt> _parseVersion({
     @required Uint8List bytes,
     @required int initialIndex,
   }) {
@@ -92,7 +92,7 @@ class TransactionFactory {
           bytes.sublist(initialIndex, initialIndex + 4),
         ),
         endian: Endian.little,
-      ).toInt(),
+      ),
     );
   }
 
@@ -191,7 +191,7 @@ class TransactionFactory {
       testnet: null,
       txIns: [],
       txOuts: null,
-      version: version,
+      version: BigInt.zero,
     );
   }
 }

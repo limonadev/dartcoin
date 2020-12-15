@@ -15,7 +15,7 @@ void main() {
 
     expect(
       tx.version,
-      equals(1),
+      equals(BigInt.one),
     );
   });
 
