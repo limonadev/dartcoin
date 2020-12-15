@@ -23,15 +23,16 @@ class Transaction {
   final List<TxOutput> txOuts;
   final BigInt version;
 
-  String get id => Base58Utils.humanReadable(
-        encoded: hashed(),
+  String get id => ObjectUtils.toHex(
+        value: ObjectUtils.bytesToBigInt(
+          bytes: hashed(),
+        ),
       );
 
-  /// TODO: CREATE A `serialize()` method, instead of passing a Fib seq
   Uint8List hashed() {
     return Uint8List.fromList(
       Secp256Utils.hash256(
-        data: Uint8List.fromList([1, 1, 2, 3, 5]),
+        data: serialize(),
       ).reversed.toList(),
     );
   }
