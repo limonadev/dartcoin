@@ -22,17 +22,17 @@ class ChapterFive {
         radix: 16,
       ),
     );
-    final script = ScriptFactory.parseSync(
+    final scriptResult = ScriptFactory.parseSync(
       bytes: scriptPubKey,
       initialIndex: 0,
     );
 
-    print(script);
+    print(scriptResult.result);
   }
 
   /// Exercise 5 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch05/Chapter5.ipynb
   void _second() {
-    print('First Exercise');
+    print('Second Exercise');
 
     final rawTx = ObjectUtils.bigIntToBytes(
       number: BigInt.parse(
