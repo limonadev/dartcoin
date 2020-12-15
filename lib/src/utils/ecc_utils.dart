@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dartcoin/src/elliptic_curves.dart/s256_point.dart';
-import 'package:dartcoin/src/models/operand.dart';
+import 'package:dartcoin/src/models/all.dart';
 import 'package:hash/hash.dart';
 import 'package:meta/meta.dart';
 

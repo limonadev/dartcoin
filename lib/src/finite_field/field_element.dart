@@ -1,4 +1,4 @@
-import 'package:dartcoin/src/models/operand.dart';
+import 'package:dartcoin/src/models/all.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 

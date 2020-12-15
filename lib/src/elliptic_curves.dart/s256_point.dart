@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dartcoin/src/elliptic_curves.dart/point.dart';
 import 'package:dartcoin/src/finite_field/s256_field_element.dart';
-import 'package:dartcoin/src/models/operand.dart';
+import 'package:dartcoin/src/models/all.dart';
 import 'package:dartcoin/src/signature/signature.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
