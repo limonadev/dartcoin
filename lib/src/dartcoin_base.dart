@@ -1,3 +1,4 @@
+export 'components/registry.dart';
 export 'elliptic_curves.dart/all.dart';
 export 'finite_field/all.dart';
 export 'models/all.dart';
