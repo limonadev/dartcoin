@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:dartcoin/src/components/registry.dart';
+import 'package:dartcoin/src/transaction/transaction.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 import 'package:dartcoin/src/transaction/script.dart';
@@ -23,6 +25,28 @@ class TxInput {
   final BigInt prevTxIndex;
   final Script scriptSig;
   final BigInt sequence;
+
+  /// Returns the [Transaction] from which this instance is an Utxo.
+  Future<Transaction> fetchTx({testnet = true}) {
+    return Registry().txFetcher.fetch(
+          hexTxId: ObjectUtils.bytesToHex(
+            bytes: prevTxId,
+            endian: Endian.little,
+          ),
+          testnet: testnet,
+        );
+  }
+
+  /// Returns the amount of Satoshis its Utxo has.
+  Future<BigInt> outputValue({testnet = true}) async {
+    final tx = await fetchTx(testnet: testnet);
+    return tx.txOuts[prevTxIndex.toInt()].amount;
+  }
+
+  Future<Script> scriptPubKey({testnet = true}) async {
+    final tx = await fetchTx(testnet: testnet);
+    return tx.txOuts[prevTxIndex.toInt()].scriptPubkey;
+  }
 
   Uint8List serialize() {
     final result = <int>[
