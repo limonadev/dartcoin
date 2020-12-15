@@ -29,6 +29,20 @@ class Transaction {
         ),
       );
 
+  Future<BigInt> getFee() async {
+    var totalIn = BigInt.zero;
+    for (final txIn in txIns) {
+      totalIn += await txIn.outputValue(testnet: testnet);
+    }
+
+    var totalOut = BigInt.zero;
+    txOuts.forEach((txOut) {
+      totalOut += txOut.amount;
+    });
+
+    return totalIn - totalOut;
+  }
+
   Uint8List hashed() {
     return Uint8List.fromList(
       Secp256Utils.hash256(
