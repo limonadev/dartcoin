@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dartcoin/src/transaction/transaction_input.dart';
 import 'package:dartcoin/src/transaction/transaction_output.dart';
+import 'package:dartcoin/src/transaction/varint.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
@@ -33,6 +34,43 @@ class Transaction {
         data: Uint8List.fromList([1, 1, 2, 3, 5]),
       ).reversed.toList(),
     );
+  }
+
+  Uint8List serialize() {
+    final result = <int>[
+      ...ObjectUtils.bigIntToBytes(
+        number: version,
+        endian: Endian.little,
+        size: 4,
+      ),
+      ...Varint.encode(
+        varint: BigInt.from(txIns.length),
+      ),
+    ];
+
+    txIns.forEach((txIn) {
+      result.addAll(txIn.serialize());
+    });
+
+    result.addAll(
+      Varint.encode(
+        varint: BigInt.from(txOuts.length),
+      ),
+    );
+
+    txOuts.forEach((txOut) {
+      result.addAll(txOut.serialize());
+    });
+
+    result.addAll(
+      ObjectUtils.bigIntToBytes(
+        number: locktime,
+        endian: Endian.little,
+        size: 4,
+      ),
+    );
+
+    return Uint8List.fromList(result);
   }
 
   @override
