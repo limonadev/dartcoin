@@ -40,7 +40,10 @@ class ChapterFive {
         radix: 16,
       ),
     );
-    final tx = TransactionFactory.parseSync(bytes: rawTx);
+    final tx = TransactionFactory.parseSync(
+      bytes: rawTx,
+      testnet: false,
+    );
 
     print(tx.txIns[1].scriptSig);
     print(tx.txOuts[0].scriptPubkey);

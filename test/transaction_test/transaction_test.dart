@@ -11,7 +11,10 @@ void main() {
       ),
     );
 
-    final tx = TransactionFactory.parseSync(bytes: rawTx);
+    final tx = TransactionFactory.parseSync(
+      bytes: rawTx,
+      testnet: false,
+    );
 
     expect(
       tx.version,
@@ -26,7 +29,10 @@ void main() {
         radix: 16,
       ),
     );
-    final tx = TransactionFactory.parseSync(bytes: rawTx);
+    final tx = TransactionFactory.parseSync(
+      bytes: rawTx,
+      testnet: false,
+    );
     expect(
       tx.txIns.length,
       equals(1),
@@ -74,7 +80,10 @@ void main() {
         radix: 16,
       ),
     );
-    final tx = TransactionFactory.parseSync(bytes: rawTx);
+    final tx = TransactionFactory.parseSync(
+      bytes: rawTx,
+      testnet: false,
+    );
     expect(
       tx.txOuts.length,
       equals(2),
@@ -122,7 +131,10 @@ void main() {
         radix: 16,
       ),
     );
-    final tx = TransactionFactory.parseSync(bytes: rawTx);
+    final tx = TransactionFactory.parseSync(
+      bytes: rawTx,
+      testnet: false,
+    );
     expect(
       tx.locktime,
       equals(BigInt.from(410393)),
@@ -138,7 +150,10 @@ void main() {
       ),
     );
 
-    final tx = TransactionFactory.parseSync(bytes: rawTx);
+    final tx = TransactionFactory.parseSync(
+      bytes: rawTx,
+      testnet: false,
+    );
 
     expect(
       tx.serialize(),
