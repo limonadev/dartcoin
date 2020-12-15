@@ -86,6 +86,20 @@ class ObjectUtils {
     );
   }
 
+  static String bytesToHex({
+    @required Uint8List bytes,
+    Endian endian = Endian.big,
+    int padding,
+  }) {
+    return toHex(
+      padding: padding,
+      value: bytesToBigInt(
+        bytes: bytes,
+        endian: endian,
+      ),
+    );
+  }
+
   static String toHex({int padding, @required BigInt value}) {
     var result = value.toRadixString(16);
     if (padding != null) {
