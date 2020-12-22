@@ -2,43 +2,129 @@ import 'dart:collection';
 import 'dart:typed_data';
 
 import 'package:dartcoin/src/utils/all.dart';
+import 'package:meta/meta.dart';
 
 typedef ScriptOperation = bool Function(ListQueue<Uint8List> stack);
 
-class OpCode {
-  static Map<int, ScriptOperation> functions = {
-    118: _op_dup,
-    170: _op_hash256,
-  };
+class ScriptExecutor {
+  ScriptExecutor()
+      : codeToOperation = Map.fromEntries(
+          OpCode.values.map(
+            (op) => MapEntry(op.byte, op),
+          ),
+        );
 
-  /// Operation called `OP_DUP` with code `118` or `0x76`.
-  /// Get the top element in the [stack] (without removing it),
-  /// duplicate it and pushes the result into the [stack].
-  static bool _op_dup(ListQueue<Uint8List> stack) {
-    var isValidOp = false;
+  final Map<int, OpCode> codeToOperation;
 
-    if (stack.isNotEmpty) {
-      stack.add(stack.last);
-
-      isValidOp = true;
+  bool run({
+    int opCodeAsByte,
+    OpCode opCode,
+    @required ListQueue<Uint8List> stack,
+  }) {
+    if (opCodeAsByte == null && opCode == null) {
+      throw ArgumentError(
+        'It is necessary to pass as argument at least one of this options: [opCodeAsByte] or [opCode]',
+      );
     }
+
+    final operation =
+        opCode != null ? opCode.function : codeToOperation[opCode].function;
+    final isValidOp = operation(stack);
 
     return isValidOp;
   }
+}
 
-  /// Operation called `OP_HASH256` with code `170` or `0xAA`.
-  /// Remove the top element of the [stack], perform a [Secp256Utils.hash256]
-  /// to it and push back the result into the [stack].
-  static bool _op_hash256(ListQueue<Uint8List> stack) {
-    var isValidOp = false;
+enum OpCode {
+  OP_DUP,
+  OP_HASH160,
+  OP_HASH256,
+}
 
-    if (stack.isNotEmpty) {
-      final element = stack.removeLast();
-      stack.add(Secp256Utils.hash256(data: element));
-
-      isValidOp = true;
+extension Info on OpCode {
+  int get byte {
+    switch (this) {
+      case OpCode.OP_DUP:
+        return 118;
+      case OpCode.OP_HASH160:
+        return 169;
+      case OpCode.OP_HASH256:
+        return 170;
+      default:
+        throw ArgumentError('[OpCode] has no valid code!');
     }
-
-    return isValidOp;
   }
+
+  String get name {
+    switch (this) {
+      case OpCode.OP_DUP:
+        return 'OP_DUP';
+      case OpCode.OP_HASH160:
+        return 'OP_HASH160';
+      case OpCode.OP_HASH256:
+        return 'OP_HASH256';
+      default:
+        throw ArgumentError('[OpCode] has no valid name!');
+    }
+  }
+
+  ScriptOperation get function {
+    switch (this) {
+      case OpCode.OP_DUP:
+        return _op_dup;
+      case OpCode.OP_HASH160:
+        return _op_hash160;
+      case OpCode.OP_HASH256:
+        return _op_hash256;
+      default:
+        throw ArgumentError('[OpCode] has no valid name!');
+    }
+  }
+}
+
+/// Operation called `OP_DUP` with code `118` or `0x76`.
+/// Get the top element in the [stack] (without removing it),
+/// duplicate it and pushes the result into the [stack].
+bool _op_dup(ListQueue<Uint8List> stack) {
+  var isValidOp = false;
+
+  if (stack.isNotEmpty) {
+    stack.add(stack.last);
+
+    isValidOp = true;
+  }
+
+  return isValidOp;
+}
+
+/// Operation called `OP_HASH160` with code `169` or `0xa9`.
+/// Remove the top element of the [stack], perform a [Secp256Utils.hash160]
+/// to it and push back the result into the [stack].
+bool _op_hash160(ListQueue<Uint8List> stack) {
+  var isValidOp = false;
+
+  if (stack.isNotEmpty) {
+    final element = stack.removeLast();
+    stack.add(Secp256Utils.hash160(data: element));
+
+    isValidOp = true;
+  }
+
+  return isValidOp;
+}
+
+/// Operation called `OP_HASH256` with code `170` or `0xaa`.
+/// Remove the top element of the [stack], perform a [Secp256Utils.hash256]
+/// to it and push back the result into the [stack].
+bool _op_hash256(ListQueue<Uint8List> stack) {
+  var isValidOp = false;
+
+  if (stack.isNotEmpty) {
+    final element = stack.removeLast();
+    stack.add(Secp256Utils.hash256(data: element));
+
+    isValidOp = true;
+  }
+
+  return isValidOp;
 }
