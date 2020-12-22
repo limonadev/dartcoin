@@ -47,6 +47,13 @@ enum OpCode {
   OP_7,
   OP_8,
   OP_9,
+  OP_10,
+  OP_11,
+  OP_12,
+  OP_13,
+  OP_14,
+  OP_15,
+  OP_16,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -77,6 +84,20 @@ extension Info on OpCode {
         return 88;
       case OpCode.OP_9:
         return 89;
+      case OpCode.OP_10:
+        return 90;
+      case OpCode.OP_11:
+        return 91;
+      case OpCode.OP_12:
+        return 92;
+      case OpCode.OP_13:
+        return 93;
+      case OpCode.OP_14:
+        return 94;
+      case OpCode.OP_15:
+        return 95;
+      case OpCode.OP_16:
+        return 96;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -112,6 +133,20 @@ extension Info on OpCode {
         return 'OP_8';
       case OpCode.OP_9:
         return 'OP_9';
+      case OpCode.OP_10:
+        return 'OP_10';
+      case OpCode.OP_11:
+        return 'OP_11';
+      case OpCode.OP_12:
+        return 'OP_12';
+      case OpCode.OP_13:
+        return 'OP_13';
+      case OpCode.OP_14:
+        return 'OP_14';
+      case OpCode.OP_15:
+        return 'OP_15';
+      case OpCode.OP_16:
+        return 'OP_16';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -147,6 +182,20 @@ extension Info on OpCode {
         return _op_8;
       case OpCode.OP_9:
         return _op_9;
+      case OpCode.OP_10:
+        return _op_10;
+      case OpCode.OP_11:
+        return _op_11;
+      case OpCode.OP_12:
+        return _op_12;
+      case OpCode.OP_13:
+        return _op_13;
+      case OpCode.OP_14:
+        return _op_14;
+      case OpCode.OP_15:
+        return _op_15;
+      case OpCode.OP_16:
+        return _op_16;
       case OpCode.OP_DUP:
         return _op_dup;
       case OpCode.OP_HASH160:
@@ -287,6 +336,90 @@ bool _op_9(ListQueue<Uint8List> stack) {
   stack.add(
     ScriptUtils.encodeNumber(
       number: BigInt.from(9),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_10` with code `90` or `0x5a`.
+/// Push into the [stack] the value `10`.
+bool _op_10(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(10),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_11` with code `91` or `0x5b`.
+/// Push into the [stack] the value `11`.
+bool _op_11(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(11),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_12` with code `92` or `0x5c`.
+/// Push into the [stack] the value `12`.
+bool _op_12(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(12),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_13` with code `93` or `0x5d`.
+/// Push into the [stack] the value `13`.
+bool _op_13(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(13),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_14` with code `94` or `0x5e`.
+/// Push into the [stack] the value `14`.
+bool _op_14(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(14),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_15` with code `95` or `0x5f`.
+/// Push into the [stack] the value `15`.
+bool _op_15(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(15),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_16` with code `96` or `0x60`.
+/// Push into the [stack] the value `16`.
+bool _op_16(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(16),
     ),
   );
 
