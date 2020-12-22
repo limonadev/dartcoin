@@ -36,6 +36,7 @@ class ScriptExecutor {
 }
 
 enum OpCode {
+  OP_0,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -44,6 +45,8 @@ enum OpCode {
 extension Info on OpCode {
   int get byte {
     switch (this) {
+      case OpCode.OP_0:
+        return 0;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -57,6 +60,8 @@ extension Info on OpCode {
 
   String get name {
     switch (this) {
+      case OpCode.OP_0:
+        return 'OP_0';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -70,6 +75,8 @@ extension Info on OpCode {
 
   ScriptOperation get function {
     switch (this) {
+      case OpCode.OP_0:
+        return _op_0;
       case OpCode.OP_DUP:
         return _op_dup;
       case OpCode.OP_HASH160:
@@ -80,6 +87,18 @@ extension Info on OpCode {
         throw ArgumentError('[OpCode] has no valid name!');
     }
   }
+}
+
+/// Operation called `OP_0` with code `0` or `0x00`.
+/// Push into the [stack] the value `0`.
+bool _op_0(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.zero,
+    ),
+  );
+
+  return true;
 }
 
 /// Operation called `OP_DUP` with code `118` or `0x76`.
