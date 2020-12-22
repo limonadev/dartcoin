@@ -54,6 +54,7 @@ enum OpCode {
   OP_14,
   OP_15,
   OP_16,
+  OP_NOP,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -98,6 +99,8 @@ extension Info on OpCode {
         return 95;
       case OpCode.OP_16:
         return 96;
+      case OpCode.OP_NOP:
+        return 97;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -147,6 +150,8 @@ extension Info on OpCode {
         return 'OP_15';
       case OpCode.OP_16:
         return 'OP_16';
+      case OpCode.OP_NOP:
+        return 'OP_NOP';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -196,6 +201,8 @@ extension Info on OpCode {
         return _op_15;
       case OpCode.OP_16:
         return _op_16;
+      case OpCode.OP_NOP:
+        return _op_nop;
       case OpCode.OP_DUP:
         return _op_dup;
       case OpCode.OP_HASH160:
@@ -423,6 +430,12 @@ bool _op_16(ListQueue<Uint8List> stack) {
     ),
   );
 
+  return true;
+}
+
+/// Operation called `OP_NOP` with code `97` or `0x61`.
+/// Does nothing.
+bool _op_nop(ListQueue<Uint8List> stack) {
   return true;
 }
 
