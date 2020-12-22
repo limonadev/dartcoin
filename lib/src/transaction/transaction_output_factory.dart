@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:dartcoin/src/transaction/script_factory.dart';
+import 'package:dartcoin/src/script/all.dart';
 import 'package:dartcoin/src/transaction/transaction_output.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';

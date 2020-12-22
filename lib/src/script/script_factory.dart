@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:dartcoin/src/transaction/script.dart';
-import 'package:dartcoin/src/transaction/varint.dart';
+import 'package:dartcoin/src/script/script.dart';
+import 'package:dartcoin/src/transaction/all.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 

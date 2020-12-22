@@ -4,7 +4,7 @@ import 'package:dartcoin/src/components/registry.dart';
 import 'package:dartcoin/src/transaction/transaction.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
-import 'package:dartcoin/src/transaction/script.dart';
+import 'package:dartcoin/src/script/all.dart';
 
 class TxInput {
   TxInput({
