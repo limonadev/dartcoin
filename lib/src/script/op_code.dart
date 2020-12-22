@@ -38,6 +38,7 @@ class ScriptExecutor {
 enum OpCode {
   OP_0,
   OP_1NEGATE,
+  OP_1,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -50,6 +51,8 @@ extension Info on OpCode {
         return 0;
       case OpCode.OP_1NEGATE:
         return 79;
+      case OpCode.OP_1:
+        return 81;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -67,6 +70,8 @@ extension Info on OpCode {
         return 'OP_0';
       case OpCode.OP_1NEGATE:
         return 'OP_1NEGATE';
+      case OpCode.OP_1:
+        return 'OP_1';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -84,6 +89,8 @@ extension Info on OpCode {
         return _op_0;
       case OpCode.OP_1NEGATE:
         return _op_1Negate;
+      case OpCode.OP_1:
+        return _op_1;
       case OpCode.OP_DUP:
         return _op_dup;
       case OpCode.OP_HASH160:
@@ -98,6 +105,7 @@ extension Info on OpCode {
 
 /// Operation called `OP_0` with code `0` or `0x00`.
 /// Push into the [stack] the value `0`.
+/// This operation is also called `OP_FALSE`.
 bool _op_0(ListQueue<Uint8List> stack) {
   stack.add(
     ScriptUtils.encodeNumber(
@@ -114,6 +122,19 @@ bool _op_1Negate(ListQueue<Uint8List> stack) {
   stack.add(
     ScriptUtils.encodeNumber(
       number: BigInt.from(-1),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_1` with code `81` or `0x51`.
+/// Push into the [stack] the value `1`.
+/// This operation is also called `OP_TRUE`.
+bool _op_1(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.one,
     ),
   );
 
