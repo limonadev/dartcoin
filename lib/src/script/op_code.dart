@@ -39,6 +39,14 @@ enum OpCode {
   OP_0,
   OP_1NEGATE,
   OP_1,
+  OP_2,
+  OP_3,
+  OP_4,
+  OP_5,
+  OP_6,
+  OP_7,
+  OP_8,
+  OP_9,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -53,6 +61,22 @@ extension Info on OpCode {
         return 79;
       case OpCode.OP_1:
         return 81;
+      case OpCode.OP_2:
+        return 82;
+      case OpCode.OP_3:
+        return 83;
+      case OpCode.OP_4:
+        return 84;
+      case OpCode.OP_5:
+        return 85;
+      case OpCode.OP_6:
+        return 86;
+      case OpCode.OP_7:
+        return 87;
+      case OpCode.OP_8:
+        return 88;
+      case OpCode.OP_9:
+        return 89;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -72,6 +96,22 @@ extension Info on OpCode {
         return 'OP_1NEGATE';
       case OpCode.OP_1:
         return 'OP_1';
+      case OpCode.OP_2:
+        return 'OP_2';
+      case OpCode.OP_3:
+        return 'OP_3';
+      case OpCode.OP_4:
+        return 'OP_4';
+      case OpCode.OP_5:
+        return 'OP_5';
+      case OpCode.OP_6:
+        return 'OP_6';
+      case OpCode.OP_7:
+        return 'OP_7';
+      case OpCode.OP_8:
+        return 'OP_8';
+      case OpCode.OP_9:
+        return 'OP_9';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -91,6 +131,22 @@ extension Info on OpCode {
         return _op_1Negate;
       case OpCode.OP_1:
         return _op_1;
+      case OpCode.OP_2:
+        return _op_2;
+      case OpCode.OP_3:
+        return _op_3;
+      case OpCode.OP_4:
+        return _op_4;
+      case OpCode.OP_5:
+        return _op_5;
+      case OpCode.OP_6:
+        return _op_6;
+      case OpCode.OP_7:
+        return _op_7;
+      case OpCode.OP_8:
+        return _op_8;
+      case OpCode.OP_9:
+        return _op_9;
       case OpCode.OP_DUP:
         return _op_dup;
       case OpCode.OP_HASH160:
@@ -135,6 +191,102 @@ bool _op_1(ListQueue<Uint8List> stack) {
   stack.add(
     ScriptUtils.encodeNumber(
       number: BigInt.one,
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_2` with code `82` or `0x52`.
+/// Push into the [stack] the value `2`.
+bool _op_2(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.two,
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_3` with code `83` or `0x53`.
+/// Push into the [stack] the value `3`.
+bool _op_3(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(3),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_4` with code `84` or `0x54`.
+/// Push into the [stack] the value `4`.
+bool _op_4(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(4),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_5` with code `85` or `0x55`.
+/// Push into the [stack] the value `5`.
+bool _op_5(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(5),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_6` with code `86` or `0x56`.
+/// Push into the [stack] the value `6`.
+bool _op_6(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(6),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_7` with code `87` or `0x57`.
+/// Push into the [stack] the value `7`.
+bool _op_7(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(7),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_8` with code `88` or `0x58`.
+/// Push into the [stack] the value `8`.
+bool _op_8(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(8),
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_9` with code `89` or `0x59`.
+/// Push into the [stack] the value `9`.
+bool _op_9(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(9),
     ),
   );
 
