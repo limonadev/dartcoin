@@ -37,6 +37,7 @@ class ScriptExecutor {
 
 enum OpCode {
   OP_0,
+  OP_1NEGATE,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -47,6 +48,8 @@ extension Info on OpCode {
     switch (this) {
       case OpCode.OP_0:
         return 0;
+      case OpCode.OP_1NEGATE:
+        return 79;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -62,6 +65,8 @@ extension Info on OpCode {
     switch (this) {
       case OpCode.OP_0:
         return 'OP_0';
+      case OpCode.OP_1NEGATE:
+        return 'OP_1NEGATE';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -77,6 +82,8 @@ extension Info on OpCode {
     switch (this) {
       case OpCode.OP_0:
         return _op_0;
+      case OpCode.OP_1NEGATE:
+        return _op_1Negate;
       case OpCode.OP_DUP:
         return _op_dup;
       case OpCode.OP_HASH160:
@@ -95,6 +102,18 @@ bool _op_0(ListQueue<Uint8List> stack) {
   stack.add(
     ScriptUtils.encodeNumber(
       number: BigInt.zero,
+    ),
+  );
+
+  return true;
+}
+
+/// Operation called `OP_1NEGATE` with code `79` or `0x4f`.
+/// Push into the [stack] the value `-1`.
+bool _op_1Negate(ListQueue<Uint8List> stack) {
+  stack.add(
+    ScriptUtils.encodeNumber(
+      number: BigInt.from(-1),
     ),
   );
 
