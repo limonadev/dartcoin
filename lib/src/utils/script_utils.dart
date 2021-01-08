@@ -44,7 +44,7 @@ class ScriptUtils {
         isNegative = false;
       }
 
-      for (var byte in element.skip(1)) {
+      for (var byte in bigEndian.skip(1)) {
         result <<= 8;
         result += BigInt.from(byte);
       }
