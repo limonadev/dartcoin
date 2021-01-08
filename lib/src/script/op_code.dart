@@ -243,13 +243,13 @@ extension Info on OpCode {
 class _Op0 extends ScriptOperation {
   _Op0({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op0 builder({@required Map<String, dynamic> args}) {
     return _Op0(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -268,13 +268,13 @@ class _Op0 extends ScriptOperation {
 class _Op1Negate extends ScriptOperation {
   _Op1Negate({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op1Negate builder({@required Map<String, dynamic> args}) {
     return _Op1Negate(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -294,13 +294,13 @@ class _Op1Negate extends ScriptOperation {
 class _Op1 extends ScriptOperation {
   _Op1({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op1 builder({@required Map<String, dynamic> args}) {
     return _Op1(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -319,13 +319,13 @@ class _Op1 extends ScriptOperation {
 class _Op2 extends ScriptOperation {
   _Op2({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op2 builder({@required Map<String, dynamic> args}) {
     return _Op2(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -344,13 +344,13 @@ class _Op2 extends ScriptOperation {
 class _Op3 extends ScriptOperation {
   _Op3({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op3 builder({@required Map<String, dynamic> args}) {
     return _Op3(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -369,13 +369,13 @@ class _Op3 extends ScriptOperation {
 class _Op4 extends ScriptOperation {
   _Op4({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op4 builder({@required Map<String, dynamic> args}) {
     return _Op4(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -394,13 +394,13 @@ class _Op4 extends ScriptOperation {
 class _Op5 extends ScriptOperation {
   _Op5({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op5 builder({@required Map<String, dynamic> args}) {
     return _Op5(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -419,13 +419,13 @@ class _Op5 extends ScriptOperation {
 class _Op6 extends ScriptOperation {
   _Op6({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op6 builder({@required Map<String, dynamic> args}) {
     return _Op6(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -444,13 +444,13 @@ class _Op6 extends ScriptOperation {
 class _Op7 extends ScriptOperation {
   _Op7({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op7 builder({@required Map<String, dynamic> args}) {
     return _Op7(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -469,13 +469,13 @@ class _Op7 extends ScriptOperation {
 class _Op8 extends ScriptOperation {
   _Op8({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op8 builder({@required Map<String, dynamic> args}) {
     return _Op8(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -494,13 +494,13 @@ class _Op8 extends ScriptOperation {
 class _Op9 extends ScriptOperation {
   _Op9({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op9 builder({@required Map<String, dynamic> args}) {
     return _Op9(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -519,13 +519,13 @@ class _Op9 extends ScriptOperation {
 class _Op10 extends ScriptOperation {
   _Op10({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op10 builder({@required Map<String, dynamic> args}) {
     return _Op10(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -544,13 +544,13 @@ class _Op10 extends ScriptOperation {
 class _Op11 extends ScriptOperation {
   _Op11({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op11 builder({@required Map<String, dynamic> args}) {
     return _Op11(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -569,13 +569,13 @@ class _Op11 extends ScriptOperation {
 class _Op12 extends ScriptOperation {
   _Op12({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op12 builder({@required Map<String, dynamic> args}) {
     return _Op12(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -594,13 +594,13 @@ class _Op12 extends ScriptOperation {
 class _Op13 extends ScriptOperation {
   _Op13({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op13 builder({@required Map<String, dynamic> args}) {
     return _Op13(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -619,13 +619,13 @@ class _Op13 extends ScriptOperation {
 class _Op14 extends ScriptOperation {
   _Op14({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op14 builder({@required Map<String, dynamic> args}) {
     return _Op14(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -644,13 +644,13 @@ class _Op14 extends ScriptOperation {
 class _Op15 extends ScriptOperation {
   _Op15({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op15 builder({@required Map<String, dynamic> args}) {
     return _Op15(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
@@ -669,13 +669,13 @@ class _Op15 extends ScriptOperation {
 class _Op16 extends ScriptOperation {
   _Op16({@required this.stack});
 
+  final ListQueue<Uint8List> stack;
+
   static _Op16 builder({@required Map<String, dynamic> args}) {
     return _Op16(
       stack: args[ScriptOperation.stackArgName],
     );
   }
-
-  final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
