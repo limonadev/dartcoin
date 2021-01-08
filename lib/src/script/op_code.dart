@@ -4,7 +4,16 @@ import 'dart:typed_data';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
-typedef ScriptOperation = bool Function(ListQueue<Uint8List> stack);
+abstract class ScriptOperation {
+  static String itemsArgName = 'items';
+  static String stackArgName = 'stack';
+
+  bool execute();
+}
+
+typedef ScriptOperationBuilder = ScriptOperation Function({
+  @required Map<String, dynamic> args,
+});
 
 class ScriptExecutor {
   ScriptExecutor()
@@ -27,9 +36,15 @@ class ScriptExecutor {
       );
     }
 
-    final operation =
-        opCode != null ? opCode.function : codeToOperation[opCode].function;
-    final isValidOp = operation(stack);
+    final args = <String, dynamic>{
+      ScriptOperation.itemsArgName: [],
+      ScriptOperation.stackArgName: stack,
+    };
+
+    final operation = opCode != null
+        ? opCode.builder(args: args)
+        : codeToOperation[opCode].builder(args: args);
+    final isValidOp = operation.execute();
 
     return isValidOp;
   }
@@ -163,52 +178,52 @@ extension Info on OpCode {
     }
   }
 
-  ScriptOperation get function {
+  ScriptOperationBuilder get builder {
     switch (this) {
       case OpCode.OP_0:
-        return _op_0;
+        return _Op0.builder;
       case OpCode.OP_1NEGATE:
-        return _op_1Negate;
+        return _Op1Negate.builder;
       case OpCode.OP_1:
-        return _op_1;
+        return _Op1.builder;
       case OpCode.OP_2:
-        return _op_2;
+        return _Op2.builder;
       case OpCode.OP_3:
-        return _op_3;
+        return _Op3.builder;
       case OpCode.OP_4:
-        return _op_4;
+        return _Op4.builder;
       case OpCode.OP_5:
-        return _op_5;
+        return _Op5.builder;
       case OpCode.OP_6:
-        return _op_6;
+        return _Op6.builder;
       case OpCode.OP_7:
-        return _op_7;
+        return _Op7.builder;
       case OpCode.OP_8:
-        return _op_8;
+        return _Op8.builder;
       case OpCode.OP_9:
-        return _op_9;
+        return _Op9.builder;
       case OpCode.OP_10:
-        return _op_10;
+        return _Op10.builder;
       case OpCode.OP_11:
-        return _op_11;
+        return _Op11.builder;
       case OpCode.OP_12:
-        return _op_12;
+        return _Op12.builder;
       case OpCode.OP_13:
-        return _op_13;
+        return _Op13.builder;
       case OpCode.OP_14:
-        return _op_14;
+        return _Op14.builder;
       case OpCode.OP_15:
-        return _op_15;
+        return _Op15.builder;
       case OpCode.OP_16:
-        return _op_16;
+        return _Op16.builder;
       case OpCode.OP_NOP:
-        return _op_nop;
+        return _OpNop.builder;
       case OpCode.OP_DUP:
-        return _op_dup;
+        return _OpDup.builder;
       case OpCode.OP_HASH160:
-        return _op_hash160;
+        return _OpHash160.builder;
       case OpCode.OP_HASH256:
-        return _op_hash256;
+        return _OpHash256.builder;
       default:
         throw ArgumentError('[OpCode] has no valid name!');
     }
@@ -218,270 +233,553 @@ extension Info on OpCode {
 /// Operation called `OP_0` with code `0` or `0x00`.
 /// Push into the [stack] the value `0`.
 /// This operation is also called `OP_FALSE`.
-bool _op_0(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.zero,
-    ),
-  );
+class _Op0 extends ScriptOperation {
+  _Op0({@required this.stack});
 
-  return true;
+  static _Op0 builder({@required Map<String, dynamic> args}) {
+    return _Op0(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.zero,
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_1NEGATE` with code `79` or `0x4f`.
 /// Push into the [stack] the value `-1`.
-bool _op_1Negate(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(-1),
-    ),
-  );
+class _Op1Negate extends ScriptOperation {
+  _Op1Negate({@required this.stack});
 
-  return true;
+  static _Op1Negate builder({@required Map<String, dynamic> args}) {
+    return _Op1Negate(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(-1),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_1` with code `81` or `0x51`.
 /// Push into the [stack] the value `1`.
 /// This operation is also called `OP_TRUE`.
-bool _op_1(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.one,
-    ),
-  );
+class _Op1 extends ScriptOperation {
+  _Op1({@required this.stack});
 
-  return true;
+  static _Op1 builder({@required Map<String, dynamic> args}) {
+    return _Op1(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.one,
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_2` with code `82` or `0x52`.
 /// Push into the [stack] the value `2`.
-bool _op_2(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.two,
-    ),
-  );
+class _Op2 extends ScriptOperation {
+  _Op2({@required this.stack});
 
-  return true;
+  static _Op2 builder({@required Map<String, dynamic> args}) {
+    return _Op2(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.two,
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_3` with code `83` or `0x53`.
 /// Push into the [stack] the value `3`.
-bool _op_3(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(3),
-    ),
-  );
+class _Op3 extends ScriptOperation {
+  _Op3({@required this.stack});
 
-  return true;
+  static _Op3 builder({@required Map<String, dynamic> args}) {
+    return _Op3(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(3),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_4` with code `84` or `0x54`.
 /// Push into the [stack] the value `4`.
-bool _op_4(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(4),
-    ),
-  );
+class _Op4 extends ScriptOperation {
+  _Op4({@required this.stack});
 
-  return true;
+  static _Op4 builder({@required Map<String, dynamic> args}) {
+    return _Op4(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(4),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_5` with code `85` or `0x55`.
 /// Push into the [stack] the value `5`.
-bool _op_5(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(5),
-    ),
-  );
+class _Op5 extends ScriptOperation {
+  _Op5({@required this.stack});
 
-  return true;
+  static _Op5 builder({@required Map<String, dynamic> args}) {
+    return _Op5(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(5),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_6` with code `86` or `0x56`.
 /// Push into the [stack] the value `6`.
-bool _op_6(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(6),
-    ),
-  );
+class _Op6 extends ScriptOperation {
+  _Op6({@required this.stack});
 
-  return true;
+  static _Op6 builder({@required Map<String, dynamic> args}) {
+    return _Op6(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(6),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_7` with code `87` or `0x57`.
 /// Push into the [stack] the value `7`.
-bool _op_7(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(7),
-    ),
-  );
+class _Op7 extends ScriptOperation {
+  _Op7({@required this.stack});
 
-  return true;
+  static _Op7 builder({@required Map<String, dynamic> args}) {
+    return _Op7(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(7),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_8` with code `88` or `0x58`.
 /// Push into the [stack] the value `8`.
-bool _op_8(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(8),
-    ),
-  );
+class _Op8 extends ScriptOperation {
+  _Op8({@required this.stack});
 
-  return true;
+  static _Op8 builder({@required Map<String, dynamic> args}) {
+    return _Op8(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(8),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_9` with code `89` or `0x59`.
 /// Push into the [stack] the value `9`.
-bool _op_9(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(9),
-    ),
-  );
+class _Op9 extends ScriptOperation {
+  _Op9({@required this.stack});
 
-  return true;
+  static _Op9 builder({@required Map<String, dynamic> args}) {
+    return _Op9(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(9),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_10` with code `90` or `0x5a`.
 /// Push into the [stack] the value `10`.
-bool _op_10(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(10),
-    ),
-  );
+class _Op10 extends ScriptOperation {
+  _Op10({@required this.stack});
 
-  return true;
+  static _Op10 builder({@required Map<String, dynamic> args}) {
+    return _Op10(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(10),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_11` with code `91` or `0x5b`.
 /// Push into the [stack] the value `11`.
-bool _op_11(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(11),
-    ),
-  );
+class _Op11 extends ScriptOperation {
+  _Op11({@required this.stack});
 
-  return true;
+  static _Op11 builder({@required Map<String, dynamic> args}) {
+    return _Op11(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(11),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_12` with code `92` or `0x5c`.
 /// Push into the [stack] the value `12`.
-bool _op_12(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(12),
-    ),
-  );
+class _Op12 extends ScriptOperation {
+  _Op12({@required this.stack});
 
-  return true;
+  static _Op12 builder({@required Map<String, dynamic> args}) {
+    return _Op12(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(12),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_13` with code `93` or `0x5d`.
 /// Push into the [stack] the value `13`.
-bool _op_13(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(13),
-    ),
-  );
+class _Op13 extends ScriptOperation {
+  _Op13({@required this.stack});
 
-  return true;
+  static _Op13 builder({@required Map<String, dynamic> args}) {
+    return _Op13(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(13),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_14` with code `94` or `0x5e`.
 /// Push into the [stack] the value `14`.
-bool _op_14(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(14),
-    ),
-  );
+class _Op14 extends ScriptOperation {
+  _Op14({@required this.stack});
 
-  return true;
+  static _Op14 builder({@required Map<String, dynamic> args}) {
+    return _Op14(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(14),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_15` with code `95` or `0x5f`.
 /// Push into the [stack] the value `15`.
-bool _op_15(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(15),
-    ),
-  );
+class _Op15 extends ScriptOperation {
+  _Op15({@required this.stack});
 
-  return true;
+  static _Op15 builder({@required Map<String, dynamic> args}) {
+    return _Op15(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(15),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_16` with code `96` or `0x60`.
 /// Push into the [stack] the value `16`.
-bool _op_16(ListQueue<Uint8List> stack) {
-  stack.add(
-    ScriptUtils.encodeNumber(
-      number: BigInt.from(16),
-    ),
-  );
+class _Op16 extends ScriptOperation {
+  _Op16({@required this.stack});
 
-  return true;
+  static _Op16 builder({@required Map<String, dynamic> args}) {
+    return _Op16(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(16),
+      ),
+    );
+
+    return true;
+  }
 }
 
 /// Operation called `OP_NOP` with code `97` or `0x61`.
 /// Does nothing.
-bool _op_nop(ListQueue<Uint8List> stack) {
-  return true;
+class _OpNop extends ScriptOperation {
+  _OpNop();
+
+  static _OpNop builder({@required Map<String, dynamic> args}) {
+    assert(args != null);
+    return _OpNop();
+  }
+
+  @override
+  bool execute() {
+    return true;
+  }
 }
 
 /// Operation called `OP_DUP` with code `118` or `0x76`.
 /// Get the top element in the [stack] (without removing it),
 /// duplicate it and pushes the result into the [stack].
-bool _op_dup(ListQueue<Uint8List> stack) {
-  var isValidOp = false;
+class _OpDup extends ScriptOperation {
+  _OpDup({@required this.stack});
 
-  if (stack.isNotEmpty) {
-    stack.add(stack.last);
-
-    isValidOp = true;
+  static _OpDup builder({@required Map<String, dynamic> args}) {
+    return _OpDup(
+      stack: args[ScriptOperation.stackArgName],
+    );
   }
 
-  return isValidOp;
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      stack.add(stack.last);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
 }
 
 /// Operation called `OP_HASH160` with code `169` or `0xa9`.
 /// Remove the top element of the [stack], perform a [Secp256Utils.hash160]
 /// to it and push back the result into the [stack].
-bool _op_hash160(ListQueue<Uint8List> stack) {
-  var isValidOp = false;
+class _OpHash160 extends ScriptOperation {
+  _OpHash160({@required this.stack});
 
-  if (stack.isNotEmpty) {
-    final element = stack.removeLast();
-    stack.add(Secp256Utils.hash160(data: element));
-
-    isValidOp = true;
+  static _OpHash160 builder({@required Map<String, dynamic> args}) {
+    return _OpHash160(
+      stack: args[ScriptOperation.stackArgName],
+    );
   }
 
-  return isValidOp;
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final element = stack.removeLast();
+      stack.add(Secp256Utils.hash160(data: element));
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
 }
 
 /// Operation called `OP_HASH256` with code `170` or `0xaa`.
 /// Remove the top element of the [stack], perform a [Secp256Utils.hash256]
 /// to it and push back the result into the [stack].
-bool _op_hash256(ListQueue<Uint8List> stack) {
-  var isValidOp = false;
+class _OpHash256 extends ScriptOperation {
+  _OpHash256({@required this.stack});
 
-  if (stack.isNotEmpty) {
-    final element = stack.removeLast();
-    stack.add(Secp256Utils.hash256(data: element));
-
-    isValidOp = true;
+  static _OpHash256 builder({@required Map<String, dynamic> args}) {
+    return _OpHash256(
+      stack: args[ScriptOperation.stackArgName],
+    );
   }
 
-  return isValidOp;
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final element = stack.removeLast();
+      stack.add(Secp256Utils.hash256(data: element));
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
 }
