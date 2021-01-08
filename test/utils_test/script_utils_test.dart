@@ -79,4 +79,36 @@ void main() {
       equals(BigInt.zero),
     );
   });
+
+  test('test_complete_conversion', () {
+    final range = 1000;
+
+    for (final i in List.generate(range, (index) => index + 1)) {
+      final number = BigInt.from(i);
+
+      var encoded = ScriptUtils.encodeNumber(number: number);
+      var decoded = ScriptUtils.decodeNumber(element: encoded);
+
+      expect(
+        decoded,
+        equals(number),
+      );
+
+      encoded = ScriptUtils.encodeNumber(number: -number);
+      decoded = ScriptUtils.decodeNumber(element: encoded);
+
+      expect(
+        decoded,
+        equals(-number),
+      );
+    }
+
+    final encoded = ScriptUtils.encodeNumber(number: BigInt.zero);
+    final decoded = ScriptUtils.decodeNumber(element: encoded);
+
+    expect(
+      decoded,
+      equals(BigInt.zero),
+    );
+  });
 }
