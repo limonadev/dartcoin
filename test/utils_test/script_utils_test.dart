@@ -72,4 +72,11 @@ void main() {
       );
     }
   });
+
+  test('test_decode_zero_number', () {
+    expect(
+      ScriptUtils.decodeNumber(element: Uint8List.fromList(<int>[])),
+      equals(BigInt.zero),
+    );
+  });
 }
