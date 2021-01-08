@@ -37,7 +37,7 @@ class ScriptExecutor {
     }
 
     final args = <String, dynamic>{
-      ScriptOperation.itemsArgName: [],
+      ScriptOperation.itemsArgName: <Object>[],
       ScriptOperation.stackArgName: stack,
     };
 
@@ -70,6 +70,7 @@ enum OpCode {
   OP_15,
   OP_16,
   OP_NOP,
+  OP_IF,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -116,6 +117,8 @@ extension Info on OpCode {
         return 96;
       case OpCode.OP_NOP:
         return 97;
+      case OpCode.OP_IF:
+        return 99;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -167,6 +170,8 @@ extension Info on OpCode {
         return 'OP_16';
       case OpCode.OP_NOP:
         return 'OP_NOP';
+      case OpCode.OP_IF:
+        return 'OP_IF';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -218,6 +223,8 @@ extension Info on OpCode {
         return _Op16.builder;
       case OpCode.OP_NOP:
         return _OpNop.builder;
+      case OpCode.OP_IF:
+        return _OpIf.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -225,7 +232,7 @@ extension Info on OpCode {
       case OpCode.OP_HASH256:
         return _OpHash256.builder;
       default:
-        throw ArgumentError('[OpCode] has no valid name!');
+        throw ArgumentError('[OpCode] has no valid builder!');
     }
   }
 }
@@ -695,6 +702,78 @@ class _OpNop extends ScriptOperation {
   @override
   bool execute() {
     return true;
+  }
+}
+
+/// Operation called `OP_IF` with code `99` or `0x63`.
+/// Gets the statements to be executed depending on the evaluation
+/// of the top stack element.
+class _OpIf extends ScriptOperation {
+  _OpIf({
+    @required this.items,
+    @required this.stack,
+  });
+
+  final ListQueue<Object> items;
+  final ListQueue<Uint8List> stack;
+
+  static _OpIf builder({@required Map<String, dynamic> args}) {
+    return _OpIf(
+      items: args[ScriptOperation.itemsArgName],
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final whenEvalTrue = <Object>[];
+      final whenEvalFalse = <Object>[];
+
+      var currentPath = whenEvalTrue;
+
+      var isValidOnParse = false;
+      var endifsNeeded = 1;
+
+      while (items.isNotEmpty) {
+        final item = items.removeLast();
+
+        if (item == 99 || item == 100) {
+          currentPath.add(item);
+          endifsNeeded++;
+        } else if (endifsNeeded == 1 && item == 103) {
+          currentPath = whenEvalFalse;
+        } else if (item == 104) {
+          if (endifsNeeded == 1) {
+            isValidOnParse = true;
+            break;
+          }
+          currentPath.add(item);
+          endifsNeeded--;
+        } else {
+          currentPath.add(item);
+        }
+      }
+
+      if (isValidOnParse) {
+        final element = stack.removeLast();
+        if (ScriptUtils.decodeNumber(element: element) == BigInt.zero) {
+          whenEvalFalse.reversed.forEach(
+            (item) => items.addFirst(item),
+          );
+        } else {
+          whenEvalTrue.reversed.forEach(
+            (item) => items.addFirst(item),
+          );
+        }
+
+        isValidOp = true;
+      }
+    }
+
+    return isValidOp;
   }
 }
 
