@@ -41,4 +41,35 @@ void main() {
       equals(true),
     );
   });
+
+  test('test_decode_non_zero_number', () {
+    final encoded = [
+      Uint8List.fromList(<int>[1]),
+      Uint8List.fromList(<int>[128, 0]),
+      Uint8List.fromList(<int>[128, 64]),
+      Uint8List.fromList(<int>[128, 129, 0]),
+      Uint8List.fromList(<int>[129]),
+      Uint8List.fromList(<int>[128, 128]),
+      Uint8List.fromList(<int>[128, 192]),
+      Uint8List.fromList(<int>[128, 129, 128]),
+    ];
+
+    final expectedNumbers = [
+      BigInt.parse('00000001', radix: 2),
+      BigInt.parse('10000000', radix: 2),
+      BigInt.parse('0100000010000000', radix: 2),
+      BigInt.parse('1000000110000000', radix: 2),
+      BigInt.from(-1),
+      BigInt.from(-128),
+      BigInt.from(-16512),
+      BigInt.from(-33152),
+    ];
+
+    for (var i = 0; i < encoded.length; i++) {
+      expect(
+        ScriptUtils.decodeNumber(element: encoded[i]),
+        equals(expectedNumbers[i]),
+      );
+    }
+  });
 }
