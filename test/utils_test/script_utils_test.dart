@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dartcoin/dartcoin.dart';
 import 'package:test/test.dart';
 
@@ -31,5 +33,12 @@ void main() {
         equals(expectedLastByte[i]),
       );
     }
+  });
+
+  test('test_encode_zero_number', () {
+    expect(
+      ScriptUtils.encodeNumber(number: BigInt.zero).isEmpty,
+      equals(true),
+    );
   });
 }
