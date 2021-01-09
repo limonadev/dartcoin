@@ -85,6 +85,7 @@ enum OpCode {
   OP_2DROP,
   OP_2DUP,
   OP_3DUP,
+  OP_2OVER,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -149,6 +150,8 @@ extension Info on OpCode {
         return 110;
       case OpCode.OP_3DUP:
         return 111;
+      case OpCode.OP_2OVER:
+        return 112;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -218,6 +221,8 @@ extension Info on OpCode {
         return 'OP_2DUP';
       case OpCode.OP_3DUP:
         return 'OP_3DUP';
+      case OpCode.OP_2OVER:
+        return 'OP_2OVER';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -287,6 +292,8 @@ extension Info on OpCode {
         return _Op2Dup.builder;
       case OpCode.OP_3DUP:
         return _Op3Dup.builder;
+      case OpCode.OP_2OVER:
+        return _Op2Over.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -1108,6 +1115,49 @@ class _Op3Dup extends ScriptOperation {
           copy(element: temp.last),
         );
       }
+
+      stack.addAll(temp);
+      stack.addAll(duplicates);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_2OVER` with code `112` or `0x70`.
+/// Duplicates the third last and fourth last [stack] elements to the top
+/// of the [stack].
+class _Op2Over extends ScriptOperation {
+  _Op2Over({@required this.stack});
+
+  static _Op2Over builder({@required Map<String, dynamic> args}) {
+    return _Op2Over(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 4) {
+      var temp = <Uint8List>[];
+      for (var _ = 0; _ < 4; _++) {
+        temp.insert(0, stack.removeLast());
+      }
+
+      final duplicates = temp
+          .sublist(0, 2)
+          .map(
+            (d) => copy(
+              element: d,
+            ),
+          )
+          .toList();
 
       stack.addAll(temp);
       stack.addAll(duplicates);
