@@ -6,7 +6,14 @@ import 'package:test/test.dart';
 void main() {
   group('Varint', () {
     test('conversion', () {
-      final toEncode = ['01', 'ab12', 'ab12cd34', 'ab12cd34ab12cd34'];
+      final toEncode = [
+        '01',
+        'ab12',
+        'ab12cd34',
+        'ab12cd34ab12cd34',
+        '100000001',
+        '7fffffffffffffff',
+      ];
 
       for (final raw in toEncode) {
         final val = BigInt.parse(
@@ -44,9 +51,10 @@ void main() {
         'ab12cd34',
         'ab12cd34ab12cd34',
         '100000001',
+        '7fffffffffffffff'
       ];
-      final prefixes = [null, 0xfd, 0xfe, 0xff, 0xff];
-      final sizes = [1, 2, 4, 8, 8];
+      final prefixes = [null, 0xfd, 0xfe, 0xff, 0xff, 0xff];
+      final sizes = [1, 2, 4, 8, 8, 8];
 
       for (var i = 0; i < toEncode.length; i++) {
         final val = BigInt.parse(
