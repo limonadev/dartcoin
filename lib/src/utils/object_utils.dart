@@ -71,6 +71,8 @@ class ObjectUtils {
         : Uint8List.fromList(encoded.reversed.toList());
   }
 
+  /// This function will return a [BigInt]. It has the same functionality
+  /// as the [decodeBigInt] method, but with the added [endian] parameter.
   static BigInt bytesToBigInt({
     @required Uint8List bytes,
     Endian endian = Endian.big,
@@ -86,6 +88,8 @@ class ObjectUtils {
     );
   }
 
+  /// Convenience method to return the Hex representation of the [BigInt]
+  /// value which [bytes] become to.
   static String bytesToHex({
     @required Uint8List bytes,
     Endian endian = Endian.big,
@@ -100,6 +104,7 @@ class ObjectUtils {
     );
   }
 
+  /// Return the Hex representation of the [value].
   static String toHex({int padding, @required BigInt value}) {
     var result = value.toRadixString(16);
     if (padding != null) {

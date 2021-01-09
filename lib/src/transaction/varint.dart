@@ -4,6 +4,8 @@ import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
 class Varint {
+  /// Encode the [varint] as a list of bytes. It uses 0,2,4 or 8
+  /// bytes plus the prefix (if exists).
   static Uint8List encode({@required BigInt varint}) {
     Uint8List result;
 
@@ -68,6 +70,8 @@ class Varint {
     return result;
   }
 
+  /// Decode a list of [bytes] to a [BigInt]. Based on a flag (the first byte),
+  /// takes the necessary number of bytes from the list.
   static BigInt read({@required Uint8List bytes}) {
     final flag = bytes[0];
     final bytesNumber = numberOfNecessaryBytes(flag: flag);
