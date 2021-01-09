@@ -73,6 +73,7 @@ enum OpCode {
   OP_IF,
   OP_NOTIF,
   OP_VERIFY,
+  OP_RETURN,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -125,6 +126,8 @@ extension Info on OpCode {
         return 100;
       case OpCode.OP_VERIFY:
         return 105;
+      case OpCode.OP_RETURN:
+        return 106;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -182,6 +185,8 @@ extension Info on OpCode {
         return 'OP_NOTIF';
       case OpCode.OP_VERIFY:
         return 'OP_VERIFY';
+      case OpCode.OP_RETURN:
+        return 'OP_RETURN';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -239,6 +244,8 @@ extension Info on OpCode {
         return _OpNotIf.builder;
       case OpCode.OP_VERIFY:
         return _OpVerify.builder;
+      case OpCode.OP_RETURN:
+        return _OpReturn.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -889,6 +896,22 @@ class _OpVerify extends ScriptOperation {
     }
 
     return isValidOp;
+  }
+}
+
+/// Operation called `OP_RETURN` with code `106` or `0x6a`.
+/// Marks transaction as invalid.
+class _OpReturn extends ScriptOperation {
+  _OpReturn();
+
+  static _OpReturn builder({@required Map<String, dynamic> args}) {
+    assert(args != null);
+    return _OpReturn();
+  }
+
+  @override
+  bool execute() {
+    return false;
   }
 }
 
