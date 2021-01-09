@@ -80,6 +80,7 @@ enum OpCode {
   OP_FROMALTSTACK,
   OP_2DROP,
   OP_2DUP,
+  OP_3DUP,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -142,6 +143,8 @@ extension Info on OpCode {
         return 109;
       case OpCode.OP_2DUP:
         return 110;
+      case OpCode.OP_3DUP:
+        return 111;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -209,6 +212,8 @@ extension Info on OpCode {
         return 'OP_2DROP';
       case OpCode.OP_2DUP:
         return 'OP_2DUP';
+      case OpCode.OP_3DUP:
+        return 'OP_3DUP';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -276,6 +281,8 @@ extension Info on OpCode {
         return _Op2Drop.builder;
       case OpCode.OP_2DUP:
         return _Op2Dup.builder;
+      case OpCode.OP_3DUP:
+        return _Op3Dup.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -1035,7 +1042,8 @@ class _Op2Drop extends ScriptOperation {
 }
 
 /// Operation called `OP_2DUP` with code `110` or `0x6e`.
-/// Removes the two top [stack] elements.
+/// Duplicates the two top [stack] elements (without removing them) and
+/// puts the duplicates into the [stack].
 class _Op2Dup extends ScriptOperation {
   _Op2Dup({@required this.stack});
 
@@ -1057,6 +1065,42 @@ class _Op2Dup extends ScriptOperation {
 
       stack.add(secondLast);
       stack.add(last);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_3DUP` with code `111` or `0x6f`.
+/// Duplicates the three top [stack] elements (without removing them) and
+/// puts the duplicates into the [stack].
+class _Op3Dup extends ScriptOperation {
+  _Op3Dup({@required this.stack});
+
+  static _Op3Dup builder({@required Map<String, dynamic> args}) {
+    return _Op3Dup(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 3) {
+      final temp = <Uint8List>[];
+      final duplicates = <Uint8List>[];
+      for (var i = 0; i < 3; i++) {
+        temp.add(stack.removeLast());
+        duplicates.add(temp.last);
+      }
+
+      stack.addAll(temp);
+      stack.addAll(duplicates);
 
       isValidOp = true;
     }
