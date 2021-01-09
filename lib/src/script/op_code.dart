@@ -71,6 +71,7 @@ enum OpCode {
   OP_16,
   OP_NOP,
   OP_IF,
+  OP_NOTIF,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -119,6 +120,8 @@ extension Info on OpCode {
         return 97;
       case OpCode.OP_IF:
         return 99;
+      case OpCode.OP_NOTIF:
+        return 100;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -172,6 +175,8 @@ extension Info on OpCode {
         return 'OP_NOP';
       case OpCode.OP_IF:
         return 'OP_IF';
+      case OpCode.OP_NOTIF:
+        return 'OP_NOTIF';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -225,6 +230,8 @@ extension Info on OpCode {
         return _OpNop.builder;
       case OpCode.OP_IF:
         return _OpIf.builder;
+      case OpCode.OP_NOTIF:
+        return _OpNotIf.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -765,6 +772,78 @@ class _OpIf extends ScriptOperation {
           );
         } else {
           whenEvalTrue.reversed.forEach(
+            (item) => items.addFirst(item),
+          );
+        }
+
+        isValidOp = true;
+      }
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_NOTIF` with code `100` or `0x64`.
+/// Gets the statements to be executed depending on the evaluation
+/// of the top stack element.
+class _OpNotIf extends ScriptOperation {
+  _OpNotIf({
+    @required this.items,
+    @required this.stack,
+  });
+
+  final ListQueue<Object> items;
+  final ListQueue<Uint8List> stack;
+
+  static _OpNotIf builder({@required Map<String, dynamic> args}) {
+    return _OpNotIf(
+      items: args[ScriptOperation.itemsArgName],
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final whenEvalTrue = <Object>[];
+      final whenEvalFalse = <Object>[];
+
+      var currentPath = whenEvalTrue;
+
+      var isValidOnParse = false;
+      var endifsNeeded = 1;
+
+      while (items.isNotEmpty) {
+        final item = items.removeLast();
+
+        if (item == 99 || item == 100) {
+          currentPath.add(item);
+          endifsNeeded++;
+        } else if (endifsNeeded == 1 && item == 103) {
+          currentPath = whenEvalFalse;
+        } else if (item == 104) {
+          if (endifsNeeded == 1) {
+            isValidOnParse = true;
+            break;
+          }
+          currentPath.add(item);
+          endifsNeeded--;
+        } else {
+          currentPath.add(item);
+        }
+      }
+
+      if (isValidOnParse) {
+        final element = stack.removeLast();
+        if (ScriptUtils.decodeNumber(element: element) == BigInt.zero) {
+          whenEvalTrue.reversed.forEach(
+            (item) => items.addFirst(item),
+          );
+        } else {
+          whenEvalFalse.reversed.forEach(
             (item) => items.addFirst(item),
           );
         }
