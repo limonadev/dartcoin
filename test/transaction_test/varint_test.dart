@@ -51,10 +51,12 @@ void main() {
         'ab12cd34',
         'ab12cd34ab12cd34',
         '100000001',
-        '7fffffffffffffff'
+        '7fffffffffffffff',
+        'ffff',
+        'ffffffff',
       ];
-      final prefixes = [null, 0xfd, 0xfe, 0xff, 0xff, 0xff];
-      final sizes = [1, 2, 4, 8, 8, 8];
+      final prefixes = [null, 0xfd, 0xfe, 0xff, 0xff, 0xff, 0xfd, 0xfe];
+      final sizes = [1, 2, 4, 8, 8, 8, 2, 4];
 
       for (var i = 0; i < toEncode.length; i++) {
         final val = BigInt.parse(
