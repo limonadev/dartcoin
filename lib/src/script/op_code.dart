@@ -1110,9 +1110,13 @@ class _Op3Dup extends ScriptOperation {
       final temp = <Uint8List>[];
       final duplicates = <Uint8List>[];
       for (var i = 0; i < 3; i++) {
-        temp.add(stack.removeLast());
-        duplicates.add(
-          copy(element: temp.last),
+        temp.insert(
+          0,
+          stack.removeLast(),
+        );
+        duplicates.insert(
+          0,
+          copy(element: temp.first),
         );
       }
 
@@ -1147,7 +1151,10 @@ class _Op2Over extends ScriptOperation {
     if (stack.length >= 4) {
       var temp = <Uint8List>[];
       for (var _ = 0; _ < 4; _++) {
-        temp.insert(0, stack.removeLast());
+        temp.insert(
+          0,
+          stack.removeLast(),
+        );
       }
 
       final duplicates = temp
