@@ -9,6 +9,10 @@ abstract class ScriptOperation {
   static String itemsArgName = 'items';
   static String stackArgName = 'stack';
 
+  Uint8List copy({@required Uint8List element}) {
+    return Uint8List.fromList(element);
+  }
+
   bool execute();
 }
 
@@ -1063,8 +1067,12 @@ class _Op2Dup extends ScriptOperation {
       final last = stack.last;
       final secondLast = stack.elementAt(stack.length - 2);
 
-      stack.add(secondLast);
-      stack.add(last);
+      stack.add(
+        copy(element: secondLast),
+      );
+      stack.add(
+        copy(element: last),
+      );
 
       isValidOp = true;
     }
@@ -1096,7 +1104,9 @@ class _Op3Dup extends ScriptOperation {
       final duplicates = <Uint8List>[];
       for (var i = 0; i < 3; i++) {
         temp.add(stack.removeLast());
-        duplicates.add(temp.last);
+        duplicates.add(
+          copy(element: temp.last),
+        );
       }
 
       stack.addAll(temp);
@@ -1128,7 +1138,9 @@ class _OpDup extends ScriptOperation {
     var isValidOp = false;
 
     if (stack.isNotEmpty) {
-      stack.add(stack.last);
+      stack.add(
+        copy(element: stack.last),
+      );
 
       isValidOp = true;
     }
