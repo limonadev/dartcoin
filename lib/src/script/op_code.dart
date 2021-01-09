@@ -77,6 +77,7 @@ enum OpCode {
   OP_VERIFY,
   OP_RETURN,
   OP_TOALTSTACK,
+  OP_FROMALTSTACK,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -133,6 +134,8 @@ extension Info on OpCode {
         return 106;
       case OpCode.OP_TOALTSTACK:
         return 107;
+      case OpCode.OP_FROMALTSTACK:
+        return 108;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -194,6 +197,8 @@ extension Info on OpCode {
         return 'OP_RETURN';
       case OpCode.OP_TOALTSTACK:
         return 'OP_TOALTSTACK';
+      case OpCode.OP_FROMALTSTACK:
+        return 'OP_FROMALTSTACK';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -255,6 +260,8 @@ extension Info on OpCode {
         return _OpReturn.builder;
       case OpCode.OP_TOALTSTACK:
         return _OpToAltStack.builder;
+      case OpCode.OP_FROMALTSTACK:
+        return _OpFromAltStack.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -948,6 +955,37 @@ class _OpToAltStack extends ScriptOperation {
 
     if (stack.isNotEmpty) {
       altStack.add(stack.removeLast());
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_FROMALTSTACK` with code `108` or `0x6c`.
+/// Removes the top [altStack] element and puts it in the [stack].
+class _OpFromAltStack extends ScriptOperation {
+  _OpFromAltStack({
+    @required this.altStack,
+    @required this.stack,
+  });
+
+  static _OpFromAltStack builder({@required Map<String, dynamic> args}) {
+    return _OpFromAltStack(
+      altStack: args[ScriptOperation.altStackArgName],
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> altStack;
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      stack.add(altStack.removeLast());
       isValidOp = true;
     }
 
