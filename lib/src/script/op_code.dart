@@ -72,6 +72,7 @@ enum OpCode {
   OP_NOP,
   OP_IF,
   OP_NOTIF,
+  OP_VERIFY,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -122,6 +123,8 @@ extension Info on OpCode {
         return 99;
       case OpCode.OP_NOTIF:
         return 100;
+      case OpCode.OP_VERIFY:
+        return 105;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -177,6 +180,8 @@ extension Info on OpCode {
         return 'OP_IF';
       case OpCode.OP_NOTIF:
         return 'OP_NOTIF';
+      case OpCode.OP_VERIFY:
+        return 'OP_VERIFY';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -232,6 +237,8 @@ extension Info on OpCode {
         return _OpIf.builder;
       case OpCode.OP_NOTIF:
         return _OpNotIf.builder;
+      case OpCode.OP_VERIFY:
+        return _OpVerify.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -856,9 +863,38 @@ class _OpNotIf extends ScriptOperation {
   }
 }
 
+/// Operation called `OP_VERIFY` with code `105` or `0x69`.
+/// Checks if the transaction is valid (if the top stack element is true)
+/// and returns if is valid or not.
+class _OpVerify extends ScriptOperation {
+  _OpVerify({@required this.stack});
+
+  static _OpVerify builder({@required Map<String, dynamic> args}) {
+    return _OpVerify(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      isValidOp = ScriptUtils.decodeNumber(
+            element: stack.removeLast(),
+          ) !=
+          BigInt.zero;
+    }
+
+    return isValidOp;
+  }
+}
+
 /// Operation called `OP_DUP` with code `118` or `0x76`.
-/// Get the top element in the [stack] (without removing it),
-/// duplicate it and pushes the result into the [stack].
+/// Gets the top element in the [stack] (without removing it),
+/// duplicates it and pushes the result into the [stack].
 class _OpDup extends ScriptOperation {
   _OpDup({@required this.stack});
 
@@ -885,8 +921,8 @@ class _OpDup extends ScriptOperation {
 }
 
 /// Operation called `OP_HASH160` with code `169` or `0xa9`.
-/// Remove the top element of the [stack], perform a [Secp256Utils.hash160]
-/// to it and push back the result into the [stack].
+/// Removes the top element of the [stack], performs a [Secp256Utils.hash160]
+/// to it and pushes back the result into the [stack].
 class _OpHash160 extends ScriptOperation {
   _OpHash160({@required this.stack});
 
@@ -914,8 +950,8 @@ class _OpHash160 extends ScriptOperation {
 }
 
 /// Operation called `OP_HASH256` with code `170` or `0xaa`.
-/// Remove the top element of the [stack], perform a [Secp256Utils.hash256]
-/// to it and push back the result into the [stack].
+/// Removes the top element of the [stack], performs a [Secp256Utils.hash256]
+/// to it and pushes back the result into the [stack].
 class _OpHash256 extends ScriptOperation {
   _OpHash256({@required this.stack});
 
