@@ -78,6 +78,7 @@ enum OpCode {
   OP_RETURN,
   OP_TOALTSTACK,
   OP_FROMALTSTACK,
+  OP_2DROP,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -136,6 +137,8 @@ extension Info on OpCode {
         return 107;
       case OpCode.OP_FROMALTSTACK:
         return 108;
+      case OpCode.OP_2DROP:
+        return 109;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -199,6 +202,8 @@ extension Info on OpCode {
         return 'OP_TOALTSTACK';
       case OpCode.OP_FROMALTSTACK:
         return 'OP_FROMALTSTACK';
+      case OpCode.OP_2DROP:
+        return 'OP_2DROP';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -262,6 +267,8 @@ extension Info on OpCode {
         return _OpToAltStack.builder;
       case OpCode.OP_FROMALTSTACK:
         return _OpFromAltStack.builder;
+      case OpCode.OP_2DROP:
+        return _Op2Drop.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -986,6 +993,33 @@ class _OpFromAltStack extends ScriptOperation {
 
     if (stack.isNotEmpty) {
       stack.add(altStack.removeLast());
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_2DROP` with code `109` or `0x6d`.
+/// Removes the two top [stack] elements.
+class _Op2Drop extends ScriptOperation {
+  _Op2Drop({@required this.stack});
+
+  static _Op2Drop builder({@required Map<String, dynamic> args}) {
+    return _Op2Drop(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      stack.removeLast();
+      stack.removeLast();
       isValidOp = true;
     }
 
