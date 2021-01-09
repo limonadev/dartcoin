@@ -5,6 +5,7 @@ import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
 abstract class ScriptOperation {
+  static String altStackArgName = 'altStack';
   static String itemsArgName = 'items';
   static String stackArgName = 'stack';
 
@@ -37,6 +38,7 @@ class ScriptExecutor {
     }
 
     final args = <String, dynamic>{
+      ScriptOperation.altStackArgName: ListQueue<Uint8List>(),
       ScriptOperation.itemsArgName: <Object>[],
       ScriptOperation.stackArgName: stack,
     };
@@ -74,6 +76,7 @@ enum OpCode {
   OP_NOTIF,
   OP_VERIFY,
   OP_RETURN,
+  OP_TOALTSTACK,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -128,6 +131,8 @@ extension Info on OpCode {
         return 105;
       case OpCode.OP_RETURN:
         return 106;
+      case OpCode.OP_TOALTSTACK:
+        return 107;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -187,6 +192,8 @@ extension Info on OpCode {
         return 'OP_VERIFY';
       case OpCode.OP_RETURN:
         return 'OP_RETURN';
+      case OpCode.OP_TOALTSTACK:
+        return 'OP_TOALTSTACK';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -246,6 +253,8 @@ extension Info on OpCode {
         return _OpVerify.builder;
       case OpCode.OP_RETURN:
         return _OpReturn.builder;
+      case OpCode.OP_TOALTSTACK:
+        return _OpToAltStack.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -912,6 +921,37 @@ class _OpReturn extends ScriptOperation {
   @override
   bool execute() {
     return false;
+  }
+}
+
+/// Operation called `OP_TOALTSTACK` with code `107` or `0x6b`.
+/// Removes the top [stack] element and puts it in the [altStack].
+class _OpToAltStack extends ScriptOperation {
+  _OpToAltStack({
+    @required this.altStack,
+    @required this.stack,
+  });
+
+  static _OpToAltStack builder({@required Map<String, dynamic> args}) {
+    return _OpToAltStack(
+      altStack: args[ScriptOperation.altStackArgName],
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> altStack;
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      altStack.add(stack.removeLast());
+      isValidOp = true;
+    }
+
+    return isValidOp;
   }
 }
 
