@@ -97,6 +97,7 @@ enum OpCode {
   OP_PICK,
   OP_ROLL,
   OP_ROT,
+  OP_SWAP,
   OP_HASH160,
   OP_HASH256,
 }
@@ -184,6 +185,8 @@ extension Info on OpCode {
         return 122;
       case OpCode.OP_ROT:
         return 123;
+      case OpCode.OP_SWAP:
+        return 124;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -275,6 +278,8 @@ extension Info on OpCode {
         return 'OP_ROLL';
       case OpCode.OP_ROT:
         return 'OP_ROT';
+      case OpCode.OP_SWAP:
+        return 'OP_SWAP';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -366,6 +371,8 @@ extension Info on OpCode {
         return _OpRoll.builder;
       case OpCode.OP_ROT:
         return _OpRot.builder;
+      case OpCode.OP_SWAP:
+        return _OpSwap.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1608,6 +1615,37 @@ class _OpRot extends ScriptOperation {
       }
       stack.addAll(temp.sublist(1));
       stack.add(temp.first);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_SWAP` with code `124` or `0x7c`.
+/// Swaps the two last [stack] elements.
+class _OpSwap extends ScriptOperation {
+  _OpSwap({@required this.stack});
+
+  static _OpSwap builder({@required Map<String, dynamic> args}) {
+    return _OpSwap(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      final temp = <Uint8List>[];
+      for (var _ = 0; _ < 2; _++) {
+        temp.add(stack.removeLast());
+      }
+      stack.addAll(temp);
 
       isValidOp = true;
     }
