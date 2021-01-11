@@ -92,6 +92,7 @@ enum OpCode {
   OP_DEPTH,
   OP_DROP,
   OP_DUP,
+  OP_NIP,
   OP_HASH160,
   OP_HASH256,
 }
@@ -169,6 +170,8 @@ extension Info on OpCode {
         return 117;
       case OpCode.OP_DUP:
         return 118;
+      case OpCode.OP_NIP:
+        return 119;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -250,6 +253,8 @@ extension Info on OpCode {
         return 'OP_DROP';
       case OpCode.OP_DUP:
         return 'OP_DUP';
+      case OpCode.OP_NIP:
+        return 'OP_NIP';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -331,6 +336,8 @@ extension Info on OpCode {
         return _OpDrop.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
+      case OpCode.OP_NIP:
+        return _OpNip.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1392,6 +1399,35 @@ class _OpDup extends ScriptOperation {
       stack.add(
         copy(element: stack.last),
       );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_NIP` with code `119` or `0x77`.
+/// Removes the second last [stack] element.
+class _OpNip extends ScriptOperation {
+  _OpNip({@required this.stack});
+
+  static _OpNip builder({@required Map<String, dynamic> args}) {
+    return _OpNip(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      final temp = stack.removeLast();
+      stack.removeLast();
+      stack.add(temp);
 
       isValidOp = true;
     }
