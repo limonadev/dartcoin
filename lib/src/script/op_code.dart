@@ -96,6 +96,7 @@ enum OpCode {
   OP_OVER,
   OP_PICK,
   OP_ROLL,
+  OP_ROT,
   OP_HASH160,
   OP_HASH256,
 }
@@ -181,6 +182,8 @@ extension Info on OpCode {
         return 121;
       case OpCode.OP_ROLL:
         return 122;
+      case OpCode.OP_ROT:
+        return 123;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -270,6 +273,8 @@ extension Info on OpCode {
         return 'OP_PICK';
       case OpCode.OP_ROLL:
         return 'OP_ROLL';
+      case OpCode.OP_ROT:
+        return 'OP_ROT';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -359,6 +364,8 @@ extension Info on OpCode {
         return _OpPick.builder;
       case OpCode.OP_ROLL:
         return _OpRoll.builder;
+      case OpCode.OP_ROT:
+        return _OpRot.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1566,6 +1573,41 @@ class _OpRoll extends ScriptOperation {
       final nLast = stack.removeLast();
       stack.addAll(temp);
       stack.add(nLast);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_ROT` with code `123` or `0x7b`.
+/// Moves the third last [stack] element to the top of the [stack].
+class _OpRot extends ScriptOperation {
+  _OpRot({@required this.stack});
+
+  static _OpRot builder({@required Map<String, dynamic> args}) {
+    return _OpRot(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 3) {
+      final temp = <Uint8List>[];
+      for (var _ = 0; _ < 3; _++) {
+        temp.insert(
+          0,
+          stack.removeLast(),
+        );
+      }
+      stack.addAll(temp.sublist(1));
+      stack.add(temp.first);
 
       isValidOp = true;
     }
