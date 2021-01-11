@@ -87,6 +87,7 @@ enum OpCode {
   OP_3DUP,
   OP_2OVER,
   OP_2ROT,
+  OP_2SWAP,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -155,6 +156,8 @@ extension Info on OpCode {
         return 112;
       case OpCode.OP_2ROT:
         return 113;
+      case OpCode.OP_2SWAP:
+        return 114;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -228,6 +231,8 @@ extension Info on OpCode {
         return 'OP_2OVER';
       case OpCode.OP_2ROT:
         return 'OP_2ROT';
+      case OpCode.OP_2SWAP:
+        return 'OP_2SWAP';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -301,6 +306,8 @@ extension Info on OpCode {
         return _Op2Over.builder;
       case OpCode.OP_2ROT:
         return _Op2Rot.builder;
+      case OpCode.OP_2SWAP:
+        return _Op2Swap.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -1213,6 +1220,41 @@ class _Op2Rot extends ScriptOperation {
       temp.add(temp.removeAt(0));
 
       stack.addAll(temp);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+// Operation called `OP_2SWAP` with code `114` or `0x72`.
+/// Swaps the top [stacj] two pairs of elements.
+class _Op2Swap extends ScriptOperation {
+  _Op2Swap({@required this.stack});
+
+  static _Op2Swap builder({@required Map<String, dynamic> args}) {
+    return _Op2Swap(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 4) {
+      var temp = <Uint8List>[];
+      for (var _ = 0; _ < 4; _++) {
+        temp.insert(
+          0,
+          stack.removeLast(),
+        );
+      }
+      stack.addAll(temp.sublist(2, 4));
+      stack.addAll(temp.sublist(0, 2));
 
       isValidOp = true;
     }
