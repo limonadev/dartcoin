@@ -98,6 +98,7 @@ enum OpCode {
   OP_ROLL,
   OP_ROT,
   OP_SWAP,
+  OP_TUCK,
   OP_HASH160,
   OP_HASH256,
 }
@@ -187,6 +188,8 @@ extension Info on OpCode {
         return 123;
       case OpCode.OP_SWAP:
         return 124;
+      case OpCode.OP_TUCK:
+        return 125;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -280,6 +283,8 @@ extension Info on OpCode {
         return 'OP_ROT';
       case OpCode.OP_SWAP:
         return 'OP_SWAP';
+      case OpCode.OP_TUCK:
+        return 'OP_TUCK';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -373,6 +378,8 @@ extension Info on OpCode {
         return _OpRot.builder;
       case OpCode.OP_SWAP:
         return _OpSwap.builder;
+      case OpCode.OP_TUCK:
+        return _OpTuck.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1645,6 +1652,45 @@ class _OpSwap extends ScriptOperation {
       for (var _ = 0; _ < 2; _++) {
         temp.add(stack.removeLast());
       }
+      stack.addAll(temp);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_TUCK` with code `125` or `0x7d`.
+/// Copies the last [stack] element before the second last [stack]
+/// element.
+class _OpTuck extends ScriptOperation {
+  _OpTuck({@required this.stack});
+
+  static _OpTuck builder({@required Map<String, dynamic> args}) {
+    return _OpTuck(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      final temp = <Uint8List>[];
+      for (var _ = 0; _ < 2; _++) {
+        temp.insert(
+          0,
+          stack.removeLast(),
+        );
+      }
+      temp.insert(
+        0,
+        copy(element: temp.last),
+      );
       stack.addAll(temp);
 
       isValidOp = true;
