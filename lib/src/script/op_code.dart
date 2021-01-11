@@ -89,6 +89,7 @@ enum OpCode {
   OP_2ROT,
   OP_2SWAP,
   OP_IFDUP,
+  OP_DEPTH,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -161,6 +162,8 @@ extension Info on OpCode {
         return 114;
       case OpCode.OP_IFDUP:
         return 115;
+      case OpCode.OP_DEPTH:
+        return 116;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -238,6 +241,8 @@ extension Info on OpCode {
         return 'OP_2SWAP';
       case OpCode.OP_IFDUP:
         return 'OP_IFDUP';
+      case OpCode.OP_DEPTH:
+        return 'OP_DEPTH';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -315,6 +320,8 @@ extension Info on OpCode {
         return _Op2Swap.builder;
       case OpCode.OP_IFDUP:
         return _OpIfDup.builder;
+      case OpCode.OP_DEPTH:
+        return _OpDepth.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -1271,7 +1278,8 @@ class _Op2Swap extends ScriptOperation {
 }
 
 /// Operation called `OP_IFDUP` with code `115` or `0x73`.
-/// Swaps the top [stack] two pairs of elements.
+/// If the top [stack] element is not `0`, adds a duplicate of it
+/// to the [stack].
 class _OpIfDup extends ScriptOperation {
   _OpIfDup({@required this.stack});
 
@@ -1298,6 +1306,33 @@ class _OpIfDup extends ScriptOperation {
     }
 
     return isValidOp;
+  }
+}
+
+/// Operation called `OP_DEPTH` with code `116` or `0x74`.
+/// Adds the length of the [stack] as a new element.
+class _OpDepth extends ScriptOperation {
+  _OpDepth({@required this.stack});
+
+  static _OpDepth builder({@required Map<String, dynamic> args}) {
+    return _OpDepth(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    stack.add(
+      ScriptUtils.encodeNumber(
+        number: BigInt.from(
+          stack.length,
+        ),
+      ),
+    );
+
+    return true;
   }
 }
 
