@@ -93,6 +93,7 @@ enum OpCode {
   OP_DROP,
   OP_DUP,
   OP_NIP,
+  OP_OVER,
   OP_HASH160,
   OP_HASH256,
 }
@@ -172,6 +173,8 @@ extension Info on OpCode {
         return 118;
       case OpCode.OP_NIP:
         return 119;
+      case OpCode.OP_OVER:
+        return 120;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -255,6 +258,8 @@ extension Info on OpCode {
         return 'OP_DUP';
       case OpCode.OP_NIP:
         return 'OP_NIP';
+      case OpCode.OP_OVER:
+        return 'OP_OVER';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -338,6 +343,8 @@ extension Info on OpCode {
         return _OpDup.builder;
       case OpCode.OP_NIP:
         return _OpNip.builder;
+      case OpCode.OP_OVER:
+        return _OpOver.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1428,6 +1435,37 @@ class _OpNip extends ScriptOperation {
       final temp = stack.removeLast();
       stack.removeLast();
       stack.add(temp);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_OVER` with code `120` or `0x78`.
+/// Duplicates the second last [stack] element to the top
+/// of the [stack].
+class _OpOver extends ScriptOperation {
+  _OpOver({@required this.stack});
+
+  static _OpOver builder({@required Map<String, dynamic> args}) {
+    return _OpOver(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      final temp = stack.removeLast();
+      final copied = copy(element: stack.last);
+      stack.add(temp);
+      stack.add(copied);
 
       isValidOp = true;
     }
