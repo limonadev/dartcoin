@@ -100,6 +100,7 @@ enum OpCode {
   OP_SWAP,
   OP_TUCK,
   OP_SIZE,
+  OP_EQUAL,
   OP_HASH160,
   OP_HASH256,
 }
@@ -193,6 +194,8 @@ extension Info on OpCode {
         return 125;
       case OpCode.OP_SIZE:
         return 130;
+      case OpCode.OP_EQUAL:
+        return 135;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -290,6 +293,8 @@ extension Info on OpCode {
         return 'OP_TUCK';
       case OpCode.OP_SIZE:
         return 'OP_SIZE';
+      case OpCode.OP_EQUAL:
+        return 'OP_EQUAL';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -387,6 +392,8 @@ extension Info on OpCode {
         return _OpTuck.builder;
       case OpCode.OP_SIZE:
         return _OpSize.builder;
+      case OpCode.OP_EQUAL:
+        return _OpEqual.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1729,6 +1736,46 @@ class _OpSize extends ScriptOperation {
       stack.add(
         ScriptUtils.encodeNumber(
           number: BigInt.from(stack.last.length),
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_EQUAL` with code `135` or `0x87`.
+/// Adds `1` to the [stack] if the two last [stack] elements are equal,
+/// `0` otherwise.
+class _OpEqual extends ScriptOperation {
+  _OpEqual({@required this.stack});
+
+  static _OpEqual builder({@required Map<String, dynamic> args}) {
+    return _OpEqual(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      final first = stack.removeLast();
+      final second = stack.removeLast();
+
+      final areEqual = ScriptUtils.areStackElementsEqual(
+        first: first,
+        second: second,
+      );
+      final result = areEqual ? BigInt.one : BigInt.zero;
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: result,
         ),
       );
 
