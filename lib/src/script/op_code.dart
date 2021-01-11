@@ -99,6 +99,7 @@ enum OpCode {
   OP_ROT,
   OP_SWAP,
   OP_TUCK,
+  OP_SIZE,
   OP_HASH160,
   OP_HASH256,
 }
@@ -190,6 +191,8 @@ extension Info on OpCode {
         return 124;
       case OpCode.OP_TUCK:
         return 125;
+      case OpCode.OP_SIZE:
+        return 130;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -285,6 +288,8 @@ extension Info on OpCode {
         return 'OP_SWAP';
       case OpCode.OP_TUCK:
         return 'OP_TUCK';
+      case OpCode.OP_SIZE:
+        return 'OP_SIZE';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -380,6 +385,8 @@ extension Info on OpCode {
         return _OpSwap.builder;
       case OpCode.OP_TUCK:
         return _OpTuck.builder;
+      case OpCode.OP_SIZE:
+        return _OpSize.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1692,6 +1699,38 @@ class _OpTuck extends ScriptOperation {
         copy(element: temp.last),
       );
       stack.addAll(temp);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_SIZE` with code `130` or `0x82`.
+/// Adds the size of the last [stack] element to the [stack] without
+/// removing it.
+class _OpSize extends ScriptOperation {
+  _OpSize({@required this.stack});
+
+  static _OpSize builder({@required Map<String, dynamic> args}) {
+    return _OpSize(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: BigInt.from(stack.last.length),
+        ),
+      );
 
       isValidOp = true;
     }
