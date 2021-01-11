@@ -95,6 +95,7 @@ enum OpCode {
   OP_NIP,
   OP_OVER,
   OP_PICK,
+  OP_ROLL,
   OP_HASH160,
   OP_HASH256,
 }
@@ -178,6 +179,8 @@ extension Info on OpCode {
         return 120;
       case OpCode.OP_PICK:
         return 121;
+      case OpCode.OP_ROLL:
+        return 122;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -265,6 +268,8 @@ extension Info on OpCode {
         return 'OP_OVER';
       case OpCode.OP_PICK:
         return 'OP_PICK';
+      case OpCode.OP_ROLL:
+        return 'OP_ROLL';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -352,6 +357,8 @@ extension Info on OpCode {
         return _OpOver.builder;
       case OpCode.OP_PICK:
         return _OpPick.builder;
+      case OpCode.OP_ROLL:
+        return _OpRoll.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1516,6 +1523,49 @@ class _OpPick extends ScriptOperation {
       final copied = copy(element: stack.last);
       stack.addAll(temp);
       stack.add(copied);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_ROLL` with code `122` or `0x7a`.
+/// Moves the `n`-last [stack] element to the top of the [stack].
+/// The `n` value is drawn from the top of the [stack], removing it.
+class _OpRoll extends ScriptOperation {
+  _OpRoll({@required this.stack});
+
+  static _OpRoll builder({@required Map<String, dynamic> args}) {
+    return _OpRoll(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    final n = stack.isNotEmpty
+        ? ScriptUtils.decodeNumber(
+            element: stack.removeLast(),
+          ).toInt()
+        : null;
+
+    if (n != null && stack.length > n) {
+      final temp = <Uint8List>[];
+      for (var _ = 0; _ < n; _++) {
+        temp.insert(
+          0,
+          stack.removeLast(),
+        );
+      }
+      final nLast = stack.removeLast();
+      stack.addAll(temp);
+      stack.add(nLast);
 
       isValidOp = true;
     }
