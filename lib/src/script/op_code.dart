@@ -90,6 +90,7 @@ enum OpCode {
   OP_2SWAP,
   OP_IFDUP,
   OP_DEPTH,
+  OP_DROP,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -164,6 +165,8 @@ extension Info on OpCode {
         return 115;
       case OpCode.OP_DEPTH:
         return 116;
+      case OpCode.OP_DROP:
+        return 117;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -243,6 +246,8 @@ extension Info on OpCode {
         return 'OP_IFDUP';
       case OpCode.OP_DEPTH:
         return 'OP_DEPTH';
+      case OpCode.OP_DROP:
+        return 'OP_DROP';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -322,6 +327,8 @@ extension Info on OpCode {
         return _OpIfDup.builder;
       case OpCode.OP_DEPTH:
         return _OpDepth.builder;
+      case OpCode.OP_DROP:
+        return _OpDrop.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -1333,6 +1340,33 @@ class _OpDepth extends ScriptOperation {
     );
 
     return true;
+  }
+}
+
+/// Operation called `OP_DROP` with code `117` or `0x75`.
+/// Removes the top [stack] item.
+class _OpDrop extends ScriptOperation {
+  _OpDrop({@required this.stack});
+
+  static _OpDrop builder({@required Map<String, dynamic> args}) {
+    return _OpDrop(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      stack.removeLast();
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
   }
 }
 
