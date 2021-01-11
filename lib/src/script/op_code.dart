@@ -94,6 +94,7 @@ enum OpCode {
   OP_DUP,
   OP_NIP,
   OP_OVER,
+  OP_PICK,
   OP_HASH160,
   OP_HASH256,
 }
@@ -175,6 +176,8 @@ extension Info on OpCode {
         return 119;
       case OpCode.OP_OVER:
         return 120;
+      case OpCode.OP_PICK:
+        return 121;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -260,6 +263,8 @@ extension Info on OpCode {
         return 'OP_NIP';
       case OpCode.OP_OVER:
         return 'OP_OVER';
+      case OpCode.OP_PICK:
+        return 'OP_PICK';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -345,6 +350,8 @@ extension Info on OpCode {
         return _OpNip.builder;
       case OpCode.OP_OVER:
         return _OpOver.builder;
+      case OpCode.OP_PICK:
+        return _OpPick.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1465,6 +1472,49 @@ class _OpOver extends ScriptOperation {
       final temp = stack.removeLast();
       final copied = copy(element: stack.last);
       stack.add(temp);
+      stack.add(copied);
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_PICK` with code `121` or `0x79`.
+/// Duplicates the `n`-last [stack] element to the top of the [stack].
+/// The `n` value is drawn from the top of the [stack], removing it.
+class _OpPick extends ScriptOperation {
+  _OpPick({@required this.stack});
+
+  static _OpPick builder({@required Map<String, dynamic> args}) {
+    return _OpPick(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    final n = stack.isNotEmpty
+        ? ScriptUtils.decodeNumber(
+            element: stack.removeLast(),
+          ).toInt()
+        : null;
+
+    if (n != null && stack.length > n) {
+      final temp = <Uint8List>[];
+      for (var _ = 0; _ < n; _++) {
+        temp.insert(
+          0,
+          stack.removeLast(),
+        );
+      }
+      final copied = copy(element: stack.last);
+      stack.addAll(temp);
       stack.add(copied);
 
       isValidOp = true;
