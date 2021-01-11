@@ -88,6 +88,7 @@ enum OpCode {
   OP_2OVER,
   OP_2ROT,
   OP_2SWAP,
+  OP_IFDUP,
   OP_DUP,
   OP_HASH160,
   OP_HASH256,
@@ -158,6 +159,8 @@ extension Info on OpCode {
         return 113;
       case OpCode.OP_2SWAP:
         return 114;
+      case OpCode.OP_IFDUP:
+        return 115;
       case OpCode.OP_DUP:
         return 118;
       case OpCode.OP_HASH160:
@@ -233,6 +236,8 @@ extension Info on OpCode {
         return 'OP_2ROT';
       case OpCode.OP_2SWAP:
         return 'OP_2SWAP';
+      case OpCode.OP_IFDUP:
+        return 'OP_IFDUP';
       case OpCode.OP_DUP:
         return 'OP_DUP';
       case OpCode.OP_HASH160:
@@ -308,6 +313,8 @@ extension Info on OpCode {
         return _Op2Rot.builder;
       case OpCode.OP_2SWAP:
         return _Op2Swap.builder;
+      case OpCode.OP_IFDUP:
+        return _OpIfDup.builder;
       case OpCode.OP_DUP:
         return _OpDup.builder;
       case OpCode.OP_HASH160:
@@ -1228,8 +1235,8 @@ class _Op2Rot extends ScriptOperation {
   }
 }
 
-// Operation called `OP_2SWAP` with code `114` or `0x72`.
-/// Swaps the top [stacj] two pairs of elements.
+/// Operation called `OP_2SWAP` with code `114` or `0x72`.
+/// Swaps the top [stack] two pairs of elements.
 class _Op2Swap extends ScriptOperation {
   _Op2Swap({@required this.stack});
 
@@ -1255,6 +1262,37 @@ class _Op2Swap extends ScriptOperation {
       }
       stack.addAll(temp.sublist(2, 4));
       stack.addAll(temp.sublist(0, 2));
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_IFDUP` with code `115` or `0x73`.
+/// Swaps the top [stack] two pairs of elements.
+class _OpIfDup extends ScriptOperation {
+  _OpIfDup({@required this.stack});
+
+  static _OpIfDup builder({@required Map<String, dynamic> args}) {
+    return _OpIfDup(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      if (ScriptUtils.decodeNumber(element: stack.last) != BigInt.zero) {
+        stack.add(
+          copy(element: stack.last),
+        );
+      }
 
       isValidOp = true;
     }
