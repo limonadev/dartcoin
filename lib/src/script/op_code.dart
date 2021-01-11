@@ -101,6 +101,7 @@ enum OpCode {
   OP_TUCK,
   OP_SIZE,
   OP_EQUAL,
+  OP_EQUALVERIFY,
   OP_HASH160,
   OP_HASH256,
 }
@@ -196,6 +197,8 @@ extension Info on OpCode {
         return 130;
       case OpCode.OP_EQUAL:
         return 135;
+      case OpCode.OP_EQUALVERIFY:
+        return 136;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -295,6 +298,8 @@ extension Info on OpCode {
         return 'OP_SIZE';
       case OpCode.OP_EQUAL:
         return 'OP_EQUAL';
+      case OpCode.OP_EQUALVERIFY:
+        return 'OP_EQUALVERIFY';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -394,6 +399,8 @@ extension Info on OpCode {
         return _OpSize.builder;
       case OpCode.OP_EQUAL:
         return _OpEqual.builder;
+      case OpCode.OP_EQUALVERIFY:
+        return _OpEqualVerify.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1783,6 +1790,34 @@ class _OpEqual extends ScriptOperation {
     }
 
     return isValidOp;
+  }
+}
+
+/// Operation called `OP_EQUALVERIFY` with code `136` or `0x88`.
+/// Same as [_OpEqual], but runs [_OpVerify] afterward.
+class _OpEqualVerify extends ScriptOperation {
+  _OpEqualVerify({@required this.stack});
+
+  static _OpEqualVerify builder({@required Map<String, dynamic> args}) {
+    return _OpEqualVerify(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    final executor = ScriptExecutor();
+
+    return executor.run(
+          opCode: OpCode.OP_EQUAL,
+          stack: stack,
+        ) &&
+        executor.run(
+          opCode: OpCode.OP_VERIFY,
+          stack: stack,
+        );
   }
 }
 
