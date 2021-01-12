@@ -108,6 +108,7 @@ enum OpCode {
   OP_ABS,
   OP_NOT,
   OP_0NOTEQUAL,
+  OP_ADD,
   OP_HASH160,
   OP_HASH256,
 }
@@ -217,6 +218,8 @@ extension Info on OpCode {
         return 145;
       case OpCode.OP_0NOTEQUAL:
         return 146;
+      case OpCode.OP_ADD:
+        return 147;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -330,6 +333,8 @@ extension Info on OpCode {
         return 'OP_NOT';
       case OpCode.OP_0NOTEQUAL:
         return 'OP_0NOTEQUAL';
+      case OpCode.OP_ADD:
+        return 'OP_ADD';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -443,6 +448,8 @@ extension Info on OpCode {
         return _OpNot.builder;
       case OpCode.OP_0NOTEQUAL:
         return _Op0NotEqual.builder;
+      case OpCode.OP_ADD:
+        return _OpAdd.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2081,6 +2088,44 @@ class _Op0NotEqual extends ScriptOperation {
       stack.add(
         ScriptUtils.encodeNumber(
           number: toAdd,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_ADD` with code `147` or `0x93`.
+/// Adds the two top [stack] elements.
+class _OpAdd extends ScriptOperation {
+  _OpAdd({@required this.stack});
+
+  static _OpAdd builder({@required Map<String, dynamic> args}) {
+    return _OpAdd(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      final first = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final second = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: first + second,
         ),
       );
 
