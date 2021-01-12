@@ -116,6 +116,7 @@ enum OpCode {
   OP_SUB,
   OP_BOOLAND,
   OP_BOOLOR,
+  OP_NUMEQUAL,
   OP_HASH160,
   OP_HASH256,
 }
@@ -233,6 +234,8 @@ extension Info on OpCode {
         return 154;
       case OpCode.OP_BOOLOR:
         return 155;
+      case OpCode.OP_NUMEQUAL:
+        return 156;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -354,6 +357,8 @@ extension Info on OpCode {
         return 'OP_BOOLAND';
       case OpCode.OP_BOOLOR:
         return 'OP_BOOLOR';
+      case OpCode.OP_NUMEQUAL:
+        return 'OP_NUMEQUAL';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -475,6 +480,8 @@ extension Info on OpCode {
         return _OpBoolAnd.builder;
       case OpCode.OP_BOOLOR:
         return _OpBoolOr.builder;
+      case OpCode.OP_NUMEQUAL:
+        return _OpNumEqual.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2273,6 +2280,52 @@ class _OpBoolOr extends ScriptOperation {
 
       BigInt toAdd;
       if (first != BigInt.zero || second != BigInt.zero) {
+        toAdd = BigInt.one;
+      } else {
+        toAdd = BigInt.zero;
+      }
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: toAdd,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_NUMEQUAL` with code `156` or `0x9c`.
+/// If the two last [stack] element are equal, a `1` is
+/// added to the [stack]. Otherwise, a `0` is added.
+class _OpNumEqual extends ScriptOperation {
+  _OpNumEqual({@required this.stack});
+
+  static _OpNumEqual builder({@required Map<String, dynamic> args}) {
+    return _OpNumEqual(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final first = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final second = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      BigInt toAdd;
+      if (first == second) {
         toAdd = BigInt.one;
       } else {
         toAdd = BigInt.zero;
