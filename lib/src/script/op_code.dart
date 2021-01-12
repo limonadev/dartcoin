@@ -109,6 +109,7 @@ enum OpCode {
   OP_NOT,
   OP_0NOTEQUAL,
   OP_ADD,
+  OP_SUB,
   OP_HASH160,
   OP_HASH256,
 }
@@ -220,6 +221,8 @@ extension Info on OpCode {
         return 146;
       case OpCode.OP_ADD:
         return 147;
+      case OpCode.OP_SUB:
+        return 148;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -335,6 +338,8 @@ extension Info on OpCode {
         return 'OP_0NOTEQUAL';
       case OpCode.OP_ADD:
         return 'OP_ADD';
+      case OpCode.OP_SUB:
+        return 'OP_SUB';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -450,6 +455,8 @@ extension Info on OpCode {
         return _Op0NotEqual.builder;
       case OpCode.OP_ADD:
         return _OpAdd.builder;
+      case OpCode.OP_SUB:
+        return _OpSub.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1871,7 +1878,7 @@ class _OpEqualVerify extends ScriptOperation {
 }
 
 /// Operation called `OP_1ADD` with code `139` or `0x8b`.
-/// Adds `1` to the top [stack] element.
+/// Adds `1` to the last [stack] element.
 class _Op1Add extends ScriptOperation {
   _Op1Add({@required this.stack});
 
@@ -1907,7 +1914,7 @@ class _Op1Add extends ScriptOperation {
 }
 
 /// Operation called `OP_1SUB` with code `140` or `0x8c`.
-/// Subtracts `1` to the top [stack] element.
+/// Subtracts `1` to the last [stack] element.
 class _Op1Sub extends ScriptOperation {
   _Op1Sub({@required this.stack});
 
@@ -1943,7 +1950,7 @@ class _Op1Sub extends ScriptOperation {
 }
 
 /// Operation called `OP_NEGATE` with code `143` or `0x8f`.
-/// The sign of the top [stack] element is flipped.
+/// The sign of the last [stack] element is flipped.
 class _OpNegate extends ScriptOperation {
   _OpNegate({@required this.stack});
 
@@ -1978,7 +1985,7 @@ class _OpNegate extends ScriptOperation {
 }
 
 /// Operation called `OP_ABS` with code `144` or `0x90`.
-/// The top [stack] element is made positive.
+/// The last [stack] element is made positive.
 class _OpAbs extends ScriptOperation {
   _OpAbs({@required this.stack});
 
@@ -2013,7 +2020,7 @@ class _OpAbs extends ScriptOperation {
 }
 
 /// Operation called `OP_NOT` with code `145` or `0x91`.
-/// If the top [stack] element is `0` or `1`, it is flipped. If not,
+/// If the last [stack] element is `0` or `1`, it is flipped. If not,
 /// a `0` is added to the [stack].
 class _OpNot extends ScriptOperation {
   _OpNot({@required this.stack});
@@ -2056,7 +2063,7 @@ class _OpNot extends ScriptOperation {
 }
 
 /// Operation called `OP_0NOTEQUAL` with code `146` or `0x92`.
-/// If the top [stack] element is `0` adds a `0` to the [stack]. Adds
+/// If the last [stack] element is `0` adds a `0` to the [stack]. Adds
 /// a `1` otherwise.
 class _Op0NotEqual extends ScriptOperation {
   _Op0NotEqual({@required this.stack});
@@ -2099,7 +2106,7 @@ class _Op0NotEqual extends ScriptOperation {
 }
 
 /// Operation called `OP_ADD` with code `147` or `0x93`.
-/// Adds the two top [stack] elements.
+/// Adds the two last [stack] elements.
 class _OpAdd extends ScriptOperation {
   _OpAdd({@required this.stack});
 
@@ -2126,6 +2133,44 @@ class _OpAdd extends ScriptOperation {
       stack.add(
         ScriptUtils.encodeNumber(
           number: first + second,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_SUB` with code `148` or `0x94`.
+/// Subtracts the last [stack] element from the second last [stack] element.
+class _OpSub extends ScriptOperation {
+  _OpSub({@required this.stack});
+
+  static _OpSub builder({@required Map<String, dynamic> args}) {
+    return _OpSub(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      final last = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final secondLast = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: secondLast - last,
         ),
       );
 
