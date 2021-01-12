@@ -56,6 +56,10 @@ class ScriptExecutor {
   }
 }
 
+/// All the supported Bitcoin Script operations.
+/// The `OP_MUL` is used here: https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch06/op.py#L476
+/// but now that operation is disabled. For that reason, the `OP_MUL`
+/// is not supported.
 enum OpCode {
   OP_0,
   OP_1NEGATE,
