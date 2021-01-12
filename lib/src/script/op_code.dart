@@ -102,6 +102,7 @@ enum OpCode {
   OP_SIZE,
   OP_EQUAL,
   OP_EQUALVERIFY,
+  OP_1ADD,
   OP_HASH160,
   OP_HASH256,
 }
@@ -199,6 +200,8 @@ extension Info on OpCode {
         return 135;
       case OpCode.OP_EQUALVERIFY:
         return 136;
+      case OpCode.OP_1ADD:
+        return 139;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -300,6 +303,8 @@ extension Info on OpCode {
         return 'OP_EQUAL';
       case OpCode.OP_EQUALVERIFY:
         return 'OP_EQUALVERIFY';
+      case OpCode.OP_1ADD:
+        return 'OP_1ADD';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -401,6 +406,8 @@ extension Info on OpCode {
         return _OpEqual.builder;
       case OpCode.OP_EQUALVERIFY:
         return _OpEqualVerify.builder;
+      case OpCode.OP_1ADD:
+        return _Op1Add.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1818,6 +1825,42 @@ class _OpEqualVerify extends ScriptOperation {
           opCode: OpCode.OP_VERIFY,
           stack: stack,
         );
+  }
+}
+
+/// Operation called `OP_1ADD` with code `139` or `0x8b`.
+/// Adds `1` to the top [stack] element.
+class _Op1Add extends ScriptOperation {
+  _Op1Add({@required this.stack});
+
+  static _Op1Add builder({@required Map<String, dynamic> args}) {
+    return _Op1Add(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      var element = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      element += BigInt.one;
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: element,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
   }
 }
 
