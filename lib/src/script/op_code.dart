@@ -103,6 +103,7 @@ enum OpCode {
   OP_EQUAL,
   OP_EQUALVERIFY,
   OP_1ADD,
+  OP_1SUB,
   OP_HASH160,
   OP_HASH256,
 }
@@ -202,6 +203,8 @@ extension Info on OpCode {
         return 136;
       case OpCode.OP_1ADD:
         return 139;
+      case OpCode.OP_1SUB:
+        return 140;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -305,6 +308,8 @@ extension Info on OpCode {
         return 'OP_EQUALVERIFY';
       case OpCode.OP_1ADD:
         return 'OP_1ADD';
+      case OpCode.OP_1SUB:
+        return 'OP_1SUB';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -408,6 +413,8 @@ extension Info on OpCode {
         return _OpEqualVerify.builder;
       case OpCode.OP_1ADD:
         return _Op1Add.builder;
+      case OpCode.OP_1SUB:
+        return _Op1Sub.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1850,6 +1857,42 @@ class _Op1Add extends ScriptOperation {
         element: stack.removeLast(),
       );
       element += BigInt.one;
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: element,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_1SUB` with code `140` or `0x8c`.
+/// Subtracts `1` to the top [stack] element.
+class _Op1Sub extends ScriptOperation {
+  _Op1Sub({@required this.stack});
+
+  static _Op1Sub builder({@required Map<String, dynamic> args}) {
+    return _Op1Sub(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      var element = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      element -= BigInt.one;
 
       stack.add(
         ScriptUtils.encodeNumber(
