@@ -107,6 +107,7 @@ enum OpCode {
   OP_NEGATE,
   OP_ABS,
   OP_NOT,
+  OP_0NOTEQUAL,
   OP_HASH160,
   OP_HASH256,
 }
@@ -214,6 +215,8 @@ extension Info on OpCode {
         return 144;
       case OpCode.OP_NOT:
         return 145;
+      case OpCode.OP_0NOTEQUAL:
+        return 146;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -325,6 +328,8 @@ extension Info on OpCode {
         return 'OP_ABS';
       case OpCode.OP_NOT:
         return 'OP_NOT';
+      case OpCode.OP_0NOTEQUAL:
+        return 'OP_0NOTEQUAL';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -436,6 +441,8 @@ extension Info on OpCode {
         return _OpAbs.builder;
       case OpCode.OP_NOT:
         return _OpNot.builder;
+      case OpCode.OP_0NOTEQUAL:
+        return _Op0NotEqual.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2026,6 +2033,49 @@ class _OpNot extends ScriptOperation {
         toAdd = BigInt.one;
       } else {
         toAdd = BigInt.zero;
+      }
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: toAdd,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_0NOTEQUAL` with code `146` or `0x92`.
+/// If the top [stack] element is `0` adds a `0` to the [stack]. Adds
+/// a `1` otherwise.
+class _Op0NotEqual extends ScriptOperation {
+  _Op0NotEqual({@required this.stack});
+
+  static _Op0NotEqual builder({@required Map<String, dynamic> args}) {
+    return _Op0NotEqual(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final element = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      BigInt toAdd;
+      if (element == BigInt.zero) {
+        toAdd = BigInt.zero;
+      } else {
+        toAdd = BigInt.one;
       }
 
       stack.add(
