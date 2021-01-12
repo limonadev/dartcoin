@@ -421,7 +421,7 @@ extension Info on OpCode {
       case OpCode.OP_1SUB:
         return _Op1Sub.builder;
       case OpCode.OP_NEGATE:
-        return _Op1Negate.builder;
+        return _OpNegate.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
