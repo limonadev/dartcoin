@@ -104,6 +104,7 @@ enum OpCode {
   OP_EQUALVERIFY,
   OP_1ADD,
   OP_1SUB,
+  OP_NEGATE,
   OP_HASH160,
   OP_HASH256,
 }
@@ -205,6 +206,8 @@ extension Info on OpCode {
         return 139;
       case OpCode.OP_1SUB:
         return 140;
+      case OpCode.OP_NEGATE:
+        return 143;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -310,6 +313,8 @@ extension Info on OpCode {
         return 'OP_1ADD';
       case OpCode.OP_1SUB:
         return 'OP_1SUB';
+      case OpCode.OP_NEGATE:
+        return 'OP_NEGATE';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -415,6 +420,8 @@ extension Info on OpCode {
         return _Op1Add.builder;
       case OpCode.OP_1SUB:
         return _Op1Sub.builder;
+      case OpCode.OP_NEGATE:
+        return _Op1Negate.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -1893,6 +1900,41 @@ class _Op1Sub extends ScriptOperation {
         element: stack.removeLast(),
       );
       element -= BigInt.one;
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: element,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_NEGATE` with code `143` or `0x8f`.
+/// The sign of the top [stack] element is flipped.
+class _OpNegate extends ScriptOperation {
+  _OpNegate({@required this.stack});
+
+  static _OpNegate builder({@required Map<String, dynamic> args}) {
+    return _OpNegate(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final element = -ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
 
       stack.add(
         ScriptUtils.encodeNumber(
