@@ -125,6 +125,7 @@ enum OpCode {
   OP_GREATERTHANOREQUAL,
   OP_MIN,
   OP_MAX,
+  OP_WITHIN,
   OP_HASH160,
   OP_HASH256,
 }
@@ -260,6 +261,8 @@ extension Info on OpCode {
         return 163;
       case OpCode.OP_MAX:
         return 164;
+      case OpCode.OP_WITHIN:
+        return 165;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -399,6 +402,8 @@ extension Info on OpCode {
         return 'OP_MIN';
       case OpCode.OP_MAX:
         return 'OP_MAX';
+      case OpCode.OP_WITHIN:
+        return 'OP_WHITHIN';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -538,6 +543,8 @@ extension Info on OpCode {
         return _OpMin.builder;
       case OpCode.OP_MAX:
         return _OpMax.builder;
+      case OpCode.OP_WITHIN:
+        return _OpWithin.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2724,6 +2731,56 @@ class _OpMax extends ScriptOperation {
       );
 
       final toAdd = first > second ? first : second;
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: toAdd,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_WITHIN` with code `165` or `0xa5`.
+/// If the third last [stack] element is betwen the range:
+/// (secondLast, last) with the left inclusive, a `1` is
+/// added to the [stack]. Otherwise, a `0` is added.
+class _OpWithin extends ScriptOperation {
+  _OpWithin({@required this.stack});
+
+  static _OpWithin builder({@required Map<String, dynamic> args}) {
+    return _OpWithin(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 3) {
+      final last = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final secondLast = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final thirdLast = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      BigInt toAdd;
+      if (thirdLast >= secondLast && thirdLast < last) {
+        toAdd = BigInt.one;
+      } else {
+        toAdd = BigInt.zero;
+      }
 
       stack.add(
         ScriptUtils.encodeNumber(
