@@ -119,6 +119,7 @@ enum OpCode {
   OP_NUMEQUAL,
   OP_NUMEQUALVERIFY,
   OP_NUMNOTEQUAL,
+  OP_LESSTHAN,
   OP_HASH160,
   OP_HASH256,
 }
@@ -242,6 +243,8 @@ extension Info on OpCode {
         return 157;
       case OpCode.OP_NUMNOTEQUAL:
         return 158;
+      case OpCode.OP_LESSTHAN:
+        return 159;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -369,6 +372,8 @@ extension Info on OpCode {
         return 'OP_NUMEQUALVERIFY';
       case OpCode.OP_NUMNOTEQUAL:
         return 'OP_NUMNOTEQUAL';
+      case OpCode.OP_LESSTHAN:
+        return 'OP_LESSTHAN';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -496,6 +501,8 @@ extension Info on OpCode {
         return _OpNumEqualVerify.builder;
       case OpCode.OP_NUMNOTEQUAL:
         return _OpNumNotEqual.builder;
+      case OpCode.OP_LESSTHAN:
+        return _OpLessThan.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2221,7 +2228,7 @@ class _OpSub extends ScriptOperation {
 }
 
 /// Operation called `OP_BOOLAND` with code `154` or `0x9a`.
-/// If the two last [stack] element are not `0`, a `1` is added to the
+/// If the two last [stack] elements are not `0`, a `1` is added to the
 /// [stack]. Otherwise, a `0` is added.
 class _OpBoolAnd extends ScriptOperation {
   _OpBoolAnd({@required this.stack});
@@ -2267,7 +2274,7 @@ class _OpBoolAnd extends ScriptOperation {
 }
 
 /// Operation called `OP_BOOLOR` with code `155` or `0x9b`.
-/// If at least one of the two last [stack] element is not `0`, a `1` is
+/// If at least one of the two last [stack] elements is not `0`, a `1` is
 /// added to the [stack]. Otherwise, a `0` is added.
 class _OpBoolOr extends ScriptOperation {
   _OpBoolOr({@required this.stack});
@@ -2313,7 +2320,7 @@ class _OpBoolOr extends ScriptOperation {
 }
 
 /// Operation called `OP_NUMEQUAL` with code `156` or `0x9c`.
-/// If the two last [stack] element are equal, a `1` is
+/// If the two last [stack] elements are equal, a `1` is
 /// added to the [stack]. Otherwise, a `0` is added.
 class _OpNumEqual extends ScriptOperation {
   _OpNumEqual({@required this.stack});
@@ -2387,7 +2394,7 @@ class _OpNumEqualVerify extends ScriptOperation {
 }
 
 /// Operation called `OP_NUMNOTEQUAL` with code `158` or `0x9e`.
-/// If the two last [stack] element are not equal, a `1` is
+/// If the two last [stack] elements are not equal, a `1` is
 /// added to the [stack]. Otherwise, a `0` is added.
 class _OpNumNotEqual extends ScriptOperation {
   _OpNumNotEqual({@required this.stack});
@@ -2414,6 +2421,52 @@ class _OpNumNotEqual extends ScriptOperation {
 
       BigInt toAdd;
       if (first != second) {
+        toAdd = BigInt.one;
+      } else {
+        toAdd = BigInt.zero;
+      }
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: toAdd,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_LESSTHAN` with code `159` or `0x9f`.
+/// If the second last [stack] element is less than the last [stack]
+/// element, a `1` is added to the [stack]. Otherwise, a `0` is added.
+class _OpLessThan extends ScriptOperation {
+  _OpLessThan({@required this.stack});
+
+  static _OpLessThan builder({@required Map<String, dynamic> args}) {
+    return _OpLessThan(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final last = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final secondLast = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      BigInt toAdd;
+      if (secondLast < last) {
         toAdd = BigInt.one;
       } else {
         toAdd = BigInt.zero;
