@@ -123,6 +123,7 @@ enum OpCode {
   OP_GREATERTHAN,
   OP_LESSTHANOREQUAL,
   OP_GREATERTHANOREQUAL,
+  OP_MIN,
   OP_HASH160,
   OP_HASH256,
 }
@@ -254,6 +255,8 @@ extension Info on OpCode {
         return 161;
       case OpCode.OP_GREATERTHANOREQUAL:
         return 162;
+      case OpCode.OP_MIN:
+        return 163;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -389,6 +392,8 @@ extension Info on OpCode {
         return 'OP_LESSTHANOREQUAL';
       case OpCode.OP_GREATERTHANOREQUAL:
         return 'OP_GREATERTHANOREQUAL';
+      case OpCode.OP_MIN:
+        return 'OP_MIN';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -524,6 +529,8 @@ extension Info on OpCode {
         return _OpLessThanOrEqual.builder;
       case OpCode.OP_GREATERTHANOREQUAL:
         return _OpGreaterThanOrEqual.builder;
+      case OpCode.OP_MIN:
+        return _OpMin.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2630,6 +2637,46 @@ class _OpGreaterThanOrEqual extends ScriptOperation {
       } else {
         toAdd = BigInt.zero;
       }
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: toAdd,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_MIN` with code `163` or `0xa3`.
+/// Adds the smaller between the two last [stack] elements to the [stack].
+class _OpMin extends ScriptOperation {
+  _OpMin({@required this.stack});
+
+  static _OpMin builder({@required Map<String, dynamic> args}) {
+    return _OpMin(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final first = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final second = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      final toAdd = first < second ? first : second;
 
       stack.add(
         ScriptUtils.encodeNumber(
