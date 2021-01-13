@@ -121,6 +121,7 @@ enum OpCode {
   OP_NUMNOTEQUAL,
   OP_LESSTHAN,
   OP_GREATERTHAN,
+  OP_LESSTHANOREQUAL,
   OP_HASH160,
   OP_HASH256,
 }
@@ -248,6 +249,8 @@ extension Info on OpCode {
         return 159;
       case OpCode.OP_GREATERTHAN:
         return 160;
+      case OpCode.OP_LESSTHANOREQUAL:
+        return 161;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -379,6 +382,8 @@ extension Info on OpCode {
         return 'OP_LESSTHAN';
       case OpCode.OP_GREATERTHAN:
         return 'OP_GREATHERTHAN';
+      case OpCode.OP_LESSTHANOREQUAL:
+        return 'OP_LESSTHANOREQUAL';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -510,6 +515,8 @@ extension Info on OpCode {
         return _OpLessThan.builder;
       case OpCode.OP_GREATERTHAN:
         return _OpGreaterThan.builder;
+      case OpCode.OP_LESSTHANOREQUAL:
+        return _OpLessThanOrEqual.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2520,6 +2527,52 @@ class _OpGreaterThan extends ScriptOperation {
 
       BigInt toAdd;
       if (secondLast > last) {
+        toAdd = BigInt.one;
+      } else {
+        toAdd = BigInt.zero;
+      }
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: toAdd,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_LESSTHANOREQUAL` with code `161` or `0xa1`.
+/// If the second last [stack] element is less than or equal to the last
+/// [stack] element, a `1` is added to the [stack]. Otherwise, a `0` is added.
+class _OpLessThanOrEqual extends ScriptOperation {
+  _OpLessThanOrEqual({@required this.stack});
+
+  static _OpLessThanOrEqual builder({@required Map<String, dynamic> args}) {
+    return _OpLessThanOrEqual(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final last = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final secondLast = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      BigInt toAdd;
+      if (secondLast <= last) {
         toAdd = BigInt.one;
       } else {
         toAdd = BigInt.zero;
