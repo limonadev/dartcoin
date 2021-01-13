@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:typed_data';
 
 import 'package:dartcoin/src/utils/all.dart';
+import 'package:hash/hash.dart';
 import 'package:meta/meta.dart';
 
 abstract class ScriptOperation {
@@ -126,6 +127,7 @@ enum OpCode {
   OP_MIN,
   OP_MAX,
   OP_WITHIN,
+  OP_RIPEMD160,
   OP_HASH160,
   OP_HASH256,
 }
@@ -263,6 +265,8 @@ extension Info on OpCode {
         return 164;
       case OpCode.OP_WITHIN:
         return 165;
+      case OpCode.OP_RIPEMD160:
+        return 166;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -404,6 +408,8 @@ extension Info on OpCode {
         return 'OP_MAX';
       case OpCode.OP_WITHIN:
         return 'OP_WHITHIN';
+      case OpCode.OP_RIPEMD160:
+        return 'OP_RIPEMD160';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -545,6 +551,8 @@ extension Info on OpCode {
         return _OpMax.builder;
       case OpCode.OP_WITHIN:
         return _OpWithin.builder;
+      case OpCode.OP_RIPEMD160:
+        return _OpRipemd160.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2786,6 +2794,37 @@ class _OpWithin extends ScriptOperation {
         ScriptUtils.encodeNumber(
           number: toAdd,
         ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_RIPEMD160` with code `166` or `0xa6`.
+/// Removes the last [stack] element, performs a [RIPEMD160]
+/// to it and pushes back the result into the [stack].
+class _OpRipemd160 extends ScriptOperation {
+  _OpRipemd160({@required this.stack});
+
+  static _OpRipemd160 builder({@required Map<String, dynamic> args}) {
+    return _OpRipemd160(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final element = stack.removeLast();
+      stack.add(
+        RIPEMD160().update(element).digest(),
       );
 
       isValidOp = true;
