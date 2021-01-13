@@ -118,6 +118,7 @@ enum OpCode {
   OP_BOOLOR,
   OP_NUMEQUAL,
   OP_NUMEQUALVERIFY,
+  OP_NUMNOTEQUAL,
   OP_HASH160,
   OP_HASH256,
 }
@@ -239,6 +240,8 @@ extension Info on OpCode {
         return 156;
       case OpCode.OP_NUMEQUALVERIFY:
         return 157;
+      case OpCode.OP_NUMNOTEQUAL:
+        return 158;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -364,6 +367,8 @@ extension Info on OpCode {
         return 'OP_NUMEQUAL';
       case OpCode.OP_NUMEQUALVERIFY:
         return 'OP_NUMEQUALVERIFY';
+      case OpCode.OP_NUMNOTEQUAL:
+        return 'OP_NUMNOTEQUAL';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -489,6 +494,8 @@ extension Info on OpCode {
         return _OpNumEqual.builder;
       case OpCode.OP_NUMEQUALVERIFY:
         return _OpNumEqualVerify.builder;
+      case OpCode.OP_NUMNOTEQUAL:
+        return _OpNumNotEqual.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2376,6 +2383,52 @@ class _OpNumEqualVerify extends ScriptOperation {
           opCode: OpCode.OP_VERIFY,
           stack: stack,
         );
+  }
+}
+
+/// Operation called `OP_NUMNOTEQUAL` with code `158` or `0x9e`.
+/// If the two last [stack] element are not equal, a `1` is
+/// added to the [stack]. Otherwise, a `0` is added.
+class _OpNumNotEqual extends ScriptOperation {
+  _OpNumNotEqual({@required this.stack});
+
+  static _OpNumNotEqual builder({@required Map<String, dynamic> args}) {
+    return _OpNumNotEqual(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final first = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final second = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      BigInt toAdd;
+      if (first != second) {
+        toAdd = BigInt.one;
+      } else {
+        toAdd = BigInt.zero;
+      }
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: toAdd,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
   }
 }
 
