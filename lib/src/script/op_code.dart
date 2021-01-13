@@ -2280,7 +2280,7 @@ class _OpBoolAnd extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final first = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
@@ -2326,7 +2326,7 @@ class _OpBoolOr extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final first = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
@@ -2372,7 +2372,7 @@ class _OpNumEqual extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final first = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
@@ -2446,7 +2446,7 @@ class _OpNumNotEqual extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final first = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
@@ -2492,7 +2492,7 @@ class _OpLessThan extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final last = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
@@ -2538,7 +2538,7 @@ class _OpGreaterThan extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final last = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
@@ -2584,7 +2584,7 @@ class _OpLessThanOrEqual extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final last = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
@@ -2630,7 +2630,7 @@ class _OpGreaterThanOrEqual extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final last = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
@@ -2675,7 +2675,7 @@ class _OpMin extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final first = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
@@ -2715,7 +2715,7 @@ class _OpMax extends ScriptOperation {
   bool execute() {
     var isValidOp = false;
 
-    if (stack.isNotEmpty) {
+    if (stack.length >= 2) {
       final first = ScriptUtils.decodeNumber(
         element: stack.removeLast(),
       );
