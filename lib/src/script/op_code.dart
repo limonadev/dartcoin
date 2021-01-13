@@ -124,6 +124,7 @@ enum OpCode {
   OP_LESSTHANOREQUAL,
   OP_GREATERTHANOREQUAL,
   OP_MIN,
+  OP_MAX,
   OP_HASH160,
   OP_HASH256,
 }
@@ -257,6 +258,8 @@ extension Info on OpCode {
         return 162;
       case OpCode.OP_MIN:
         return 163;
+      case OpCode.OP_MAX:
+        return 164;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -394,6 +397,8 @@ extension Info on OpCode {
         return 'OP_GREATERTHANOREQUAL';
       case OpCode.OP_MIN:
         return 'OP_MIN';
+      case OpCode.OP_MAX:
+        return 'OP_MAX';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -531,6 +536,8 @@ extension Info on OpCode {
         return _OpGreaterThanOrEqual.builder;
       case OpCode.OP_MIN:
         return _OpMin.builder;
+      case OpCode.OP_MAX:
+        return _OpMax.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2677,6 +2684,46 @@ class _OpMin extends ScriptOperation {
       );
 
       final toAdd = first < second ? first : second;
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: toAdd,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_MAX` with code `164` or `0xa4`.
+/// Adds the larger between the two last [stack] elements to the [stack].
+class _OpMax extends ScriptOperation {
+  _OpMax({@required this.stack});
+
+  static _OpMax builder({@required Map<String, dynamic> args}) {
+    return _OpMax(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final first = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final second = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      final toAdd = first > second ? first : second;
 
       stack.add(
         ScriptUtils.encodeNumber(
