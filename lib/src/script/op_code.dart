@@ -128,6 +128,7 @@ enum OpCode {
   OP_MAX,
   OP_WITHIN,
   OP_RIPEMD160,
+  OP_SHA1,
   OP_HASH160,
   OP_HASH256,
 }
@@ -267,6 +268,8 @@ extension Info on OpCode {
         return 165;
       case OpCode.OP_RIPEMD160:
         return 166;
+      case OpCode.OP_SHA1:
+        return 167;
       case OpCode.OP_HASH160:
         return 169;
       case OpCode.OP_HASH256:
@@ -410,6 +413,8 @@ extension Info on OpCode {
         return 'OP_WHITHIN';
       case OpCode.OP_RIPEMD160:
         return 'OP_RIPEMD160';
+      case OpCode.OP_SHA1:
+        return 'OP_SHA1';
       case OpCode.OP_HASH160:
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
@@ -553,6 +558,8 @@ extension Info on OpCode {
         return _OpWithin.builder;
       case OpCode.OP_RIPEMD160:
         return _OpRipemd160.builder;
+      case OpCode.OP_SHA1:
+        return _OpSha1.builder;
       case OpCode.OP_HASH160:
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
@@ -2825,6 +2832,37 @@ class _OpRipemd160 extends ScriptOperation {
       final element = stack.removeLast();
       stack.add(
         RIPEMD160().update(element).digest(),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_SHA1` with code `167` or `0xa7`.
+/// Removes the last [stack] element, performs a [SHA1]
+/// to it and pushes back the result into the [stack].
+class _OpSha1 extends ScriptOperation {
+  _OpSha1({@required this.stack});
+
+  static _OpSha1 builder({@required Map<String, dynamic> args}) {
+    return _OpSha1(
+      stack: args[ScriptOperation.stackArgName],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.isNotEmpty) {
+      final element = stack.removeLast();
+      stack.add(
+        SHA1().update(element).digest(),
       );
 
       isValidOp = true;
