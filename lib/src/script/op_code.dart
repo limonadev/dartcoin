@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:typed_data';
 
+import 'package:dartcoin/src/elliptic_curves.dart/all.dart';
+import 'package:dartcoin/src/signature/all.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:hash/hash.dart';
 import 'package:meta/meta.dart';
@@ -145,6 +147,7 @@ enum OpCode {
   OP_SHA256,
   OP_HASH160,
   OP_HASH256,
+  OP_CHECKSIG,
 }
 
 extension Info on OpCode {
@@ -290,6 +293,8 @@ extension Info on OpCode {
         return 169;
       case OpCode.OP_HASH256:
         return 170;
+      case OpCode.OP_CHECKSIG:
+        return 172;
       default:
         throw ArgumentError('[OpCode] has no valid code!');
     }
@@ -437,6 +442,8 @@ extension Info on OpCode {
         return 'OP_HASH160';
       case OpCode.OP_HASH256:
         return 'OP_HASH256';
+      case OpCode.OP_CHECKSIG:
+        return 'OP_CHECKSIG';
       default:
         throw ArgumentError('[OpCode] has no valid name!');
     }
@@ -584,6 +591,8 @@ extension Info on OpCode {
         return _OpHash160.builder;
       case OpCode.OP_HASH256:
         return _OpHash256.builder;
+      case OpCode.OP_CHECKSIG:
+        return _OpCheckSig.builder;
       default:
         throw ArgumentError('[OpCode] has no valid builder!');
     }
@@ -2983,6 +2992,65 @@ class _OpHash256 extends ScriptOperation {
     if (stack.isNotEmpty) {
       final element = stack.removeLast();
       stack.add(Secp256Utils.hash256(data: element));
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// Operation called `OP_CHECKSIG` with code `172` or `0xac`.
+/// Removes the two last [stack] elements, performs a [S256Point.verify]
+/// to it and pushes `1` if the result is true, `0` otherwise.
+class _OpCheckSig extends ScriptOperation {
+  _OpCheckSig({
+    @required this.message,
+    @required this.stack,
+  });
+
+  static _OpCheckSig builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
+    return _OpCheckSig(
+      message: args[ScriptOperationArgs.message],
+      stack: args[ScriptOperationArgs.stack],
+    );
+  }
+
+  final BigInt message;
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      /// Pubkey
+      final sec = stack.removeLast();
+
+      /// Signature
+      var der = stack.removeLast();
+      der = Uint8List.fromList(
+        der.take(der.length - 1).toList(),
+      );
+
+      final pubKey = S256Point.fromSerialized(sec: sec);
+      final signature = Signature.fromSerialized(
+        der: der,
+      );
+
+      final toAdd = pubKey.verify(
+        sig: signature,
+        z: message,
+      )
+          ? BigInt.one
+          : BigInt.zero;
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: toAdd,
+        ),
+      );
 
       isValidOp = true;
     }
