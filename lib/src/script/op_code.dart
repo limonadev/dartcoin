@@ -296,7 +296,7 @@ extension Info on OpCode {
       case OpCode.OP_CHECKSIG:
         return 172;
       default:
-        throw ArgumentError('[OpCode] has no valid code!');
+        throw ArgumentError('OpCode:$this has no valid code!');
     }
   }
 
@@ -445,7 +445,7 @@ extension Info on OpCode {
       case OpCode.OP_CHECKSIG:
         return 'OP_CHECKSIG';
       default:
-        throw ArgumentError('[OpCode] has no valid name!');
+        throw ArgumentError('OpCode:$this has no valid name!');
     }
   }
 
@@ -594,7 +594,7 @@ extension Info on OpCode {
       case OpCode.OP_CHECKSIG:
         return _OpCheckSig.builder;
       default:
-        throw ArgumentError('[OpCode] has no valid builder!');
+        throw ArgumentError('OpCode:$this has no valid builder!');
     }
   }
 }
