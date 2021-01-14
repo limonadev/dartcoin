@@ -44,7 +44,7 @@ class ScriptOperationExecutor {
   final ListQueue<Uint8List> stack;
 
   bool run({
-    ListQueue<Uint8List> commands,
+    ListQueue<Object> commands,
     BigInt message,
     OpCode opCode,
     int opCodeAsByte,
@@ -57,7 +57,7 @@ class ScriptOperationExecutor {
 
     final args = <ScriptOperationArgs, dynamic>{
       ScriptOperationArgs.altStack: altStack,
-      ScriptOperationArgs.commands: commands ?? ListQueue<Uint8List>(),
+      ScriptOperationArgs.commands: commands ?? ListQueue<Object>(),
       ScriptOperationArgs.executor: this,
       ScriptOperationArgs.message: message,
       ScriptOperationArgs.stack: stack,
