@@ -9,6 +9,7 @@ enum ScriptOperationArgs {
   altStack,
   commands,
   executor,
+  message,
   stack,
 }
 
@@ -41,6 +42,8 @@ class ScriptOperationExecutor {
   final ListQueue<Uint8List> stack;
 
   bool run({
+    ListQueue<Uint8List> commands,
+    BigInt message,
     OpCode opCode,
     int opCodeAsByte,
   }) {
@@ -52,8 +55,9 @@ class ScriptOperationExecutor {
 
     final args = <ScriptOperationArgs, dynamic>{
       ScriptOperationArgs.altStack: altStack,
-      ScriptOperationArgs.commands: <Object>[],
+      ScriptOperationArgs.commands: commands ?? ListQueue<Uint8List>(),
       ScriptOperationArgs.executor: this,
+      ScriptOperationArgs.message: message,
       ScriptOperationArgs.stack: stack,
     };
 
