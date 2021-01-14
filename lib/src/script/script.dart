@@ -1,5 +1,7 @@
+import 'dart:collection';
 import 'dart:typed_data';
 
+import 'package:dartcoin/src/script/op_code.dart';
 import 'package:dartcoin/src/transaction/all.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
@@ -19,6 +21,37 @@ class Script {
     return Script(
       cmds: first.cmds + second.cmds,
     );
+  }
+
+  bool evaluate({@required BigInt message}) {
+    var result = true;
+
+    final commands = ListQueue<Object>.from(cmds);
+    final stack = ListQueue<Uint8List>();
+    final altStack = ListQueue<Uint8List>();
+
+    final executor = ScriptOperationExecutor(
+      altStack: altStack,
+      stack: stack,
+    );
+
+    while (commands.isNotEmpty && result == true) {
+      final command = commands.removeFirst();
+
+      if (command is int) {
+        result = executor.run(
+          commands: commands,
+          message: message,
+          opCodeAsByte: command,
+        );
+      } else {
+        stack.add(command);
+      }
+    }
+
+    result = result && stack.isNotEmpty && stack.last.isNotEmpty;
+
+    return result;
   }
 
   Uint8List rawSerialize() {
