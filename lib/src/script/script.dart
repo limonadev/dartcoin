@@ -12,6 +12,15 @@ class Script {
 
   final List<Object> cmds;
 
+  static Script combine({
+    @required Script first,
+    @required Script second,
+  }) {
+    return Script(
+      cmds: first.cmds + second.cmds,
+    );
+  }
+
   Uint8List rawSerialize() {
     final result = <int>[];
 
