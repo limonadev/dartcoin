@@ -5,12 +5,14 @@ import 'package:dartcoin/src/utils/all.dart';
 import 'package:hash/hash.dart';
 import 'package:meta/meta.dart';
 
-abstract class ScriptOperation {
-  static String altStackArgName = 'altStack';
-  static String commandsArgName = 'commands';
-  static String executorArgName = 'executor';
-  static String stackArgName = 'stack';
+enum ScriptOperationArgs {
+  altStack,
+  commands,
+  executor,
+  stack,
+}
 
+abstract class ScriptOperation {
   Uint8List copy({@required Uint8List element}) {
     return Uint8List.fromList(element);
   }
@@ -19,7 +21,7 @@ abstract class ScriptOperation {
 }
 
 typedef ScriptOperationBuilder = ScriptOperation Function({
-  @required Map<String, dynamic> args,
+  @required Map<ScriptOperationArgs, dynamic> args,
 });
 
 class ScriptOperationExecutor {
@@ -48,11 +50,11 @@ class ScriptOperationExecutor {
       );
     }
 
-    final args = <String, dynamic>{
-      ScriptOperation.altStackArgName: altStack,
-      ScriptOperation.commandsArgName: <Object>[],
-      ScriptOperation.executorArgName: this,
-      ScriptOperation.stackArgName: stack,
+    final args = <ScriptOperationArgs, dynamic>{
+      ScriptOperationArgs.altStack: altStack,
+      ScriptOperationArgs.commands: <Object>[],
+      ScriptOperationArgs.executor: this,
+      ScriptOperationArgs.stack: stack,
     };
 
     final operation = opCode != null
@@ -592,9 +594,9 @@ class _Op0 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op0 builder({@required Map<String, dynamic> args}) {
+  static _Op0 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op0(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -617,9 +619,10 @@ class _Op1Negate extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op1Negate builder({@required Map<String, dynamic> args}) {
+  static _Op1Negate builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op1Negate(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -643,9 +646,9 @@ class _Op1 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op1 builder({@required Map<String, dynamic> args}) {
+  static _Op1 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op1(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -668,9 +671,9 @@ class _Op2 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op2 builder({@required Map<String, dynamic> args}) {
+  static _Op2 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op2(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -693,9 +696,9 @@ class _Op3 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op3 builder({@required Map<String, dynamic> args}) {
+  static _Op3 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op3(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -718,9 +721,9 @@ class _Op4 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op4 builder({@required Map<String, dynamic> args}) {
+  static _Op4 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op4(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -743,9 +746,9 @@ class _Op5 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op5 builder({@required Map<String, dynamic> args}) {
+  static _Op5 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op5(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -768,9 +771,9 @@ class _Op6 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op6 builder({@required Map<String, dynamic> args}) {
+  static _Op6 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op6(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -793,9 +796,9 @@ class _Op7 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op7 builder({@required Map<String, dynamic> args}) {
+  static _Op7 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op7(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -818,9 +821,9 @@ class _Op8 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op8 builder({@required Map<String, dynamic> args}) {
+  static _Op8 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op8(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -843,9 +846,9 @@ class _Op9 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op9 builder({@required Map<String, dynamic> args}) {
+  static _Op9 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op9(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -868,9 +871,9 @@ class _Op10 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op10 builder({@required Map<String, dynamic> args}) {
+  static _Op10 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op10(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -893,9 +896,9 @@ class _Op11 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op11 builder({@required Map<String, dynamic> args}) {
+  static _Op11 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op11(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -918,9 +921,9 @@ class _Op12 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op12 builder({@required Map<String, dynamic> args}) {
+  static _Op12 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op12(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -943,9 +946,9 @@ class _Op13 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op13 builder({@required Map<String, dynamic> args}) {
+  static _Op13 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op13(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -968,9 +971,9 @@ class _Op14 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op14 builder({@required Map<String, dynamic> args}) {
+  static _Op14 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op14(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -993,9 +996,9 @@ class _Op15 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op15 builder({@required Map<String, dynamic> args}) {
+  static _Op15 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op15(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1018,9 +1021,9 @@ class _Op16 extends ScriptOperation {
 
   final ListQueue<Uint8List> stack;
 
-  static _Op16 builder({@required Map<String, dynamic> args}) {
+  static _Op16 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op16(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1041,7 +1044,7 @@ class _Op16 extends ScriptOperation {
 class _OpNop extends ScriptOperation {
   _OpNop();
 
-  static _OpNop builder({@required Map<String, dynamic> args}) {
+  static _OpNop builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     assert(args != null);
     return _OpNop();
   }
@@ -1064,10 +1067,10 @@ class _OpIf extends ScriptOperation {
   final ListQueue<Object> commands;
   final ListQueue<Uint8List> stack;
 
-  static _OpIf builder({@required Map<String, dynamic> args}) {
+  static _OpIf builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpIf(
-      commands: args[ScriptOperation.commandsArgName],
-      stack: args[ScriptOperation.stackArgName],
+      commands: args[ScriptOperationArgs.commands],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1136,10 +1139,10 @@ class _OpNotIf extends ScriptOperation {
   final ListQueue<Object> commands;
   final ListQueue<Uint8List> stack;
 
-  static _OpNotIf builder({@required Map<String, dynamic> args}) {
+  static _OpNotIf builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpNotIf(
-      commands: args[ScriptOperation.commandsArgName],
-      stack: args[ScriptOperation.stackArgName],
+      commands: args[ScriptOperationArgs.commands],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1202,9 +1205,9 @@ class _OpNotIf extends ScriptOperation {
 class _OpVerify extends ScriptOperation {
   _OpVerify({@required this.stack});
 
-  static _OpVerify builder({@required Map<String, dynamic> args}) {
+  static _OpVerify builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpVerify(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1230,7 +1233,7 @@ class _OpVerify extends ScriptOperation {
 class _OpReturn extends ScriptOperation {
   _OpReturn();
 
-  static _OpReturn builder({@required Map<String, dynamic> args}) {
+  static _OpReturn builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     assert(args != null);
     return _OpReturn();
   }
@@ -1249,10 +1252,11 @@ class _OpToAltStack extends ScriptOperation {
     @required this.stack,
   });
 
-  static _OpToAltStack builder({@required Map<String, dynamic> args}) {
+  static _OpToAltStack builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpToAltStack(
-      altStack: args[ScriptOperation.altStackArgName],
-      stack: args[ScriptOperation.stackArgName],
+      altStack: args[ScriptOperationArgs.altStack],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1280,10 +1284,11 @@ class _OpFromAltStack extends ScriptOperation {
     @required this.stack,
   });
 
-  static _OpFromAltStack builder({@required Map<String, dynamic> args}) {
+  static _OpFromAltStack builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpFromAltStack(
-      altStack: args[ScriptOperation.altStackArgName],
-      stack: args[ScriptOperation.stackArgName],
+      altStack: args[ScriptOperationArgs.altStack],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1308,9 +1313,9 @@ class _OpFromAltStack extends ScriptOperation {
 class _Op2Drop extends ScriptOperation {
   _Op2Drop({@required this.stack});
 
-  static _Op2Drop builder({@required Map<String, dynamic> args}) {
+  static _Op2Drop builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op2Drop(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1336,9 +1341,9 @@ class _Op2Drop extends ScriptOperation {
 class _Op2Dup extends ScriptOperation {
   _Op2Dup({@required this.stack});
 
-  static _Op2Dup builder({@required Map<String, dynamic> args}) {
+  static _Op2Dup builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op2Dup(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1372,9 +1377,9 @@ class _Op2Dup extends ScriptOperation {
 class _Op3Dup extends ScriptOperation {
   _Op3Dup({@required this.stack});
 
-  static _Op3Dup builder({@required Map<String, dynamic> args}) {
+  static _Op3Dup builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op3Dup(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1414,9 +1419,9 @@ class _Op3Dup extends ScriptOperation {
 class _Op2Over extends ScriptOperation {
   _Op2Over({@required this.stack});
 
-  static _Op2Over builder({@required Map<String, dynamic> args}) {
+  static _Op2Over builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op2Over(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1460,9 +1465,9 @@ class _Op2Over extends ScriptOperation {
 class _Op2Rot extends ScriptOperation {
   _Op2Rot({@required this.stack});
 
-  static _Op2Rot builder({@required Map<String, dynamic> args}) {
+  static _Op2Rot builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op2Rot(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1497,9 +1502,9 @@ class _Op2Rot extends ScriptOperation {
 class _Op2Swap extends ScriptOperation {
   _Op2Swap({@required this.stack});
 
-  static _Op2Swap builder({@required Map<String, dynamic> args}) {
+  static _Op2Swap builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op2Swap(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1533,9 +1538,9 @@ class _Op2Swap extends ScriptOperation {
 class _OpIfDup extends ScriptOperation {
   _OpIfDup({@required this.stack});
 
-  static _OpIfDup builder({@required Map<String, dynamic> args}) {
+  static _OpIfDup builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpIfDup(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1564,9 +1569,9 @@ class _OpIfDup extends ScriptOperation {
 class _OpDepth extends ScriptOperation {
   _OpDepth({@required this.stack});
 
-  static _OpDepth builder({@required Map<String, dynamic> args}) {
+  static _OpDepth builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpDepth(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1591,9 +1596,9 @@ class _OpDepth extends ScriptOperation {
 class _OpDrop extends ScriptOperation {
   _OpDrop({@required this.stack});
 
-  static _OpDrop builder({@required Map<String, dynamic> args}) {
+  static _OpDrop builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpDrop(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1619,9 +1624,9 @@ class _OpDrop extends ScriptOperation {
 class _OpDup extends ScriptOperation {
   _OpDup({@required this.stack});
 
-  static _OpDup builder({@required Map<String, dynamic> args}) {
+  static _OpDup builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpDup(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1648,9 +1653,9 @@ class _OpDup extends ScriptOperation {
 class _OpNip extends ScriptOperation {
   _OpNip({@required this.stack});
 
-  static _OpNip builder({@required Map<String, dynamic> args}) {
+  static _OpNip builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpNip(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1678,9 +1683,9 @@ class _OpNip extends ScriptOperation {
 class _OpOver extends ScriptOperation {
   _OpOver({@required this.stack});
 
-  static _OpOver builder({@required Map<String, dynamic> args}) {
+  static _OpOver builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpOver(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1709,9 +1714,9 @@ class _OpOver extends ScriptOperation {
 class _OpPick extends ScriptOperation {
   _OpPick({@required this.stack});
 
-  static _OpPick builder({@required Map<String, dynamic> args}) {
+  static _OpPick builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpPick(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1752,9 +1757,9 @@ class _OpPick extends ScriptOperation {
 class _OpRoll extends ScriptOperation {
   _OpRoll({@required this.stack});
 
-  static _OpRoll builder({@required Map<String, dynamic> args}) {
+  static _OpRoll builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpRoll(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1794,9 +1799,9 @@ class _OpRoll extends ScriptOperation {
 class _OpRot extends ScriptOperation {
   _OpRot({@required this.stack});
 
-  static _OpRot builder({@required Map<String, dynamic> args}) {
+  static _OpRot builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpRot(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1829,9 +1834,9 @@ class _OpRot extends ScriptOperation {
 class _OpSwap extends ScriptOperation {
   _OpSwap({@required this.stack});
 
-  static _OpSwap builder({@required Map<String, dynamic> args}) {
+  static _OpSwap builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpSwap(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1861,9 +1866,9 @@ class _OpSwap extends ScriptOperation {
 class _OpTuck extends ScriptOperation {
   _OpTuck({@required this.stack});
 
-  static _OpTuck builder({@required Map<String, dynamic> args}) {
+  static _OpTuck builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpTuck(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1900,9 +1905,9 @@ class _OpTuck extends ScriptOperation {
 class _OpSize extends ScriptOperation {
   _OpSize({@required this.stack});
 
-  static _OpSize builder({@required Map<String, dynamic> args}) {
+  static _OpSize builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpSize(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1932,9 +1937,9 @@ class _OpSize extends ScriptOperation {
 class _OpEqual extends ScriptOperation {
   _OpEqual({@required this.stack});
 
-  static _OpEqual builder({@required Map<String, dynamic> args}) {
+  static _OpEqual builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpEqual(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1974,10 +1979,11 @@ class _OpEqualVerify extends ScriptOperation {
     @required this.stack,
   });
 
-  static _OpEqualVerify builder({@required Map<String, dynamic> args}) {
+  static _OpEqualVerify builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpEqualVerify(
-      executor: args[ScriptOperation.executorArgName],
-      stack: args[ScriptOperation.stackArgName],
+      executor: args[ScriptOperationArgs.executor],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -1996,9 +2002,9 @@ class _OpEqualVerify extends ScriptOperation {
 class _Op1Add extends ScriptOperation {
   _Op1Add({@required this.stack});
 
-  static _Op1Add builder({@required Map<String, dynamic> args}) {
+  static _Op1Add builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op1Add(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2032,9 +2038,9 @@ class _Op1Add extends ScriptOperation {
 class _Op1Sub extends ScriptOperation {
   _Op1Sub({@required this.stack});
 
-  static _Op1Sub builder({@required Map<String, dynamic> args}) {
+  static _Op1Sub builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op1Sub(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2068,9 +2074,9 @@ class _Op1Sub extends ScriptOperation {
 class _OpNegate extends ScriptOperation {
   _OpNegate({@required this.stack});
 
-  static _OpNegate builder({@required Map<String, dynamic> args}) {
+  static _OpNegate builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpNegate(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2103,9 +2109,9 @@ class _OpNegate extends ScriptOperation {
 class _OpAbs extends ScriptOperation {
   _OpAbs({@required this.stack});
 
-  static _OpAbs builder({@required Map<String, dynamic> args}) {
+  static _OpAbs builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpAbs(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2139,9 +2145,9 @@ class _OpAbs extends ScriptOperation {
 class _OpNot extends ScriptOperation {
   _OpNot({@required this.stack});
 
-  static _OpNot builder({@required Map<String, dynamic> args}) {
+  static _OpNot builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpNot(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2182,9 +2188,10 @@ class _OpNot extends ScriptOperation {
 class _Op0NotEqual extends ScriptOperation {
   _Op0NotEqual({@required this.stack});
 
-  static _Op0NotEqual builder({@required Map<String, dynamic> args}) {
+  static _Op0NotEqual builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _Op0NotEqual(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2224,9 +2231,9 @@ class _Op0NotEqual extends ScriptOperation {
 class _OpAdd extends ScriptOperation {
   _OpAdd({@required this.stack});
 
-  static _OpAdd builder({@required Map<String, dynamic> args}) {
+  static _OpAdd builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpAdd(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2262,9 +2269,9 @@ class _OpAdd extends ScriptOperation {
 class _OpSub extends ScriptOperation {
   _OpSub({@required this.stack});
 
-  static _OpSub builder({@required Map<String, dynamic> args}) {
+  static _OpSub builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpSub(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2301,9 +2308,10 @@ class _OpSub extends ScriptOperation {
 class _OpBoolAnd extends ScriptOperation {
   _OpBoolAnd({@required this.stack});
 
-  static _OpBoolAnd builder({@required Map<String, dynamic> args}) {
+  static _OpBoolAnd builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpBoolAnd(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2347,9 +2355,9 @@ class _OpBoolAnd extends ScriptOperation {
 class _OpBoolOr extends ScriptOperation {
   _OpBoolOr({@required this.stack});
 
-  static _OpBoolOr builder({@required Map<String, dynamic> args}) {
+  static _OpBoolOr builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpBoolOr(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2393,9 +2401,10 @@ class _OpBoolOr extends ScriptOperation {
 class _OpNumEqual extends ScriptOperation {
   _OpNumEqual({@required this.stack});
 
-  static _OpNumEqual builder({@required Map<String, dynamic> args}) {
+  static _OpNumEqual builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpNumEqual(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2441,10 +2450,11 @@ class _OpNumEqualVerify extends ScriptOperation {
     @required this.stack,
   });
 
-  static _OpNumEqualVerify builder({@required Map<String, dynamic> args}) {
+  static _OpNumEqualVerify builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpNumEqualVerify(
-      executor: args[ScriptOperation.executorArgName],
-      stack: args[ScriptOperation.stackArgName],
+      executor: args[ScriptOperationArgs.executor],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2464,9 +2474,10 @@ class _OpNumEqualVerify extends ScriptOperation {
 class _OpNumNotEqual extends ScriptOperation {
   _OpNumNotEqual({@required this.stack});
 
-  static _OpNumNotEqual builder({@required Map<String, dynamic> args}) {
+  static _OpNumNotEqual builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpNumNotEqual(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2510,9 +2521,10 @@ class _OpNumNotEqual extends ScriptOperation {
 class _OpLessThan extends ScriptOperation {
   _OpLessThan({@required this.stack});
 
-  static _OpLessThan builder({@required Map<String, dynamic> args}) {
+  static _OpLessThan builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpLessThan(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2556,9 +2568,10 @@ class _OpLessThan extends ScriptOperation {
 class _OpGreaterThan extends ScriptOperation {
   _OpGreaterThan({@required this.stack});
 
-  static _OpGreaterThan builder({@required Map<String, dynamic> args}) {
+  static _OpGreaterThan builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpGreaterThan(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2602,9 +2615,10 @@ class _OpGreaterThan extends ScriptOperation {
 class _OpLessThanOrEqual extends ScriptOperation {
   _OpLessThanOrEqual({@required this.stack});
 
-  static _OpLessThanOrEqual builder({@required Map<String, dynamic> args}) {
+  static _OpLessThanOrEqual builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpLessThanOrEqual(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2648,9 +2662,10 @@ class _OpLessThanOrEqual extends ScriptOperation {
 class _OpGreaterThanOrEqual extends ScriptOperation {
   _OpGreaterThanOrEqual({@required this.stack});
 
-  static _OpGreaterThanOrEqual builder({@required Map<String, dynamic> args}) {
+  static _OpGreaterThanOrEqual builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpGreaterThanOrEqual(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2693,9 +2708,9 @@ class _OpGreaterThanOrEqual extends ScriptOperation {
 class _OpMin extends ScriptOperation {
   _OpMin({@required this.stack});
 
-  static _OpMin builder({@required Map<String, dynamic> args}) {
+  static _OpMin builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpMin(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2733,9 +2748,9 @@ class _OpMin extends ScriptOperation {
 class _OpMax extends ScriptOperation {
   _OpMax({@required this.stack});
 
-  static _OpMax builder({@required Map<String, dynamic> args}) {
+  static _OpMax builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpMax(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2775,9 +2790,9 @@ class _OpMax extends ScriptOperation {
 class _OpWithin extends ScriptOperation {
   _OpWithin({@required this.stack});
 
-  static _OpWithin builder({@required Map<String, dynamic> args}) {
+  static _OpWithin builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpWithin(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2824,9 +2839,10 @@ class _OpWithin extends ScriptOperation {
 class _OpRipemd160 extends ScriptOperation {
   _OpRipemd160({@required this.stack});
 
-  static _OpRipemd160 builder({@required Map<String, dynamic> args}) {
+  static _OpRipemd160 builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpRipemd160(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2855,9 +2871,9 @@ class _OpRipemd160 extends ScriptOperation {
 class _OpSha1 extends ScriptOperation {
   _OpSha1({@required this.stack});
 
-  static _OpSha1 builder({@required Map<String, dynamic> args}) {
+  static _OpSha1 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpSha1(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2886,9 +2902,9 @@ class _OpSha1 extends ScriptOperation {
 class _OpSha256 extends ScriptOperation {
   _OpSha256({@required this.stack});
 
-  static _OpSha256 builder({@required Map<String, dynamic> args}) {
+  static _OpSha256 builder({@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpSha256(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2917,9 +2933,10 @@ class _OpSha256 extends ScriptOperation {
 class _OpHash160 extends ScriptOperation {
   _OpHash160({@required this.stack});
 
-  static _OpHash160 builder({@required Map<String, dynamic> args}) {
+  static _OpHash160 builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpHash160(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
@@ -2946,9 +2963,10 @@ class _OpHash160 extends ScriptOperation {
 class _OpHash256 extends ScriptOperation {
   _OpHash256({@required this.stack});
 
-  static _OpHash256 builder({@required Map<String, dynamic> args}) {
+  static _OpHash256 builder(
+      {@required Map<ScriptOperationArgs, dynamic> args}) {
     return _OpHash256(
-      stack: args[ScriptOperation.stackArgName],
+      stack: args[ScriptOperationArgs.stack],
     );
   }
 
