@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 
 abstract class ScriptOperation {
   static String altStackArgName = 'altStack';
+  static String executorArgName = 'executor';
   static String itemsArgName = 'items';
   static String stackArgName = 'stack';
 
@@ -21,20 +22,25 @@ typedef ScriptOperationBuilder = ScriptOperation Function({
   @required Map<String, dynamic> args,
 });
 
-class ScriptExecutor {
-  ScriptExecutor()
-      : codeToOperation = Map.fromEntries(
+class ScriptOperationExecutor {
+  ScriptOperationExecutor({
+    ListQueue<Uint8List> altStack,
+    ListQueue<Uint8List> stack,
+  })  : altStack = altStack ?? ListQueue<Uint8List>(),
+        codeToOperation = Map.fromEntries(
           OpCode.values.map(
             (op) => MapEntry(op.byte, op),
           ),
-        );
+        ),
+        stack = stack ?? ListQueue<Uint8List>();
 
+  final ListQueue<Uint8List> altStack;
   final Map<int, OpCode> codeToOperation;
+  final ListQueue<Uint8List> stack;
 
   bool run({
     int opCodeAsByte,
     OpCode opCode,
-    @required ListQueue<Uint8List> stack,
   }) {
     if (opCodeAsByte == null && opCode == null) {
       throw ArgumentError(
@@ -43,7 +49,8 @@ class ScriptExecutor {
     }
 
     final args = <String, dynamic>{
-      ScriptOperation.altStackArgName: ListQueue<Uint8List>(),
+      ScriptOperation.altStackArgName: altStack,
+      ScriptOperation.executorArgName: this,
       ScriptOperation.itemsArgName: <Object>[],
       ScriptOperation.stackArgName: stack,
     };
@@ -1962,28 +1969,25 @@ class _OpEqual extends ScriptOperation {
 /// Operation called `OP_EQUALVERIFY` with code `136` or `0x88`.
 /// Same as [_OpEqual], but runs [_OpVerify] afterward.
 class _OpEqualVerify extends ScriptOperation {
-  _OpEqualVerify({@required this.stack});
+  _OpEqualVerify({
+    @required this.executor,
+    @required this.stack,
+  });
 
   static _OpEqualVerify builder({@required Map<String, dynamic> args}) {
     return _OpEqualVerify(
+      executor: args[ScriptOperation.executorArgName],
       stack: args[ScriptOperation.stackArgName],
     );
   }
 
+  final ScriptOperationExecutor executor;
   final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
-    final executor = ScriptExecutor();
-
-    return executor.run(
-          opCode: OpCode.OP_EQUAL,
-          stack: stack,
-        ) &&
-        executor.run(
-          opCode: OpCode.OP_VERIFY,
-          stack: stack,
-        );
+    return executor.run(opCode: OpCode.OP_EQUAL) &&
+        executor.run(opCode: OpCode.OP_VERIFY);
   }
 }
 
@@ -2432,28 +2436,25 @@ class _OpNumEqual extends ScriptOperation {
 /// Operation called `OP_NUMEQUALVERIFY` with code `157` or `0x9d`.
 /// Same as [_OpNumEqual], but runs [_OpVerify] afterward.
 class _OpNumEqualVerify extends ScriptOperation {
-  _OpNumEqualVerify({@required this.stack});
+  _OpNumEqualVerify({
+    @required this.executor,
+    @required this.stack,
+  });
 
   static _OpNumEqualVerify builder({@required Map<String, dynamic> args}) {
     return _OpNumEqualVerify(
+      executor: args[ScriptOperation.executorArgName],
       stack: args[ScriptOperation.stackArgName],
     );
   }
 
+  final ScriptOperationExecutor executor;
   final ListQueue<Uint8List> stack;
 
   @override
   bool execute() {
-    final executor = ScriptExecutor();
-
-    return executor.run(
-          opCode: OpCode.OP_NUMEQUAL,
-          stack: stack,
-        ) &&
-        executor.run(
-          opCode: OpCode.OP_VERIFY,
-          stack: stack,
-        );
+    return executor.run(opCode: OpCode.OP_NUMEQUAL) &&
+        executor.run(opCode: OpCode.OP_VERIFY);
   }
 }
 
