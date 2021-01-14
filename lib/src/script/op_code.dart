@@ -7,8 +7,8 @@ import 'package:meta/meta.dart';
 
 abstract class ScriptOperation {
   static String altStackArgName = 'altStack';
+  static String commandsArgName = 'commands';
   static String executorArgName = 'executor';
-  static String itemsArgName = 'items';
   static String stackArgName = 'stack';
 
   Uint8List copy({@required Uint8List element}) {
@@ -39,19 +39,19 @@ class ScriptOperationExecutor {
   final ListQueue<Uint8List> stack;
 
   bool run({
-    int opCodeAsByte,
     OpCode opCode,
+    int opCodeAsByte,
   }) {
-    if (opCodeAsByte == null && opCode == null) {
+    if (opCode == null && opCodeAsByte == null) {
       throw ArgumentError(
-        'It is necessary to pass as argument at least one of this options: [opCodeAsByte] or [opCode]',
+        'It is necessary to pass as argument at least one of this options: [opCode] or [opCodeAsByte]',
       );
     }
 
     final args = <String, dynamic>{
       ScriptOperation.altStackArgName: altStack,
+      ScriptOperation.commandsArgName: <Object>[],
       ScriptOperation.executorArgName: this,
-      ScriptOperation.itemsArgName: <Object>[],
       ScriptOperation.stackArgName: stack,
     };
 
@@ -1057,16 +1057,16 @@ class _OpNop extends ScriptOperation {
 /// of the top stack element.
 class _OpIf extends ScriptOperation {
   _OpIf({
-    @required this.items,
+    @required this.commands,
     @required this.stack,
   });
 
-  final ListQueue<Object> items;
+  final ListQueue<Object> commands;
   final ListQueue<Uint8List> stack;
 
   static _OpIf builder({@required Map<String, dynamic> args}) {
     return _OpIf(
-      items: args[ScriptOperation.itemsArgName],
+      commands: args[ScriptOperation.commandsArgName],
       stack: args[ScriptOperation.stackArgName],
     );
   }
@@ -1084,23 +1084,23 @@ class _OpIf extends ScriptOperation {
       var isValidOnParse = false;
       var endifsNeeded = 1;
 
-      while (items.isNotEmpty) {
-        final item = items.removeLast();
+      while (commands.isNotEmpty) {
+        final command = commands.removeLast();
 
-        if (item == 99 || item == 100) {
-          currentPath.add(item);
+        if (command == 99 || command == 100) {
+          currentPath.add(command);
           endifsNeeded++;
-        } else if (endifsNeeded == 1 && item == 103) {
+        } else if (endifsNeeded == 1 && command == 103) {
           currentPath = whenEvalFalse;
-        } else if (item == 104) {
+        } else if (command == 104) {
           if (endifsNeeded == 1) {
             isValidOnParse = true;
             break;
           }
-          currentPath.add(item);
+          currentPath.add(command);
           endifsNeeded--;
         } else {
-          currentPath.add(item);
+          currentPath.add(command);
         }
       }
 
@@ -1108,11 +1108,11 @@ class _OpIf extends ScriptOperation {
         final element = stack.removeLast();
         if (ScriptUtils.decodeNumber(element: element) == BigInt.zero) {
           whenEvalFalse.reversed.forEach(
-            (item) => items.addFirst(item),
+            (c) => commands.addFirst(c),
           );
         } else {
           whenEvalTrue.reversed.forEach(
-            (item) => items.addFirst(item),
+            (c) => commands.addFirst(c),
           );
         }
 
@@ -1129,16 +1129,16 @@ class _OpIf extends ScriptOperation {
 /// of the top stack element.
 class _OpNotIf extends ScriptOperation {
   _OpNotIf({
-    @required this.items,
+    @required this.commands,
     @required this.stack,
   });
 
-  final ListQueue<Object> items;
+  final ListQueue<Object> commands;
   final ListQueue<Uint8List> stack;
 
   static _OpNotIf builder({@required Map<String, dynamic> args}) {
     return _OpNotIf(
-      items: args[ScriptOperation.itemsArgName],
+      commands: args[ScriptOperation.commandsArgName],
       stack: args[ScriptOperation.stackArgName],
     );
   }
@@ -1156,23 +1156,23 @@ class _OpNotIf extends ScriptOperation {
       var isValidOnParse = false;
       var endifsNeeded = 1;
 
-      while (items.isNotEmpty) {
-        final item = items.removeLast();
+      while (commands.isNotEmpty) {
+        final command = commands.removeLast();
 
-        if (item == 99 || item == 100) {
-          currentPath.add(item);
+        if (command == 99 || command == 100) {
+          currentPath.add(command);
           endifsNeeded++;
-        } else if (endifsNeeded == 1 && item == 103) {
+        } else if (endifsNeeded == 1 && command == 103) {
           currentPath = whenEvalFalse;
-        } else if (item == 104) {
+        } else if (command == 104) {
           if (endifsNeeded == 1) {
             isValidOnParse = true;
             break;
           }
-          currentPath.add(item);
+          currentPath.add(command);
           endifsNeeded--;
         } else {
-          currentPath.add(item);
+          currentPath.add(command);
         }
       }
 
@@ -1180,11 +1180,11 @@ class _OpNotIf extends ScriptOperation {
         final element = stack.removeLast();
         if (ScriptUtils.decodeNumber(element: element) == BigInt.zero) {
           whenEvalTrue.reversed.forEach(
-            (item) => items.addFirst(item),
+            (c) => commands.addFirst(c),
           );
         } else {
           whenEvalFalse.reversed.forEach(
-            (item) => items.addFirst(item),
+            (c) => commands.addFirst(c),
           );
         }
 
