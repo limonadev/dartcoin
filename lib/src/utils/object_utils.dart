@@ -88,6 +88,22 @@ class ObjectUtils {
     );
   }
 
+  /// Convenience method to return the byte representation of the [String]
+  /// hex value.
+  static Uint8List bytesFromHex({
+    @required String hex,
+    Endian endian = Endian.big,
+  }) {
+    return bigIntToBytes(
+      number: BigInt.parse(
+        hex,
+        radix: 16,
+      ),
+      endian: endian,
+      size: hex.length ~/ 2,
+    );
+  }
+
   /// Convenience method to return the Hex representation of the [BigInt]
   /// value which [bytes] become to.
   static String bytesToHex({
