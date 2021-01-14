@@ -63,9 +63,14 @@ class ScriptOperationExecutor {
       ScriptOperationArgs.stack: stack,
     };
 
-    final operation = opCode != null
-        ? opCode.builder(args: args)
-        : codeToOperation[opCode].builder(args: args);
+    opCode ??= codeToOperation[opCodeAsByte];
+    if (opCode == null) {
+      throw ArgumentError(
+        'Invalid opCode:$opCode or opCodeAsByte:$opCodeAsByte',
+      );
+    }
+
+    final operation = opCode.builder(args: args);
     final isValidOp = operation.execute();
 
     return isValidOp;
