@@ -9,16 +9,17 @@ import 'package:test/test.dart';
 /// Each test is based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch06/op.py#L721
 void main() {
   test('test_op_hash160', () {
-    final executor = ScriptExecutor();
-
     final message = Uint8List.fromList(
       utf8.encode('hello world'),
     );
     final stack = ListQueue<Uint8List>.from([message]);
 
+    final executor = ScriptOperationExecutor(
+      stack: stack,
+    );
+
     final isValidOp = executor.run(
       opCode: OpCode.OP_HASH160,
-      stack: stack,
     );
 
     expect(
