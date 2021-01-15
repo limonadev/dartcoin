@@ -7,6 +7,7 @@ import 'package:dartcoin/src/utils/all.dart';
 import 'package:hash/hash.dart';
 import 'package:meta/meta.dart';
 
+// TODO: Add the operations that require a message, locktime, version, or sequence
 enum ScriptOperationArgs {
   altStack,
   commands,
