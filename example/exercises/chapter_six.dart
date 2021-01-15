@@ -5,6 +5,7 @@ class ChapterSix {
     print('Run each exercise from Chapter Six');
 
     _first();
+    _second();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -39,6 +40,27 @@ class ChapterSix {
     final scriptExecutor = ScriptExecutor(
       message: message,
     );
+
+    print(
+      scriptExecutor.runBoth(
+        first: scriptSig,
+        second: scriptPubKey,
+      ),
+    );
+  }
+
+  /// Exercise 3 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch06/Chapter6.ipynb
+  void _second() {
+    print('Second Exercise');
+
+    final scriptPubKey = Script(
+      cmds: [0x76, 0x76, 0x95, 0x93, 0x56, 0x87],
+    );
+    final scriptSig = Script(
+      cmds: [OpCode.OP_2.byte],
+    );
+
+    final scriptExecutor = ScriptExecutor();
 
     print(
       scriptExecutor.runBoth(
