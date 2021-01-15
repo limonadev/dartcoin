@@ -11,7 +11,7 @@ import 'package:meta/meta.dart';
 /// the [commonAltStack].
 class ScriptExecutor {
   ScriptExecutor({
-    @required this.message,
+    this.message,
   })  : commonAltStack = ListQueue<Uint8List>(),
         commonStack = ListQueue<Uint8List>();
 
