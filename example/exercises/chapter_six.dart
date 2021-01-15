@@ -36,13 +36,14 @@ class ChapterSix {
       cmds: [der],
     );
 
-    final combinedScript = Script.combine(
-      first: scriptSig,
-      second: scriptPubKey,
+    final scriptExecutor = ScriptExecutor(
+      message: message,
     );
+
     print(
-      combinedScript.evaluate(
-        message: message,
+      scriptExecutor.runBoth(
+        first: scriptSig,
+        second: scriptPubKey,
       ),
     );
   }
