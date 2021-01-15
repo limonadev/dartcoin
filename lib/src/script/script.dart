@@ -6,33 +6,27 @@ import 'package:dartcoin/src/transaction/all.dart';
 import 'package:dartcoin/src/utils/all.dart';
 import 'package:meta/meta.dart';
 
-/// TODO: MAKE THIS CLASS (CHAPTER 6)
-class Script {
-  Script({
-    @required List<Object> cmds,
-  }) : cmds = cmds ?? [];
+/// This class is intended to improve the issue mentioned in the book
+/// at page 117, by maintaining a "state" of the [commonStack] and
+/// the [commonAltStack].
+class ScriptExecutor {
+  ScriptExecutor({
+    @required this.message,
+  })  : commonAltStack = ListQueue<Uint8List>(),
+        commonStack = ListQueue<Uint8List>();
 
-  final List<Object> cmds;
+  final ListQueue<Uint8List> commonAltStack;
+  final ListQueue<Uint8List> commonStack;
+  final BigInt message;
 
-  static Script combine({
-    @required Script first,
-    @required Script second,
-  }) {
-    return Script(
-      cmds: first.cmds + second.cmds,
-    );
-  }
-
-  bool evaluate({@required BigInt message}) {
+  bool run({@required Script script}) {
     var result = true;
 
-    final commands = ListQueue<Object>.from(cmds);
-    final stack = ListQueue<Uint8List>();
-    final altStack = ListQueue<Uint8List>();
+    final commands = ListQueue<Object>.from(script.cmds);
 
     final executor = ScriptOperationExecutor(
-      altStack: altStack,
-      stack: stack,
+      altStack: commonAltStack,
+      stack: commonStack,
     );
 
     while (commands.isNotEmpty && result == true) {
@@ -45,14 +39,37 @@ class Script {
           opCodeAsByte: command,
         );
       } else {
-        stack.add(command);
+        commonStack.add(command);
       }
     }
 
-    result = result && stack.isNotEmpty && stack.last.isNotEmpty;
+    result = result && commonStack.isNotEmpty && commonStack.last.isNotEmpty;
 
     return result;
   }
+
+  bool runBoth({
+    @required Script first,
+    @required Script second,
+  }) {
+    var result = false;
+
+    final firstIsValid = run(script: first);
+    if (firstIsValid) {
+      result = run(script: second);
+    }
+
+    return result;
+  }
+}
+
+/// TODO: MAKE THIS CLASS (CHAPTER 6)
+class Script {
+  Script({
+    @required List<Object> cmds,
+  }) : cmds = cmds ?? [];
+
+  final List<Object> cmds;
 
   Uint8List rawSerialize() {
     final result = <int>[];
