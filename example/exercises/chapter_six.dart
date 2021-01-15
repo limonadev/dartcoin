@@ -54,7 +54,14 @@ class ChapterSix {
     print('Second Exercise');
 
     final scriptPubKey = Script(
-      cmds: [0x76, 0x76, 0x95, 0x93, 0x56, 0x87],
+      cmds: [
+        OpCode.OP_DUP.byte,
+        OpCode.OP_DUP.byte,
+        OpCode.OP_MUL.byte,
+        OpCode.OP_ADD.byte,
+        OpCode.OP_6.byte,
+        OpCode.OP_EQUAL.byte,
+      ],
     );
     final scriptSig = Script(
       cmds: [OpCode.OP_2.byte],
