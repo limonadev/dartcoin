@@ -63,7 +63,6 @@ class ScriptExecutor {
   }
 }
 
-/// TODO: MAKE THIS CLASS (CHAPTER 6)
 class Script {
   Script({
     @required List<Object> cmds,
@@ -119,14 +118,16 @@ class Script {
     );
   }
 
-  /// TODO: COMPLETE THE REAL STRING REPRESENTATION
   @override
   String toString() {
     final result = <String>[];
 
+    final opCodes = ScriptOperationExecutor().codeToOperation;
+
     for (final cmd in cmds) {
       if (cmd is int) {
-        /// TODO: TOSTRING WHEN OPCODE
+        final operation = opCodes[cmd] != null ? opCodes[cmd].name : 'OP_$cmd';
+        result.add(operation);
       } else if (cmd is Uint8List) {
         final value = ObjectUtils.bytesToBigInt(bytes: cmd);
         result.add(ObjectUtils.toHex(value: value));
