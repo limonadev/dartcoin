@@ -80,7 +80,8 @@ class ScriptOperationExecutor {
 /// All the supported Bitcoin Script operations.
 /// The `OP_MUL` is used here: https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch06/op.py#L476
 /// but now that operation is disabled. For that reason, the `OP_MUL`
-/// is not supported.
+/// is supported but only for educational purposes. DO NOT USE THE
+/// `OP_MUL`.
 enum OpCode {
   OP_0,
   OP_1NEGATE,
@@ -135,6 +136,7 @@ enum OpCode {
   OP_0NOTEQUAL,
   OP_ADD,
   OP_SUB,
+  OP_MUL,
   OP_BOOLAND,
   OP_BOOLOR,
   OP_NUMEQUAL,
@@ -264,6 +266,8 @@ extension Info on OpCode {
         return 147;
       case OpCode.OP_SUB:
         return 148;
+      case OpCode.OP_MUL:
+        return 149;
       case OpCode.OP_BOOLAND:
         return 154;
       case OpCode.OP_BOOLOR:
@@ -413,6 +417,8 @@ extension Info on OpCode {
         return 'OP_ADD';
       case OpCode.OP_SUB:
         return 'OP_SUB';
+      case OpCode.OP_MUL:
+        return 'OP_MUL';
       case OpCode.OP_BOOLAND:
         return 'OP_BOOLAND';
       case OpCode.OP_BOOLOR:
@@ -562,6 +568,8 @@ extension Info on OpCode {
         return _OpAdd.builder;
       case OpCode.OP_SUB:
         return _OpSub.builder;
+      case OpCode.OP_MUL:
+        return _OpMul.builder;
       case OpCode.OP_BOOLAND:
         return _OpBoolAnd.builder;
       case OpCode.OP_BOOLOR:
@@ -2310,6 +2318,49 @@ class _OpSub extends ScriptOperation {
       stack.add(
         ScriptUtils.encodeNumber(
           number: secondLast - last,
+        ),
+      );
+
+      isValidOp = true;
+    }
+
+    return isValidOp;
+  }
+}
+
+/// NOT INTENDED FOR REAL USE.
+///
+/// Operation called `OP_MUL` with code `149` or `0x95`.
+/// Multiplies the two last [stack] elements.
+///
+/// The `OP_MUL` is supported but only for educational
+/// purposes. DO NOT USE THE `OP_MUL`.
+class _OpMul extends ScriptOperation {
+  _OpMul({@required this.stack});
+
+  static _OpMul builder({@required Map<ScriptOperationArgs, dynamic> args}) {
+    return _OpMul(
+      stack: args[ScriptOperationArgs.stack],
+    );
+  }
+
+  final ListQueue<Uint8List> stack;
+
+  @override
+  bool execute() {
+    var isValidOp = false;
+
+    if (stack.length >= 2) {
+      final last = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+      final secondLast = ScriptUtils.decodeNumber(
+        element: stack.removeLast(),
+      );
+
+      stack.add(
+        ScriptUtils.encodeNumber(
+          number: last * secondLast,
         ),
       );
 
