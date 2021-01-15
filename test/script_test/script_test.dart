@@ -4,8 +4,9 @@ import 'package:dartcoin/dartcoin.dart';
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
 
-/// Each test is based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch05/script.py
 void main() {
+/// Each test is based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch05/script.py
+  group('script_parsing', () {
   Stream<int> fakeSyncRead({@required Uint8List scriptPubKey}) async* {
     for (var byte in scriptPubKey) {
       yield byte;
@@ -87,5 +88,6 @@ void main() {
       script.cmds[1],
       equals(want),
     );
+  });
   });
 }
