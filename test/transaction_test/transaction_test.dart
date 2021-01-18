@@ -1,7 +1,7 @@
 import 'package:dartcoin/dartcoin.dart';
 import 'package:test/test.dart';
 
-/// Each test is based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch05/tx.py
+/// Each test is based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/tx.py
 void main() {
   test('test_parse_version', () {
     final rawTx = ObjectUtils.bigIntToBytes(
@@ -194,6 +194,24 @@ void main() {
     expect(
       fee,
       equals(BigInt.from(140500)),
+    );
+  });
+
+  test('test_sig_hash', () async {
+    final tx = await BitcoinTxFetcher().fetch(
+      hexTxId:
+          '452c629d67e41baec3ac6f04fe744b4b9617f8f859c63b3002f8684e7a4fee03',
+      testnet: false,
+    );
+    final expected = BigInt.parse(
+      '27e0c5994dec7824e56dec6b2fcb342eb7cdb0d0957c2fce9882f715e85d81a6',
+      radix: 16,
+    );
+    final sigHash = await tx.getSigHash(inputIndex: 0);
+
+    expect(
+      sigHash,
+      equals(expected),
     );
   });
 }
