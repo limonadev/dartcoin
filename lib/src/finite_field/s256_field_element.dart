@@ -30,7 +30,7 @@ class S256FieldElement extends FieldElement {
   }
 
   S256FieldElement sqrt() {
-    return pow((prime + BigInt.one) / BigInt.from(4));
+    return pow((prime + BigInt.one) ~/ BigInt.from(4));
   }
 
   @override
