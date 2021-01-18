@@ -6,6 +6,7 @@ class ChapterSeven {
 
     await _first();
     _second();
+    _third();
 
     if (runOptionals) {
       print('Optional exercises');
@@ -51,6 +52,21 @@ class ChapterSeven {
         sig: signature,
         z: z,
       ),
+    );
+  }
+
+  /// Exercise 3 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/Chapter7.ipynb
+  void _third() {
+    print('Third Exercise');
+
+    final modifiedTx = ObjectUtils.bytesFromHex(
+      hex:
+          '0100000001813f79011acb80925dfe69b3def355fe914bd1d96a3f5f71bf8303c6a989c7d1000000001976a914a802fc56c704ce87c42d7c92eb75e7896bdc41ae88acfeffffff02a135ef01000000001976a914bc3b654dca7e56b04dca18f2566cdaf02e8d9ada88ac99c39800000000001976a9141c4bc762dd5423e332166702cb75f40df79fea1288ac1943060001000000',
+    );
+    final hashed = Secp256Utils.hash256(data: modifiedTx);
+    final z = ObjectUtils.bytesToBigInt(bytes: hashed);
+    print(
+      ObjectUtils.toHex(value: z),
     );
   }
 }
