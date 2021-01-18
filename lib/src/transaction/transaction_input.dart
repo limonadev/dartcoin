@@ -48,7 +48,7 @@ class TxInput {
     return tx.txOuts[prevTxIndex.toInt()].scriptPubkey;
   }
 
-  Uint8List serialize() {
+  Uint8List serialize({bool ignoreScriptSig = false}) {
     final result = <int>[
       ...prevTxId,
       ...ObjectUtils.bigIntToBytes(
@@ -56,7 +56,7 @@ class TxInput {
         endian: Endian.little,
         size: 4,
       ),
-      ...scriptSig.serialize(),
+      if (ignoreScriptSig != true) ...scriptSig.serialize(),
       ...ObjectUtils.bigIntToBytes(
         number: sequence,
         endian: Endian.little,
