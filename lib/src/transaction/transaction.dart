@@ -29,6 +29,64 @@ class Transaction {
         ),
       );
 
+  /// TODO: This method is very similar to the [serialize] method.
+  /// Is it possible to reduce thee code duplication?
+  Future<BigInt> getSigHash({@required int inputIndex}) async {
+    final result = <int>[
+      ...ObjectUtils.bigIntToBytes(
+        number: version,
+        endian: Endian.little,
+        size: 4,
+      ),
+      ...Varint.encode(
+        varint: BigInt.from(txIns.length),
+      ),
+    ];
+
+    for (var i = 0; i < txIns.length; i++) {
+      final txIn = txIns[i];
+      if (i == inputIndex) {
+        final scriptPubKey = await txIn.scriptPubKey(
+          testnet: testnet,
+        );
+        result.addAll(
+          txIn.copyWith(scriptSig: scriptPubKey).serialize(),
+        );
+      } else {
+        result.addAll(
+          txIn.serialize(ignoreScriptSig: true),
+        );
+      }
+    }
+
+    result.addAll(
+      Varint.encode(
+        varint: BigInt.from(txOuts.length),
+      ),
+    );
+
+    txOuts.forEach((txOut) {
+      result.addAll(txOut.serialize());
+    });
+
+    result.addAll(
+      ObjectUtils.bigIntToBytes(
+        number: locktime,
+        endian: Endian.little,
+        size: 4,
+      ),
+    );
+    result.addAll(
+      TransactionUtils.hashTypeBytes(
+        hashType: HashType.sigHashAll,
+      ),
+    );
+    final serialized = Uint8List.fromList(result);
+
+    final hashed = Secp256Utils.hash256(data: serialized);
+    return ObjectUtils.bytesToBigInt(bytes: hashed);
+  }
+
   Future<BigInt> getFee() async {
     var totalIn = BigInt.zero;
     for (final txIn in txIns) {
