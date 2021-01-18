@@ -154,45 +154,4 @@ class TransactionFactory {
       result: locktime,
     );
   }
-
-  static Future<Transaction> parse(Stream<int> stream) async {
-    final acc = <int>[];
-    var currentStep = Parsing.Version;
-
-    int txInVarintByteNumber;
-    BigInt txInVarint;
-
-    int version;
-
-    await for (var byte in stream) {
-      acc.add(byte);
-      if (acc.length == 4 && currentStep == Parsing.Version) {
-        version = ObjectUtils.bytesToBigInt(
-          bytes: Uint8List.fromList(acc),
-          endian: Endian.little,
-        ).toInt();
-
-        acc.clear();
-        currentStep = Parsing.TxInsVarint;
-      } else if (currentStep == Parsing.TxInsVarint) {
-        txInVarintByteNumber ??= Varint.numberOfNecessaryBytes(flag: byte);
-
-        if (txInVarintByteNumber == 0 ||
-            acc.length == txInVarintByteNumber + 1) {
-          txInVarint = Varint.read(bytes: Uint8List.fromList(acc));
-
-          acc.clear();
-          currentStep = Parsing.TxIns;
-        }
-      }
-    }
-
-    return Transaction(
-      locktime: null,
-      testnet: null,
-      txIns: [],
-      txOuts: null,
-      version: BigInt.zero,
-    );
-  }
 }
