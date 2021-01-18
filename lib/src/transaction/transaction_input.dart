@@ -26,6 +26,20 @@ class TxInput {
   final Script scriptSig;
   final BigInt sequence;
 
+  TxInput copyWith({
+    Uint8List prevTxId,
+    BigInt prevTxIndex,
+    Script scriptSig,
+    BigInt sequence,
+  }) {
+    return TxInput(
+      prevTxId: prevTxId ?? this.prevTxId,
+      prevTxIndex: prevTxIndex ?? this.prevTxIndex,
+      scriptSig: scriptSig ?? this.scriptSig,
+      sequence: sequence ?? this.sequence,
+    );
+  }
+
   /// Returns the [Transaction] from which this instance is an Utxo.
   Future<Transaction> fetchTx({testnet = true}) {
     return Registry().txFetcher.fetch(
