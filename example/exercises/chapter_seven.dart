@@ -4,18 +4,17 @@ class ChapterSeven {
   void runEverything({bool runOptionals = false}) async {
     print('Run each exercise from Chapter Seven');
 
-    await _first();
-    _second();
-    _third();
-
     if (runOptionals) {
       print('Optional exercises');
+      await _optionalFirst();
+      _optionalSecond();
+      _optionalThird();
     }
   }
 
-  /// Exercise 1 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/Chapter7.ipynb
-  void _first() async {
-    print('First Exercise');
+  /// Exercise 0.1 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/Chapter7.ipynb
+  void _optionalFirst() async {
+    print('Optional First Exercise');
 
     final rawTx = ObjectUtils.bytesFromHex(
       hex:
@@ -30,9 +29,9 @@ class ChapterSeven {
     print(fee >= BigInt.zero);
   }
 
-  /// Exercise 2 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/Chapter7.ipynb
-  void _second() {
-    print('Second Exercise');
+  /// Exercise 0.2 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/Chapter7.ipynb
+  void _optionalSecond() {
+    print('Optional Second Exercise');
 
     final sec = ObjectUtils.bytesFromHex(
       hex: '0349fc4e631e3624a545de3f89f5d8684c7b8138bd94bdd531d2e213bf016b278a',
@@ -55,9 +54,9 @@ class ChapterSeven {
     );
   }
 
-  /// Exercise 3 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/Chapter7.ipynb
-  void _third() {
-    print('Third Exercise');
+  /// Exercise 0.3 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/Chapter7.ipynb
+  void _optionalThird() {
+    print('Optional Third Exercise');
 
     final modifiedTx = ObjectUtils.bytesFromHex(
       hex:

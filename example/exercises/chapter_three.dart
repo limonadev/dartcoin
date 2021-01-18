@@ -15,12 +15,12 @@ class ChapterThree {
 
     if (runOptionals) {
       print('Optional exercises');
-      _optional_first();
-      _optional_second();
-      _optional_third();
-      _optional_fourth();
-      _optional_fifth();
-      _optional_sixth();
+      _optionalFirst();
+      _optionalSecond();
+      _optionalThird();
+      _optionalFourth();
+      _optionalFifth();
+      _optionalSixth();
     }
   }
 
@@ -165,7 +165,7 @@ class ChapterThree {
   }
 
   /// Exercise 1 from Programming Bitcoin book - Chapter 3
-  void _optional_first() {
+  void _optionalFirst() {
     print('Optional First Exercise');
 
     const prime = 223;
@@ -188,7 +188,7 @@ class ChapterThree {
   }
 
   /// Exercise 2 from Programming Bitcoin book - Chapter 3
-  void _optional_second() {
+  void _optionalSecond() {
     print('Optional Second Exercise');
 
     const prime = 223;
@@ -230,7 +230,7 @@ class ChapterThree {
   }
 
   /// Exercise 5 from Programming Bitcoin book - Chapter 3
-  void _optional_third() {
+  void _optionalThird() {
     print('Optional Third Exercise');
 
     const prime = 223;
@@ -256,7 +256,7 @@ class ChapterThree {
   }
 
   /// Exercise on page 60 from Programming Bitcoin book - Chapter 3
-  void _optional_fourth() {
+  void _optionalFourth() {
     final gx = BigInt.parse(
       '79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798',
       radix: 16,
@@ -283,14 +283,14 @@ class ChapterThree {
   }
 
   /// Exercise on page 61 from Programming Bitcoin book - Chapter 3
-  void _optional_fifth() {
+  void _optionalFifth() {
     print('Optional Fifth Exercise');
 
     print(Secp256Utils.generator * Secp256Utils.order);
   }
 
   /// Exercise on page 69 from Programming Bitcoin book - Chapter 3
-  void _optional_sixth() {
+  void _optionalSixth() {
     print('Optional Sixth Exercise');
     final e = ObjectUtils.decodeBigInt(
       Secp256Utils.hash256(

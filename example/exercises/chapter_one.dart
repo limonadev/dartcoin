@@ -11,9 +11,9 @@ class ChapterOne {
 
     if (runOptionals) {
       print('Optional exercises');
-      _optional_first();
-      _optional_second();
-      _optional_third();
+      _optionalFirst();
+      _optionalSecond();
+      _optionalThird();
     }
   }
 
@@ -63,7 +63,7 @@ class ChapterOne {
   }
 
   /// Exercise 5 from Programming Bitcoin book - Chapter 1
-  void _optional_first() {
+  void _optionalFirst() {
     print('Optional First Exercise');
     const order = 19;
     for (var k in [1, 3, 7, 13, 18]) {
@@ -77,7 +77,7 @@ class ChapterOne {
   }
 
   /// Exercise 7 from Programming Bitcoin book - Chapter 1
-  void _optional_second() {
+  void _optionalSecond() {
     print('Optional Second Exercise');
     for (var p in [7, 11, 17, 31]) {
       var result = [];
@@ -89,7 +89,7 @@ class ChapterOne {
   }
 
   /// Exercise 8 from Programming Bitcoin book - Chapter 1
-  void _optional_third() {
+  void _optionalThird() {
     print('Optional Third Exercise');
 
     const order = 31;
