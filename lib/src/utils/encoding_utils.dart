@@ -43,6 +43,18 @@ class Base58Utils {
     );
   }
 
+  /// Convenience method to get a base58 encoded list of bytes from
+  /// a readable String called [humanReadable].
+  static Uint8List fromHumanReadable({@required String humanReadable}) {
+    final result = <int>[];
+    for (var i = 0; i < humanReadable.length; i++) {
+      final char = humanReadable[i];
+      result.add(bytesFromChars[char]);
+    }
+
+    return Uint8List.fromList(result);
+  }
+
   /// Convenience method to show a readable String from a Base58
   /// list called [encoded].
   static String humanReadable({@required Uint8List encoded}) {
