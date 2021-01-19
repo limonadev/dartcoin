@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 class ScriptUtils {
   /// Returns if two elements of a Script stack are equal.
-  static bool areStackElementsEqual({
+  static bool areBytesListsEqual({
     @required Uint8List first,
     @required Uint8List second,
   }) {

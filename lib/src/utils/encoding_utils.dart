@@ -31,7 +31,7 @@ class Base58Utils {
     final hashed = Secp256Utils.hash256(
       data: combined.sublist(0, combined.length - 4),
     );
-    final areEqual = ScriptUtils.areStackElementsEqual(
+    final areEqual = ScriptUtils.areBytesListsEqual(
       first: hashed.sublist(0, 4),
       second: checksum,
     );

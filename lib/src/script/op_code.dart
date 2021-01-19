@@ -1980,7 +1980,7 @@ class _OpEqual extends ScriptOperation {
       final first = stack.removeLast();
       final second = stack.removeLast();
 
-      final areEqual = ScriptUtils.areStackElementsEqual(
+      final areEqual = ScriptUtils.areBytesListsEqual(
         first: first,
         second: second,
       );
