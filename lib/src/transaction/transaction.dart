@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:dartcoin/src/script/all.dart';
 import 'package:dartcoin/src/transaction/transaction_input.dart';
 import 'package:dartcoin/src/transaction/transaction_output.dart';
 import 'package:dartcoin/src/transaction/varint.dart';
@@ -152,5 +153,22 @@ class Transaction {
     final outs = txOuts.join('\n');
 
     return 'Tx:\t$id \nVersion:\t$version \nTxIns:\t$ins \nTxOuts:\t$outs \nLocktime:\t$locktime';
+  }
+  Future<bool> verifyInput({@required int inputIndex}) async {
+    final scriptSig = txIns[inputIndex].scriptSig;
+    final scriptPubKey = await txIns[inputIndex].scriptPubKey(
+      testnet: testnet,
+    );
+    final signatureHash = await getSigHash(
+      inputIndex: inputIndex,
+    );
+
+    final executor = ScriptExecutor(
+      message: signatureHash,
+    );
+    return executor.runBoth(
+      first: scriptSig,
+      second: scriptPubKey,
+    );
   }
 }
