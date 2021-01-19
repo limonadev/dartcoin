@@ -8,6 +8,19 @@ import 'package:meta/meta.dart';
 /// TODO: UNDERSTAND ON CHAPTER 6 BUILD SCRIPT FROM STREAM
 
 class ScriptFactory {
+  /// Based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/script.py#L18
+  static Script buildP2pkhScript({@required Uint8List hash160}) {
+    return Script(
+      cmds: [
+        0x76,
+        0xa9,
+        hash160,
+        0x88,
+        0xac,
+      ],
+    );
+  }
+
   static ParsingResult<Script> parseSync({
     @required Uint8List bytes,
     int initialIndex = 0,
