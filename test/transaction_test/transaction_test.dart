@@ -238,4 +238,17 @@ void main() {
       equals(true),
     );
   });
+
+  test('test_verify_p2sh', () async {
+    final tx = await BitcoinTxFetcher().fetch(
+      hexTxId:
+          '46df1a9484d0a81d03ce0ee543ab6e1a23ed06175c104a178268fad381216c2b',
+      testnet: false,
+    );
+    final isTxValid = await tx.verify();
+    expect(
+      isTxValid,
+      equals(true),
+    );
+  });
 }
