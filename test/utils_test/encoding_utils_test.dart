@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dartcoin/src/dartcoin_base.dart';
 import 'package:test/test.dart';
 
@@ -29,6 +31,48 @@ void main() {
       expect(
         encoded,
         equals(expected[i]),
+      );
+    }
+  });
+
+  /// Based on https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/helper.py
+  test('test_base58', () {
+    final encoded = [
+      'mnrVtF8DWjMu839VW3rBfgYaAfKk8983Xf',
+    ];
+    final expected = [
+      '507b27411ccf7f16f10297de6cef3f291623eddf',
+    ];
+
+    for (var i = 0; i < encoded.length; i++) {
+      final decoded = Base58Utils.decodeAddress(
+        base58Address: Base58Utils.fromHumanReadable(
+          humanReadable: encoded[i],
+        ),
+      );
+      final hex = ObjectUtils.bytesToHex(
+        bytes: decoded,
+      );
+      expect(
+        hex,
+        equals(expected[i]),
+      );
+
+      final address = Base58Utils.humanReadable(
+        encoded: Base58Utils.encodeChecksum(
+          bytes: Uint8List.fromList(
+            [
+              0x6f,
+              ...ObjectUtils.bytesFromHex(
+                hex: hex,
+              )
+            ],
+          ),
+        ),
+      );
+      expect(
+        encoded[i],
+        equals(address),
       );
     }
   });
