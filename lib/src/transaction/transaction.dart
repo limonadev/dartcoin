@@ -154,6 +154,24 @@ class Transaction {
 
     return 'Tx:\t$id \nVersion:\t$version \nTxIns:\t$ins \nTxOuts:\t$outs \nLocktime:\t$locktime';
   }
+
+  Future<bool> verify() async {
+    var result = false;
+
+    final fee = await getFee();
+    if (fee >= BigInt.zero) {
+      result = true;
+      for (var i = 0; i < txIns.length && result == true; i++) {
+        final isInputValid = await verifyInput(
+          inputIndex: i,
+        );
+        result = isInputValid;
+      }
+    }
+
+    return result;
+  }
+
   Future<bool> verifyInput({@required int inputIndex}) async {
     final scriptSig = txIns[inputIndex].scriptSig;
     final scriptPubKey = await txIns[inputIndex].scriptPubKey(
