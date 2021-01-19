@@ -15,6 +15,36 @@ class Base58Utils {
           key,
         ),
       );
+
+  static Uint8List decodeAddress({@required Uint8List base58Address}) {
+    var number = BigInt.zero;
+    for (final val in base58Address) {
+      number *= BigInt.from(58);
+      number += BigInt.from(val);
+    }
+
+    final combined = ObjectUtils.bigIntToBytes(
+      number: number,
+      size: 25,
+    );
+    final checksum = combined.sublist(combined.length - 4);
+    final hashed = Secp256Utils.hash256(
+      data: combined.sublist(0, combined.length - 4),
+    );
+    final areEqual = ScriptUtils.areStackElementsEqual(
+      first: hashed.sublist(0, 4),
+      second: checksum,
+    );
+    if (!areEqual) {
+      throw FormatException(
+        'The argument base58Address: $base58Address has not the right format',
+      );
+    }
+
+    final result = combined.sublist(1, combined.length - 4);
+    return Uint8List.fromList(result);
+  }
+
   static Uint8List encode({@required Uint8List bytes}) {
     final zerosCount = bytes.takeWhile((value) => value == 0x00).length;
     final prefix = List.filled(zerosCount, 0x00);
