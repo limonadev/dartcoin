@@ -22,14 +22,14 @@ class S256Point extends Point {
     S256FieldElement x, y;
     if (sec[0] == 4) {
       x = S256FieldElement(
-        value: ObjectUtils.decodeBigInt(sec.sublist(1, 33)),
+        value: ObjectUtils.bytesToBigInt(bytes: sec.sublist(1, 33)),
       );
       y = S256FieldElement(
-        value: ObjectUtils.decodeBigInt(sec.sublist(33)),
+        value: ObjectUtils.bytesToBigInt(bytes: sec.sublist(33)),
       );
     } else {
       x = S256FieldElement(
-        value: ObjectUtils.decodeBigInt(sec.sublist(1)),
+        value: ObjectUtils.bytesToBigInt(bytes: sec.sublist(1)),
       );
 
       final isEven = sec[0] == 2;

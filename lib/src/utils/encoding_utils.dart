@@ -49,7 +49,7 @@ class Base58Utils {
     final zerosCount = bytes.takeWhile((value) => value == 0x00).length;
     final prefix = List.filled(zerosCount, 0x00);
 
-    var decoded = ObjectUtils.decodeBigInt(bytes);
+    var decoded = ObjectUtils.bytesToBigInt(bytes: bytes);
     final result = <int>[];
 
     while (decoded > BigInt.zero) {

@@ -25,16 +25,16 @@ class Signature {
       throw FormatException('Bad Signature');
     }
     final rLength = der[3];
-    final r = ObjectUtils.decodeBigInt(
-      der.sublist(4, 4 + rLength),
+    final r = ObjectUtils.bytesToBigInt(
+      bytes: der.sublist(4, 4 + rLength),
     );
     marker = der[4 + rLength];
     if (marker != 0x02) {
       throw FormatException('Bad Signature');
     }
     final sLength = der[4 + rLength + 1];
-    final s = ObjectUtils.decodeBigInt(
-      der.sublist(4 + rLength + 2, 4 + rLength + 2 + sLength),
+    final s = ObjectUtils.bytesToBigInt(
+      bytes: der.sublist(4 + rLength + 2, 4 + rLength + 2 + sLength),
     );
     if (der.length != 6 + rLength + sLength) {
       throw FormatException('Signature too long');
