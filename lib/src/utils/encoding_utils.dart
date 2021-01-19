@@ -9,6 +9,12 @@ class Base58Utils {
   static const alphabet =
       '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
+  static final bytesFromChars = alphabet.codeUnits.asMap().map(
+        (key, value) => MapEntry(
+          String.fromCharCode(value),
+          key,
+        ),
+      );
   static Uint8List encode({@required Uint8List bytes}) {
     final zerosCount = bytes.takeWhile((value) => value == 0x00).length;
     final prefix = List.filled(zerosCount, 0x00);
