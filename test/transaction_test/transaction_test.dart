@@ -214,4 +214,28 @@ void main() {
       equals(expected),
     );
   });
+
+  test('test_verify_p2pkh', () async {
+    var tx = await BitcoinTxFetcher().fetch(
+      hexTxId:
+          '452c629d67e41baec3ac6f04fe744b4b9617f8f859c63b3002f8684e7a4fee03',
+      testnet: false,
+    );
+    var isTxValid = await tx.verify();
+    expect(
+      isTxValid,
+      equals(true),
+    );
+
+    tx = await BitcoinTxFetcher().fetch(
+      hexTxId:
+          '5418099cc755cb9dd3ebc6cf1a7888ad53a1a3beb5a025bce89eb1bf7f1650a2',
+      testnet: true,
+    );
+    isTxValid = await tx.verify();
+    expect(
+      isTxValid,
+      equals(true),
+    );
+  });
 }
