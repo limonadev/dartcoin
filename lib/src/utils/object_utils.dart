@@ -33,6 +33,9 @@ class ObjectUtils {
   /// to represent the [number].
   static Uint8List encodeBigInt(BigInt number) {
     // Not handling negative numbers. Decide how you want to do that.
+    if (number == BigInt.zero) {
+      return Uint8List.fromList([0]);
+    }
     var size = (number.bitLength + 7) >> 3;
     var result = Uint8List(size);
     for (var i = 0; i < size; i++) {
