@@ -9,6 +9,7 @@ class ChapterSeven {
       await _optionalFirst();
       _optionalSecond();
       _optionalThird();
+      _optionalFourth();
     }
   }
 
@@ -67,5 +68,53 @@ class ChapterSeven {
     print(
       ObjectUtils.toHex(value: z),
     );
+  }
+
+  /// Exercise 2.1 from https://github.com/jimmysong/programmingbitcoin/blob/master/code-ch07/Chapter7.ipynb
+  void _optionalFourth() {
+    print('Optional Fourth Exercise');
+
+    final prevTxId = ObjectUtils.bytesFromHex(
+      hex: '0d6fe5213c0b3291f208cba8bfb59b7476dffacc4e5cb66f6eb20a080843a299',
+      endian: Endian.little,
+    );
+    final prevTxIndex = BigInt.from(13);
+    final txIn = TxInput(
+      prevTxId: prevTxId,
+      prevTxIndex: prevTxIndex,
+    );
+
+    final changeAmount = BigInt.from((0.33 * 100000000).toInt());
+    final changeHash160 = Base58Utils.decodeFromHumanReadable(
+      humanReadable: 'mzx5YhAH9kNHtcN481u6WkjeHjYtVeKVh2',
+    );
+    final changeScript = ScriptFactory.buildP2pkhScript(
+      hash160: changeHash160,
+    );
+    final changeOutput = TxOutput(
+      amount: changeAmount,
+      scriptPubkey: changeScript,
+    );
+
+    final targetAmount = BigInt.from((0.1 * 100000000).toInt());
+    final targetHash160 = Base58Utils.decodeFromHumanReadable(
+      humanReadable: 'mnrVtF8DWjMu839VW3rBfgYaAfKk8983Xf',
+    );
+    final targetScript = ScriptFactory.buildP2pkhScript(
+      hash160: targetHash160,
+    );
+    final targetOutput = TxOutput(
+      amount: targetAmount,
+      scriptPubkey: targetScript,
+    );
+
+    final transaction = Transaction(
+      txIns: [txIn],
+      txOuts: [changeOutput, targetOutput],
+      testnet: true,
+      version: BigInt.one,
+      locktime: BigInt.zero,
+    );
+    print(transaction);
   }
 }
