@@ -10,8 +10,8 @@ class TxInput {
   TxInput({
     @required this.prevTxId,
     @required this.prevTxIndex,
-    @required Script scriptSig,
-    @required BigInt sequence,
+    Script scriptSig,
+    BigInt sequence,
   })  : scriptSig = scriptSig ?? Script(cmds: null),
         sequence = sequence ??
             BigInt.parse(
