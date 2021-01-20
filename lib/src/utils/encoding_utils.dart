@@ -45,6 +45,16 @@ class Base58Utils {
     return Uint8List.fromList(result);
   }
 
+  /// Convenience method to decode a human readable base58 address into its real
+  /// list of bytes.
+  static Uint8List decodeFromHumanReadable({@required String humanReadable}) {
+    return decodeAddress(
+      base58Address: fromHumanReadable(
+        humanReadable: humanReadable,
+      ),
+    );
+  }
+
   static Uint8List encode({@required Uint8List bytes}) {
     final zerosCount = bytes.takeWhile((value) => value == 0x00).length;
     final prefix = List.filled(zerosCount, 0x00);
