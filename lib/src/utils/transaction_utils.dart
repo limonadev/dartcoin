@@ -22,4 +22,7 @@ class TransactionUtils {
         endian: Endian.little,
         size: 4,
       );
+
+  static BigInt hashTypeValue({@required HashType hashType}) =>
+      _hashTypeMap[hashType];
 }
