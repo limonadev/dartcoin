@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:dartcoin/src/script/op_code.dart';
 import 'package:dartcoin/src/script/script.dart';
 import 'package:dartcoin/src/transaction/all.dart';
 import 'package:dartcoin/src/utils/all.dart';
@@ -12,11 +13,11 @@ class ScriptFactory {
   static Script buildP2pkhScript({@required Uint8List hash160}) {
     return Script(
       cmds: [
-        0x76,
-        0xa9,
+        OpCode.OP_DUP.byte,
+        OpCode.OP_HASH160.byte,
         hash160,
-        0x88,
-        0xac,
+        OpCode.OP_EQUALVERIFY.byte,
+        OpCode.OP_CHECKSIG.byte,
       ],
     );
   }
