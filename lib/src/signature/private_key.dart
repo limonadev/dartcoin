@@ -36,14 +36,21 @@ class PrivateKey {
     k = hmacSha256.update(
       [...v, 0, ...secretBytes, ...zBytes],
     ).digest();
+
+    hmacSha256 = Hmac(SHA256(), k);
     v = hmacSha256.update(v).digest();
+
+    hmacSha256 = Hmac(SHA256(), k);
     k = hmacSha256.update(
       [...v, 1, ...secretBytes, ...zBytes],
     ).digest();
+
+    hmacSha256 = Hmac(SHA256(), k);
     v = hmacSha256.update(v).digest();
 
     BigInt result;
     while (result == null) {
+      hmacSha256 = Hmac(SHA256(), k);
       v = hmacSha256.update(v).digest();
       final candidate = ObjectUtils.bytesToBigInt(bytes: v);
 
