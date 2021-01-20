@@ -125,7 +125,11 @@ class ObjectUtils {
 
   /// Return the Hex representation of the [value].
   static String toHex({int padding, @required BigInt value}) {
-    var result = value.toRadixString(16);
+    var result = '';
+    final bytes = bigIntToBytes(number: value);
+    for (var byte in bytes) {
+      result += byte.toRadixString(16).padLeft(2, '0');
+    }
     if (padding != null) {
       result = result.padLeft(padding, '0');
     }
