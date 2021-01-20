@@ -92,6 +92,26 @@ void main() {
   });
 
   group('BigInt to bytes', () {
+    test('Zero value', () {
+      final value = BigInt.zero;
+
+      expect(
+        ObjectUtils.bigIntToBytes(
+          number: value,
+          endian: Endian.big,
+        ),
+        equals([0]),
+      );
+
+      expect(
+        ObjectUtils.bigIntToBytes(
+          number: value,
+          endian: Endian.little,
+        ),
+        equals([0]),
+      );
+    });
+
     test('Value lower than 32 bytes', () {
       final value = BigInt.one;
       expect(
