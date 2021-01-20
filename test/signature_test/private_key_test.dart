@@ -58,7 +58,7 @@ void main() {
         secret: arg[0],
       );
       expect(
-        Base58Utils.humanReadable(
+        Base58Utils.toHumanReadable(
           encoded: privateKey.wif(
             compressed: arg[1],
             testnet: arg[2],

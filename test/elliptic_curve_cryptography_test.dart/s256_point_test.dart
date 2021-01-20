@@ -210,13 +210,13 @@ void main() {
     var point = Secp256Utils.generator * secret;
 
     expect(
-      Base58Utils.humanReadable(
+      Base58Utils.toHumanReadable(
         encoded: point.getAddress(compressed: true, testnet: false),
       ),
       equals(mainnetAddress),
     );
     expect(
-      Base58Utils.humanReadable(
+      Base58Utils.toHumanReadable(
         encoded: point.getAddress(compressed: true, testnet: true),
       ),
       equals(testnetAddress),
@@ -228,13 +228,13 @@ void main() {
     point = Secp256Utils.generator * secret;
 
     expect(
-      Base58Utils.humanReadable(
+      Base58Utils.toHumanReadable(
         encoded: point.getAddress(compressed: false, testnet: false),
       ),
       equals(mainnetAddress),
     );
     expect(
-      Base58Utils.humanReadable(
+      Base58Utils.toHumanReadable(
         encoded: point.getAddress(compressed: false, testnet: true),
       ),
       equals(testnetAddress),
@@ -246,13 +246,13 @@ void main() {
     point = Secp256Utils.generator * secret;
 
     expect(
-      Base58Utils.humanReadable(
+      Base58Utils.toHumanReadable(
         encoded: point.getAddress(compressed: false, testnet: false),
       ),
       equals(mainnetAddress),
     );
     expect(
-      Base58Utils.humanReadable(
+      Base58Utils.toHumanReadable(
         encoded: point.getAddress(compressed: false, testnet: true),
       ),
       equals(testnetAddress),

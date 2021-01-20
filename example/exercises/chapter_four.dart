@@ -101,7 +101,7 @@ class ChapterFour {
       );
 
       print(
-        Base58Utils.humanReadable(
+        Base58Utils.toHumanReadable(
           encoded: Base58Utils.encode(bytes: bytes),
         ),
       );
@@ -125,7 +125,7 @@ class ChapterFour {
         compressed: arg[1],
         testnet: arg[2],
       );
-      final humanAddress = Base58Utils.humanReadable(
+      final humanAddress = Base58Utils.toHumanReadable(
         encoded: address,
       );
       print(humanAddress);
@@ -149,7 +149,7 @@ class ChapterFour {
         compressed: arg[1],
         testnet: arg[2],
       );
-      final humanWif = Base58Utils.humanReadable(
+      final humanWif = Base58Utils.toHumanReadable(
         encoded: wif,
       );
       print(humanWif);
@@ -169,7 +169,7 @@ class ChapterFour {
       compressed: true,
       testnet: true,
     );
-    final humanAddress = Base58Utils.humanReadable(
+    final humanAddress = Base58Utils.toHumanReadable(
       encoded: address,
     );
 

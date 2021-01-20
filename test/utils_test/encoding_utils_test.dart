@@ -24,7 +24,7 @@ void main() {
           radix: 16,
         ),
       );
-      final encoded = Base58Utils.humanReadable(
+      final encoded = Base58Utils.toHumanReadable(
         encoded: Base58Utils.encode(bytes: bytes),
       );
 
@@ -58,7 +58,7 @@ void main() {
         equals(expected[i]),
       );
 
-      final address = Base58Utils.humanReadable(
+      final address = Base58Utils.toHumanReadable(
         encoded: Base58Utils.encodeChecksum(
           bytes: Uint8List.fromList(
             [
